@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('work_type_id');
             $table->foreign('work_type_id')->references('id')->on('work_types');
-            $table->unsignedBigInteger('connecting_point_id');
-            $table->foreign('connecting_point_id')->references('id')->on('connecting_points');
-            $table->unique(['work_type_id', 'connecting_point_id']);
+            $table->unsignedBigInteger('point_id');
+            $table->foreign('point_id')->references('id')->on('connecting_points');
+            $table->unique(['work_type_id', 'point_id']);
             $table->timestamps();
         });
     }
