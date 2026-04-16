@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\TPType;
+use App\Models\TpType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<TPType>
+ * @extends Factory<TpType>
  */
-class TPTypeFactory extends Factory
+class TpTypeFactory extends Factory
 {
     /**
      * Define the model's default state.

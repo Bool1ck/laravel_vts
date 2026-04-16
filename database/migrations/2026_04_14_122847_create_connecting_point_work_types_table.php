@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('connecting_point_work_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('work_type_id');
-            $table->foreign('work_type_id')->references('id')->on('work_types');
-            $table->unsignedBigInteger('point_id');
-            $table->foreign('point_id')->references('id')->on('connecting_points');
-            $table->unique(['work_type_id', 'point_id']);
+            $table->unsignedBigInteger('worktype_id');
+            $table->foreign('worktype_id')->references('id')->on('work_types');
+            $table->unsignedBigInteger('pointid');
+            $table->foreign('pointid')->references('id')->on('connecting_points');
+            $table->unique(['worktype_id', 'pointid']);
             $table->timestamps();
         });
     }

@@ -28,8 +28,8 @@ return new class extends Migration
             $table->text('connecting_note');
             $table->unsignedBigInteger('power_line_type_id');
             $table->foreign('power_line_type_id')->references('id')->on('power_line_types');
-            $table->unsignedBigInteger('tp_id');
-            $table->foreign('tp_id')->references('id')->on('tp_types');
+            $table->unsignedBigInteger('tps_id');
+            $table->foreign('tps_id')->references('id')->on('tps');
             $table->string('line');
             $table->string('pole');
             $table->text('power_point_note');
