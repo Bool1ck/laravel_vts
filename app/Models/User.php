@@ -7,6 +7,8 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,5 +30,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id == 2;
+    }
+
+    public function isUser(): bool {
+        return $this->role_id == 3;
+    }
+
+    public function isSuperAdmin(): bool {
+            return $this->role_id == 1;
+    }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function regions(): BelongsToMany
+    {
+        return $this->belongsToMany(Region::class,'role_region_users','user_id','region_id');
+    }
+
+    public function regionRoles() {
+        return $this->hasMany(RoleRegionUser::class);
     }
 }

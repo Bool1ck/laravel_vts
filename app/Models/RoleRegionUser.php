@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoleRegionUser extends Model
 {
+    public function role() {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function region() {
+        return $this->belongsTo(Region::class, 'region_id');
+    }
     //
 }

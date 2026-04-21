@@ -29,7 +29,17 @@
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
                         >
                             Dashboard
-                        </a>
+                        </a>|
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit">Выйти</button>
+                        </form>
+{{--                        <a--}}
+{{--                            href="{{ url('/logout') }}"--}}
+{{--                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"--}}
+{{--                        >--}}
+{{--                            LogOut--}}
+{{--                        </a>--}}
                     @else
                         <a
                             href="{{ route('login') }}"
@@ -50,7 +60,14 @@
             @endif
         </header>
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <div>2221111</div>
+{{--            <div>{{ \Illuminate\Support\Facades\Auth::user()->isAdmin() }}</div>--}}
+            @if(\Illuminate\Support\Facades\Auth::user()->isAdmin())
+                <div>Admin</div>
+            @elseif(\Illuminate\Support\Facades\Auth::user()->isUser())
+                <div>User</div>
+            @elseif(\Illuminate\Support\Facades\Auth::user()->isSuperAdmin())
+                <div>SuperAdmin</div>
+            @endif
         </div>
 
         @if (Route::has('login'))

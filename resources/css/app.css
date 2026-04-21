@@ -1,3 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Add paths to your blade files so Tailwind knows what to scan */
+@source "../../resources/**/*.blade.php";
+@source "../../resources/**/*.js";
+/*@tailwind base;*/
+/*@tailwind components;*/
+/*@tailwind utilities;*/
