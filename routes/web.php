@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\ConnectionPointController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,13 +8,15 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/test', function () {
-    return view('test.index');
-});
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/user', function () {return view('user.index');})->name('dashboard');
-    Route::get('/admin', function () {return view('admin.index');})->name('admin.dashboard');
+    Route::get('/connectionpoints', function () {
+        return view('connectionpoints.dashboard');
+    })->name('dashboard');
+
+    Route::get('/connectionpoints/{id}', [ConnectionPointController::class, 'index'])->name
+    ('connectionpoints.index');
 });
 
 Route::middleware('auth')->group(function () {
