@@ -2090,18 +2090,18 @@
 <body class="flex items-center lg:justify-center min-h-screen flex-col">
 <div class="w-full bg-gray-200 flex flex-row min-h-screen">
     <div class="bg-gray-400 w-[350px]">
-        @include('connectionpoints.components.left_side')
+        @include('app.components.left_side')
     </div>
     <div class="w-full flex flex-col">
         <div class="w-full bg-gray-300  p-2">
-            @include('connectionpoints.components.header')
+            @include('app.components.header')
         </div>
         <div>
             @yield('content')
         </div>
     </div>
 </div>
-{{--@include('connectionpoints.components.header')--}}
+{{--@include('app.components.header')--}}
 {{--<div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">--}}
 {{--    @yield('content')--}}
 {{--</div>--}}

@@ -1,4 +1,4 @@
-@extends('connectionpoints.layouts.main')
+@extends('app.layouts.main')
 
 @section('content')
     <div>
@@ -14,6 +14,7 @@
                     <td class="text-left">Технічні умови</td>
                     <td>Дата ТУ</td>
                     <td>Замовник</td>
+                    <td>Тип замовника</td>
                     <td>Місце знаходження об'єкту</td>
                     <td>Точка забезпечення потужності</td>
                     <td>Потужність</td>
@@ -25,6 +26,7 @@
                         <td>{{$point->technical_conditions}}</td>
                         <td>{{$point->technical_conditions_date}}</td>
                         <td>{{$point->customer}}</td>
+                        <td>{{$point->customerType->name}}</td>
                         <td>{{$point->point_place}}</td>
                         <td>{{$point->power_point}}</td>
                         <td>{{$point->power}} кВт</td>

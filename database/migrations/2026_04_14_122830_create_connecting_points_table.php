@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('technical_conditions');
             $table->date('technical_conditions_date');
             $table->string('customer');
+            $table->unsignedBigInteger('customer_type_id');
+            $table->foreign('customer_type_id')->references('id')->on('customer_types');
             $table->string('point_place');
             $table->text('connecting_note');
             $table->string('power_point');

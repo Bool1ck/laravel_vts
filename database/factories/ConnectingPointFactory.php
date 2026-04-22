@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\City;
 use App\Models\ConnectingPoint;
+use App\Models\CustomerType;
 use App\Models\PowerLineType;
 use App\Models\Region;
 use App\Models\Street;
@@ -27,6 +28,7 @@ class ConnectingPointFactory extends Factory
             'technical_conditions' => 'MP-'.fake()->numberBetween(100, 999),
             'technical_conditions_date' => $this->faker->date(),
             'customer' => $this->faker->name().' '.$this->faker->lastName(),
+            'customer_type_id' => $this->faker->randomElement(CustomerType::all()->pluck('id')->toArray()),
             'point_place' => $this->faker->words(5, true),
             'connecting_note' => $this->faker->text(30),
             'power_point' => $this->faker->words(5, true),

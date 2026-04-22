@@ -32,23 +32,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin(): bool
-    {
-        return $this->role_id == 2;
-    }
-
-    public function isUser(): bool {
-        return $this->role_id == 3;
-    }
-
-    public function isSuperAdmin(): bool {
-            return $this->role_id == 1;
-    }
-
-    public function role() {
-        return $this->belongsTo(Role::class);
-    }
-
     public function regions(): BelongsToMany
     {
         return $this->belongsToMany(Region::class,'role_region_users','user_id','region_id');

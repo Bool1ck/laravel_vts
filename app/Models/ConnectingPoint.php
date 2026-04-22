@@ -13,11 +13,7 @@ class ConnectingPoint extends Model
         return $this->belongsTo(Region::class);
     }
 
-    public function city() {
-        return $this->belongsTo(City::class);
-    }
-
-    public function street() {
-        return $this->belongsTo(Street::class);
+    public function customerType() {
+        return $this->belongsTo(CustomerType::class);
     }
 }

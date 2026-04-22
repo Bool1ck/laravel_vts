@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             StreetTypeSeeder::class,
             PowerLineTypeSeeder::class,
             TpTypeSeeder::class,
-//            ConnectingPointWorkTypeSeeder::class,
+            CustomerTypeSeeder::class,
         ]);
         Region::factory(10)->create();
         City::factory(10)->create();
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
 
 //        User::factory()->create([
 //            'name' => 'Test User',
-//            'email' => 'connectionpoints@example.com',
+//            'email' => 'app@example.com',
 //        ]);
     }
 }

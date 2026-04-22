@@ -2,21 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
+use App\Models\CustomerType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RoleSeeder extends Seeder
+class CustomerTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $roles = ['admin', 'vtg', 'legal', 'household', 'viewer'];
-        foreach ($roles as $role) {
-            Role::factory()->create([
-                'name' => $role
+        $types = ['Юридічний', 'Побутовий'];
+        foreach ($types as $type) {
+            CustomerType::factory()->create([
+                'name' => $type
             ]);
         }
     }

@@ -19,7 +19,7 @@ test('profile information can be updated', function () {
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
-            'email' => 'connectionpoints@example.com',
+            'email' => 'app@example.com',
         ]);
 
     $response
@@ -29,7 +29,7 @@ test('profile information can be updated', function () {
     $user->refresh();
 
     $this->assertSame('Test User', $user->name);
-    $this->assertSame('connectionpoints@example.com', $user->email);
+    $this->assertSame('app@example.com', $user->email);
     $this->assertNull($user->email_verified_at);
 });
 
