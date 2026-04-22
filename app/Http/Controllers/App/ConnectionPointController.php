@@ -14,12 +14,11 @@ class ConnectionPointController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $id)
+    public function index(Region $region)
     {
-        $points = [];
-        $permission = RoleRegionUser::all()->where('user_id', Auth::id())->where('region_id', $id);
-        if ($permission->count()) {
-            $points = ConnectingPoint::all()->where('region_id', $id);
+        $points =[];
+        if ($region->userHasPermission(Auth::user())) {
+            $points = ConnectingPoint::all()->where('region_id', $region->id);
         }
         return view('connectionpoints.index', compact('points'));
     }

@@ -10,7 +10,7 @@
 {{--            </select>--}}
         <ul>
             @foreach(Auth::user()->regionRoles as $regionrole)
-               <li><a href="{{ route('connectionpoints.index',['id' => $regionrole->region->id]) }}">{{$regionrole->region->name}}</a></li>
+               <li><a href="{{ route('connectionpoints.index',['region' => $regionrole->region->id]) }}">{{$regionrole->region->name}}</a></li>
             @endforeach
         </ul>
 

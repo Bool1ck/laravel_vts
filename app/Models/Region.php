@@ -15,6 +15,6 @@ class Region extends Model
     }
 
     public function userHasPermission(User $user) {
-
+        return !RoleRegionUser::all()->where('user_id', $user->id)->where('region_id',$this->id)->isEmpty();
     }
 }

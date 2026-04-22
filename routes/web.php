@@ -11,11 +11,11 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/connectionpoints', function () {
+    Route::get('/region', function () {
         return view('connectionpoints.dashboard');
     })->name('dashboard');
 
-    Route::get('/connectionpoints/{id}', [ConnectionPointController::class, 'index'])->name
+    Route::get('/region/{region}', [ConnectionPointController::class, 'index'])->name
     ('connectionpoints.index');
 });
 
