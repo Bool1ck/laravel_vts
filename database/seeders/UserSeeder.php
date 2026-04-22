@@ -22,9 +22,13 @@ class UserSeeder extends Seeder
             'name' => 'boolick',
             'email' => 'boolick@boolick.com',
             'role_id' => DB::table('roles')->where('name', 'root')->value('id'),
-//            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('11111111'),
-//            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'name' => 'bool',
+            'email' => 'bool@bool.com',
+            'role_id' => DB::table('roles')->where('name', 'user')->value('id'),
+            'password' => static::$password ??= Hash::make('11111111'),
         ]);
         //
     }

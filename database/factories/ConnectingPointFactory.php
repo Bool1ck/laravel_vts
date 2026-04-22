@@ -31,9 +31,8 @@ class ConnectingPointFactory extends Factory
             'connecting_note' => $this->faker->text(30),
             'power_point' => $this->faker->words(5, true),
             'power_point_note' => $this->faker->text(30),
+            'power' => $this->faker->numberBetween(5,20),
             'note' => $this->faker->text(30),
-
-            //
         ];
     }
 }

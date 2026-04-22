@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('connecting_note');
             $table->string('power_point');
             $table->text('power_point_note');
+            $table->unsignedBigInteger('power');
             $table->text('note');
             $table->timestamps();
         });

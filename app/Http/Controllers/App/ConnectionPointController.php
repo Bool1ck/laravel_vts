@@ -20,7 +20,7 @@ class ConnectionPointController extends Controller
         if ($region->userHasPermission(Auth::user())) {
             $points = ConnectingPoint::all()->where('region_id', $region->id);
         }
-        return view('connectionpoints.index', compact('points'));
+        return view('connectionpoints.index', compact('points', 'region'));
     }
 
     /**

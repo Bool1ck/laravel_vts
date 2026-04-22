@@ -11,12 +11,15 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/region', function () {
-        return view('connectionpoints.dashboard');
-    })->name('dashboard');
+    Route::prefix('/region')->group(function () {
+        Route::get('/', function () {
+            return view('connectionpoints.dashboard');
+        })->name('dashboard');
 
-    Route::get('/region/{region}', [ConnectionPointController::class, 'index'])->name
-    ('connectionpoints.index');
+        Route::get('/{region}', [ConnectionPointController::class, 'index'])->name
+        ('connectionpoints.index');
+    });
+
 });
 
 Route::middleware('auth')->group(function () {
