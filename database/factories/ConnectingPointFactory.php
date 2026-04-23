@@ -34,6 +34,12 @@ class ConnectingPointFactory extends Factory
             'power_point' => $this->faker->words(5, true),
             'power_point_note' => $this->faker->text(30),
             'power' => $this->faker->numberBetween(5,20),
+            'payment_date' => $this->faker->date(),
+            'perform_by_date' => $this->faker->date(),
+            'performance_date' => $this->faker->date(),
+            'materials_order_date' => $this->faker->date(),
+            'materials_receipt_date' => $this->faker->date(),
+            'contract_date' => $this->faker->date(),
             'note' => $this->faker->text(30),
         ];
     }

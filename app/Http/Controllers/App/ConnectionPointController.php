@@ -16,11 +16,12 @@ class ConnectionPointController extends Controller
      */
     public function index(Region $region)
     {
+        $role = $region->userRole()->name;
         $points =[];
         if ($region->userHasPermission(Auth::user())) {
             $points = ConnectingPoint::all()->where('region_id', $region->id);
         }
-        return view('app.index', compact('points', 'region'));
+        return view('app.index', compact('points', 'region', 'role'));
     }
 
     /**

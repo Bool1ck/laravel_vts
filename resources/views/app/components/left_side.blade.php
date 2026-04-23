@@ -22,11 +22,16 @@
     <div>
         <hr>
     </div>
-    <div class="w-full text-center">Admin panel</div>
-    <div><a href="#">Some text</a></div>
-    <div><a href="#">Some text</a></div>
-    <div><a href="#">Some text</a></div>
-    <div><a href="#">Some text</a></div>
-    <div><a href="#">Some text</a></div>
-    <div><a href="#">Some text</a></div>
+    @isset($region)
+        @if($region->IsUserRoleAdmin())
+            <div class="w-full text-center">Admin panel</div>
+            <div><a href="#">Some text</a></div>
+            <div><a href="#">Some text</a></div>
+            <div><a href="#">Some text</a></div>
+            <div><a href="#">Some text</a></div>
+            <div><a href="#">Some text</a></div>
+            <div><a href="#">Some text</a></div>
+        @endif
+    @endisset
+
 </div>

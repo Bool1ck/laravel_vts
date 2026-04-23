@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('region_id')->references('id')->on('regions');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unique(['role_id', 'region_id', 'user_id']);
+            $table->unique(['region_id', 'user_id']);
             $table->timestamps();
         });
     }

@@ -2086,6 +2086,7 @@
             }
         </style>
     @endif
+    @stack('styles')
 </head>
 <body class="flex items-center lg:justify-center min-h-screen flex-col">
 <div class="w-full bg-gray-200 flex flex-row min-h-screen">
@@ -2101,13 +2102,5 @@
         </div>
     </div>
 </div>
-{{--@include('app.components.header')--}}
-{{--<div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">--}}
-{{--    @yield('content')--}}
-{{--</div>--}}
-
-{{--@if (Route::has('login'))--}}
-{{--    <div class="h-14.5 hidden lg:block"></div>--}}
-{{--@endif--}}
 </body>
 </html>

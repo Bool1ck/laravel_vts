@@ -20,11 +20,17 @@ return new class extends Migration
             $table->string('customer');
             $table->unsignedBigInteger('customer_type_id');
             $table->foreign('customer_type_id')->references('id')->on('customer_types');
+            $table->date('contract_date');
             $table->string('point_place');
             $table->text('connecting_note');
             $table->string('power_point');
             $table->text('power_point_note');
             $table->unsignedBigInteger('power');
+            $table->date('payment_date');
+            $table->date('perform_by_date');
+            $table->date('performance_date');
+            $table->date('materials_order_date');
+            $table->date('materials_receipt_date');
             $table->text('note');
             $table->timestamps();
         });
