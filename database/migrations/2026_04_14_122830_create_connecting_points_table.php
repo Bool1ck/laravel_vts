@@ -22,9 +22,7 @@ return new class extends Migration
             $table->foreign('customer_type_id')->references('id')->on('customer_types');
             $table->date('contract_date');
             $table->string('point_place');
-            $table->text('connecting_note');
             $table->string('power_point');
-            $table->text('power_point_note');
             $table->unsignedBigInteger('power');
             $table->date('payment_date');
             $table->date('perform_by_date');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreConnectionPointRequest;
 use App\Models\City;
 use App\Models\ConnectingPoint;
 use App\Models\CustomerType;
@@ -10,6 +11,7 @@ use App\Models\PowerLineType;
 use App\Models\Region;
 use App\Models\RoleRegionUser;
 use App\Models\Street;
+use App\Models\WorkType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,17 +38,25 @@ class ConnectionPointController extends Controller
         $customerTypes = CustomerType::all();
         $powerLineTypes = PowerLineType::all();
         $cities = City::citiesInRegion($region);
-//        $streets = Street::streetsInCitie($city);
-        return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities'));
-        //
+        $streets = Street::streetsInCity(City::find(array_keys($cities->toArray())[0]));
+        $workTypes = WorkType::all();
+        return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities', 'streets', 'workTypes'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreConnectionPointRequest $request)
     {
-        dd($request);
+//        dd($request);
+        $validated = $request->validated();
+        $city = City::find($request->get('city_id'));
+        $cityType = $city->cityType->name;
+        $CityFullName = $cityType . ' ' . $city->name;
+        $street = Street::find($validated['street_id']);
+        $streetType = $street->streetType->name;
+        $StreetFullName = $streetType . ' ' . $street->name;
+        dd($validated, $CityFullName, $StreetFullName);
         return view('app.connectionpoints.show', compact('region', 'id'));
     }
 

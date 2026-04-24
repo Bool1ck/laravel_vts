@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
             CustomerTypeSeeder::class,
         ]);
         Region::factory(10)->create();
-        City::factory(10)->create();
-        Street::factory(20)->create();
+        City::factory(100)->create();
+        Street::factory(1000)->create();
         Tp::factory(100)->create();
         WorkType::factory(5)->create();
         ConnectingPoint::factory(20)->create();

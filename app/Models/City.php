@@ -13,4 +13,8 @@ class City extends Model
     public  static function citiesInRegion(Region $region) {
         return City::all()->where('region_id', $region->id);
     }
+
+    public function cityType() {
+        return $this->belongsTo(CityType::class, 'city_type_id');
+    }
 }

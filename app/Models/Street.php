@@ -9,7 +9,12 @@ class Street extends Model
 {
     use HasFactory;
 
-    public static function streetsInCitie(City $city) {
+    public static function streetsInCity(City $city) {
         return Street::all()->where('city_id', $city->id);
+    }
+
+    public function streetType()
+    {
+        return $this->belongsTo(StreetType::class, 'street_type_id');
     }
 }
