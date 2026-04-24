@@ -13,7 +13,7 @@ class PowerLineTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $PowerLineType = ['0.4k', '10k'];
+        $PowerLineType = ['0.4', '10'];
         foreach ($PowerLineType as $type) {
             PowerLineType::factory()->create([
                 'name' => $type

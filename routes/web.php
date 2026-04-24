@@ -18,6 +18,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/{region}', [ConnectionPointController::class, 'index'])->name
         ('app.index');
+
+        Route::prefix('/{region}/connections-points')->group(function () {
+            Route::get('/show/{id}', [ConnectionPointController::class, 'show'])->name('connection_point.show');
+            Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
+            Route::put('/store', [ConnectionPointController::class, 'store'])->name('connection_point.store');
+        });
     });
 
 });

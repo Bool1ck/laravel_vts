@@ -9,4 +9,8 @@ class City extends Model
 {
     use HasFactory;
     //
+
+    public  static function citiesInRegion(Region $region) {
+        return City::all()->where('region_id', $region->id);
+    }
 }

@@ -13,7 +13,7 @@ class CustomerTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $types = ['Юридічний', 'Побутовий'];
+        $types = ['Побутовий', 'Юридічний'];
         foreach ($types as $type) {
             CustomerType::factory()->create([
                 'name' => $type

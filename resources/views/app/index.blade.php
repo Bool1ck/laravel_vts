@@ -5,7 +5,7 @@
         <div class="p-2">
             {{$region->name}} >>
             @if($region->IsUserRoleVtg())
-                <a href="#">Нове приєднання</a>
+                <a href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
             @endif
         </div>
         <div>

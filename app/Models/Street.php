@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Street extends Model
 {
     use HasFactory;
-    //
+
+    public static function streetsInCitie(City $city) {
+        return Street::all()->where('city_id', $city->id);
+    }
 }
