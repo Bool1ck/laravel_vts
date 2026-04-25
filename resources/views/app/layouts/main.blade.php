@@ -2094,7 +2094,7 @@
         @include('app.components.left_side')
     </div>
     <div class="w-full flex flex-col">
-        <div class="w-full bg-gray-300  p-2">
+        <div class="w-full bg-gray-300">
             @include('app.components.header')
         </div>
         <div>

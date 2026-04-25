@@ -2,14 +2,9 @@
 
 @section('content')
     <div>
-        <div class="p-2">
-            {{$region->name}} >>
-        </div>
-        <div>
-            <hr>
-        </div>
         <div class="m-2">
             <p>Show Connection Point</p>
+{{--@dd($cp)--}}
 {{--            <form action="#">--}}
 {{--                @csrf--}}
 {{--                @method('PUT')--}}

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+//#[Fillable(['region_id ', 'technical_conditions', 'password'])]
 class ConnectingPoint extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
     public function region() {
         return $this->belongsTo(Region::class);
     }

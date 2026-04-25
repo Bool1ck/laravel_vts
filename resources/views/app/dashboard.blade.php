@@ -2,9 +2,9 @@
 
 @section('content')
     <div>
-        @foreach(\Illuminate\Support\Facades\Auth::user()->regionRoles as $regionrole)
-            <div>Region: {{ $regionrole->region->name }}, role : {{ $regionrole->role->name }},
-                points: {{$regionrole->region->allConnectionPoints->count()}}
+        @foreach(\Illuminate\Support\Facades\Auth::user()->regions as $region)
+            <div>Region: {{ $region->name }}, role : {{ $region->userRole()->name }},
+                points: {{$region->allConnectionPoints->count()}}
             </div>
         @endforeach
     </div>

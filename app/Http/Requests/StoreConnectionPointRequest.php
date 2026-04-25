@@ -38,6 +38,7 @@ class StoreConnectionPointRequest extends FormRequest
             'power_line' => 'required|string',
             'pole' => 'required|numeric',
             'notes' => 'string|nullable',
+            'workTypes' => 'array|nullable',
         ];
     }
 }

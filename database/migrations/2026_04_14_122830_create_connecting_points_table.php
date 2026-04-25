@@ -16,20 +16,23 @@ return new class extends Migration
             $table->unsignedBigInteger('region_id');
             $table->foreign('region_id')->references('id')->on('regions');
             $table->string('technical_conditions');
+            /* for prod */
+//            $table->unique(['region_id', 'technical_conditions']);
+            /* for prod */
             $table->date('technical_conditions_date');
             $table->string('customer');
             $table->unsignedBigInteger('customer_type_id');
             $table->foreign('customer_type_id')->references('id')->on('customer_types');
-            $table->date('contract_date');
             $table->string('point_place');
             $table->string('power_point');
             $table->unsignedBigInteger('power');
-            $table->date('payment_date');
-            $table->date('perform_by_date');
-            $table->date('performance_date');
-            $table->date('materials_order_date');
-            $table->date('materials_receipt_date');
-            $table->text('note');
+            $table->date('contract_date')->nullable();
+            $table->date('payment_date')->nullable();
+            $table->date('perform_by_date')->nullable();
+            $table->date('performance_date')->nullable();
+            $table->date('materials_order_date')->nullable();
+            $table->date('materials_receipt_date')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

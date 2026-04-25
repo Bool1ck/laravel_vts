@@ -1,9 +1,9 @@
-<header class="w-full lg:max-w-4xl max-w-[335px] text-sm not-has-[nav]:hidden">
+<header class="w-full lg:max-w-4xl max-w-[335px] text-sm not-has-[nav]:hidden py-2 px-2" >
     @if (Route::has('login'))
         <nav class="flex items-center  gap-4">
             @auth
                 <div>User : {{\Illuminate\Support\Facades\Auth::user()->name}}
-                    @isset($role), role: {{$role}}
+                    @isset($region), role: {{$region->userRole()->name}}
                     @endisset</div>
                 <a
                     href="{{ route('dashboard') }}"
@@ -33,4 +33,14 @@
             @endauth
         </nav>
     @endif
+
 </header>
+@if(isset($region))
+    <div class="bg-gray-200 flex w-full py-2 px-2">
+        {{$region->name}} >>
+        @if($region->IsUserRoleVtg())
+            <a href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+        @endif
+    </div>
+@endif
+    <hr class="p-0 m-0">

@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ConnectingPointWorkType extends Model
 {
     use HasFactory;
+    protected $guarded = [];
     //
 }

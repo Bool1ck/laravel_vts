@@ -45,4 +45,8 @@ class Region extends Model
     public function IsUserCanEdit() {
         return $this->IsUserRoleAdmin() || $this->IsUserRoleVtg();
     }
+
+    public function Cities() {
+        return $this->hasMany(City::class, 'region_id', 'id');
+    }
 }

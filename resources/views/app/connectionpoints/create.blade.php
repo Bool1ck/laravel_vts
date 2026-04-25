@@ -2,12 +2,6 @@
 
 @section('content')
     <div>
-        <div class="p-2">
-            {{$region->name}} >>
-        </div>
-        <div>
-            <hr>
-        </div>
         <div class="m-2">
             <p>New Connection Point</p>
             <form action="{{ route('connection_point.store', ['region' => $region]) }}" method="POST">
