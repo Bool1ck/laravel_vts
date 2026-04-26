@@ -16,4 +16,8 @@ class ConnectingPoint extends Model
     public function customerType() {
         return $this->belongsTo(CustomerType::class);
     }
+
+    public function workTypes() {
+        return $this->belongsToMany(WorkType::class, 'connecting_point_work_types', 'pointid', 'worktype_id');
+    }
 }

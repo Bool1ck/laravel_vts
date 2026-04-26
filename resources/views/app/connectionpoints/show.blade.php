@@ -2,149 +2,150 @@
 
 @section('content')
     <div>
-        <div class="m-2">
-            <p>Show Connection Point</p>
-{{--@dd($cp)--}}
-{{--            <form action="#">--}}
-{{--                @csrf--}}
-{{--                @method('PUT')--}}
-{{--                <div class="flex flex-col tbl">--}}
-{{--                    <div>--}}
-{{--                        <label>Дані замовника</label>--}}
-{{--                        <div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Технічні умови</div>--}}
-{{--                                <div><input type="text" placeholder="Номер техних умов"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Дата ТУ</div>--}}
-{{--                                <div><input type="date"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Замовник</div>--}}
-{{--                                <div><input type="text" placeholder="ПІБ"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Потужність :</div>--}}
-{{--                                <div><input type="number" placeholder="кВт"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Тип замовника</div>--}}
-{{--                                <div>--}}
-{{--                                    <fieldset class="flex flex-row">--}}
-{{--                                        <div>--}}
-{{--                                            <input type="radio" id="huey" name="drone" value="huey" checked/>--}}
-{{--                                            <label for="huey">Побутовий</label>--}}
-{{--                                        </div>--}}
-{{--                                        <div>--}}
-{{--                                            <input type="radio" id="dewey" name="drone" value="dewey"/>--}}
-{{--                                            <label for="dewey">Юридичний</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div>--}}
-{{--                        <label>Місце знаходження об'єкту</label>--}}
-{{--                        <div class="flex flex-col">--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Місто/Село</div>--}}
-{{--                                <div>--}}
-{{--                                    <select>--}}
-{{--                                        <option>Малин</option>--}}
-{{--                                        <option>Малин2</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Вулиця</div>--}}
-{{--                                <div>--}}
-{{--                                    <select>--}}
-{{--                                        <option>Грушевського</option>--}}
-{{--                                        <option>Грушевського2</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Будинок</div>--}}
-{{--                                <div><input type="number" placeholder="№"></div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div>--}}
-{{--                        <label>Точка забезпечення потужності</label>--}}
-{{--                        <div class="flex flex-col">--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">ПЛ :</div>--}}
-{{--                                <div>--}}
-{{--                                    <fieldset class="flex flex-row">--}}
-{{--                                        <div>--}}
-{{--                                            <input type="radio" id="04" name="pl" value="04" checked/>--}}
-{{--                                            <label for="04">0,4</label>--}}
-{{--                                        </div>--}}
-{{--                                        <div>--}}
-{{--                                            <input type="radio" id="10" name="pl" value="10"/>--}}
-{{--                                            <label for="10">10</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">ТП :</div>--}}
-{{--                                <div><input type="number" placeholder="000"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Лінія :</div>--}}
-{{--                                <div><input type="text" placeholder="Л-"></div>--}}
-{{--                            </div>--}}
-{{--                            <div class="flex flex-row">--}}
-{{--                                <div class="form_title">Опора №:</div>--}}
-{{--                                <div><input type="number" placeholder="№"></div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+        <div class="">
+            <div class="flex flex-col tbl">
+                <div>
+                    <label>Дані замовника</label>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Замовник</div>
+                            <div><input type="text" value="{{ $cp->customer }}" disabled></div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Технічні умови</div>
+                            <div><input type="text" value="{{ $cp->technical_conditions }}" disabled>
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Дата ТУ</div>
+                            <div><input type="date" value="{{ $cp->technical_conditions_date }}" disabled></div>
+                        </div>
 
-{{--                    </div>--}}
+                        <div class="flex flex-row">
+                            <div class="form_title">Потужність(кВт)</div>
+                            <div><input type="number" value="{{ $cp->power }}" disabled>
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Тип замовника</div>
+                            <div>
+                                <input type="text" value="{{ $cp->customerType->name }}" disabled>
+                            </div>
+                        </div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Дата договору</div>
+                            <div>
+                                <input type="text" value="{{ $cp->contract_date }}" disabled
+                                       @if(empty($cp->contract_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Виконання</label>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Дата оплати</div>
+                            <div>
+                                <input type="text" value="{{ $cp->payment_date }}" disabled
+                                       @if(empty($cp->payment_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Виконати до</div>
+                            <div>
+                                <input type="text" value="{{ $cp->perform_by_date }}" disabled
+                                       @if(empty($cp->perform_by_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Виконано</div>
+                            <div>
+                                <input type="text" value="{{ $cp->performance_date }}" disabled
+                                       @if(empty($cp->performance_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Матеріали</label>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Замовлено</div>
+                            <div>
+                                <input type="text" value="{{ $cp->materials_order_date }}" disabled
+                                       @if(empty($cp->materials_order_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex flex-row">
+                            <div class="form_title">Отримано</div>
+                            <div>
+                                <input type="text" value="{{ $cp->materials_receipt_date }}" disabled
+                                       @if(empty($cp->materials_receipt_date))
+                                           style="background-color: #FFBDC1"
+                                    @endif>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Місце знаходження об'єкту</label>
+                    <div class="flex flex-col">
+                        <div class="flex flex-row">
+                            <div>
+                                <input style="width: 520px" type="text" value="{{ $cp->point_place }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Точка забезпечення потужності</label>
+                    <div class="flex flex-col">
+                        <div class="flex flex-row">
+                            <div>
+                                <input style="width: 520px" type="text" value="{{ $cp->power_point }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Перелік робіт</label>
+                    <div class="flex flex-col ms-4">
+                        <div>
+                            @foreach($cpWorkTypes as $cpWorkType)
+                                <li>{{$cpWorkType->workType->name}}</li>
+                            @endforeach
+                        </div>
 
-{{--                    <div>--}}
-{{--                        <div class=>--}}
-{{--                            <label>Перелік робіт</label>--}}
-{{--                        </div>--}}
-{{--                        <div class="flex">--}}
-{{--                            <fieldset class="flex flex-col ms-5">--}}
-{{--                                <div>--}}
-{{--                                    <input type="checkbox" id="subscribe" name="newsletter" value="yes">--}}
-{{--                                    <label for="04">11111</label>--}}
-{{--                                </div>--}}
-{{--                                <div>--}}
-{{--                                    <input type="checkbox" id="subscribe" name="newsletter" value="yes">--}}
-{{--                                    <label for="10">22222</label>--}}
-{{--                                </div>--}}
-{{--                                <div>--}}
-{{--                                    <input type="checkbox" id="subscribe" name="newsletter" value="yes">--}}
-{{--                                    <label for="10">33333</label>--}}
-{{--                                </div>--}}
-{{--                                <div>--}}
-{{--                                    <input type="checkbox" id="subscribe" name="newsletter" value="yes">--}}
-{{--                                    <label for="10">444444</label>--}}
-{{--                                </div>--}}
-{{--                                <div>--}}
-{{--                                    <input type="checkbox" id="subscribe" name="newsletter" value="yes">--}}
-{{--                                    <label for="10">555555</label>--}}
-{{--                                </div>--}}
-{{--                            </fieldset>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="flex flex-row">--}}
-{{--                        <div class="form_title">Note</div>--}}
-{{--                        <div><textarea placeholder="..."></textarea></div>--}}
-{{--                    </div>--}}
-{{--                    <div class="flex flex-row">--}}
-{{--                        <div class="m-1"><input type="button" value="Додати" class="btn"></div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </form>--}}
+                    </div>
+                </div>
+                <div>
+                    <label>Note</label>
+                    <div class="flex flex-col">
+                        <div><textarea disabled>{{$cp->note}}</textarea></div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
+    </div>
     </div>
 @endsection
 
@@ -177,7 +178,7 @@
         }
 
         div.tbl {
-            border: 1px solid #AAA;
+            /*border: 1px solid #AAA;*/
         }
 
         div.tbl > div {
@@ -194,52 +195,18 @@
             padding-top: 2px;
         }
 
-        select {
-            padding-left: 5px;
-            width: 400px;
-            /*appearance: none; !* Removes default arrow *!*/
-            background-color: #FDFFC4;
-            border: 1px solid #3498db;
-            /*background-image: url('arrow.svg'); !* Add custom arrow *!*/
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            cursor: pointer;
-        }
-
         input {
-            background-color: #E1EEFF;
+            width: 400px;
+            background-color: #FFFBD5;
             padding-left: 5px;
-        }
-
-        input[type="text"] {
-            width: 400px;
             border: 1px solid #CCC;
             margin-right: 5px;
-        }
-
-        input[type="number"] {
-            width: 400px;
-            border: 1px solid #CCC;
-            margin-right: 5px;
-        }
-
-        input[type="radio"] {
-            width: 10px;
-            margin-left: 5px;
-        }
-
-        input[type="checkbox"] {
-            width: 10px;
-            /*margin-left: 5px;*/
-        }
-
-        input[type="date"] {
-            border: 1px solid #CCC;
         }
 
         textarea {
             padding-left: 5px;
-            width: 400px;
+            width: 520px;
+            min-height: 100px;
             border: 1px solid #CCC;
         }
 

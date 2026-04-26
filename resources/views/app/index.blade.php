@@ -19,7 +19,7 @@
                     <th>Виконано</th>
                     <th>замовлення<br>матеріалів</th>
                     <th>отримання<br>матеріалів</th>
-                    <th>Примітка</th>
+{{--                    <th>Примітка</th>--}}
                     @if($region->IsUserCanEdit())
                         <th>Операції</th>
                     @endif
@@ -33,16 +33,23 @@
                         <td>{{$point->point_place}}</td>
                         <td>{{$point->power_point}}</td>
                         <td>{{$point->power}} кВт</td>
-                        <td></td>
+                        <td>
+                            @foreach($point->workTypes as $cpwt)
+                                <li class="ms-3">{{$cpwt->name}}</li>
+                            @endforeach
+                        </td>
                         <td>{{$point->contract_date}}</td>
                         <td>{{$point->payment_date}}</td>
                         <td>{{$point->perform_by_date}}</td>
                         <td>{{$point->performance_date}}</td>
                         <td>{{$point->materials_order_date}}</td>
                         <td>{{$point->materials_receipt_date}}</td>
-                        <td>{{$point->note}}</td>
+{{--                        <td>{{$point->note}}</td>--}}
                         @if($region->IsUserCanEdit())
-                            <td>1111</td>
+                            <td>
+                                <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
+                                <a href="#">Edit</a>
+                            </td>
                         @endif
                     </tr>
                 @endforeach

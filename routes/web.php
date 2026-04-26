@@ -11,11 +11,10 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', function () {
+        return view('app.dashboard');
+    })->name('dashboard');
     Route::prefix('/region')->group(function () {
-        Route::get('/', function () {
-            return view('app.dashboard');
-        })->name('dashboard');
-
         Route::get('/{region}', [ConnectionPointController::class, 'index'])->name
         ('app.index');
 

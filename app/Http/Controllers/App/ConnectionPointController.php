@@ -57,7 +57,7 @@ class ConnectionPointController extends Controller
         $power_point = 'ПЛ-' . $validated['powerLineType'] . 'кВ від ' . $tp->type->name . '-' . $tp->name . ' ' .$tp->city->cityType->name  . $tp->city->name . ', ' . $validated['power_line'] . ' опора №' . $validated['pole'];
         $validated['point_place'] = $point_place;
         $validated['power_point'] = $power_point;
-        $workTypes = $validated['workTypes'];
+        $workTypes_id = $validated['workTypes'];
         $region = $validated['region_id'];
         unset($validated['build_number']);
         unset($validated['workTypes']);
@@ -68,8 +68,8 @@ class ConnectionPointController extends Controller
         unset($validated['city_id']);
         unset($validated['street_id']);
         $connectionPoint = ConnectingPoint::create($validated);
-        foreach ($workTypes as $workType) {
-            ConnectingPointWorkType::create(['worktype_id' => $workType, 'pointid' => $connectionPoint->id]);
+        foreach ($workTypes_id as $workType_id) {
+            ConnectingPointWorkType::create(['worktype_id' => $workType_id, 'pointid' => $connectionPoint->id]);
         }
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $connectionPoint->id]));
     }
@@ -79,8 +79,8 @@ class ConnectionPointController extends Controller
      */
     public function show(Region $region, ConnectingPoint $cp)
     {
-//        $cp = $cp->toArray();
-        return view('app.connectionpoints.show', compact('region', 'cp'));
+        $cpWorkTypes = ConnectingPointWorkType::where('pointid', $cp->id)->get();
+        return view('app.connectionpoints.show', compact('region', 'cp', 'cpWorkTypes'));
     }
 
     /**
