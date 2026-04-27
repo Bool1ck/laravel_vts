@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreConnectionPointRequest extends FormRequest
+class UpdateConnectionPointRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +24,18 @@ class StoreConnectionPointRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'region_id' => 'required|exists:regions,id',
             'technical_conditions' => 'required|string',
             'technical_conditions_date' => 'required|date_format:Y-m-d',
             'customer' => 'required|string',
-            'power' => 'required|numeric',
             'customer_type_id' => 'required|exists:customer_types,id',
-            'city_id' => 'required|exists:cities,id',
-            'street_id' => 'required|exists:streets,id',
-            'build_number' => 'required|string',
-            'powerLineType' => 'required|string',
-            'tp' => 'required|exists:tps,name',
-            'power_line' => 'required|string',
-            'pole' => 'required|numeric',
+            'point_place' => 'required|string',
+            'power_point' => 'required|string',
+            'power' => 'required|numeric',
+            'contract_date' => 'nullable|date_format:Y-m-d',
+            'payment_date' => 'nullable|date_format:Y-m-d',
+            'performance_date' => 'nullable|date_format:Y-m-d',
+            'materials_order_date' => 'nullable|date_format:Y-m-d',
+            'materials_receipt_date' => 'nullable|date_format:Y-m-d',
             'note' => 'string|nullable',
             'workTypes' => 'array|nullable',
         ];

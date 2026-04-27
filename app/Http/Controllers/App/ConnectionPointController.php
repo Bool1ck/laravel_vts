@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreConnectionPointRequest;
+use App\Http\Requests\UpdateConnectionPointRequest;
 use App\Models\City;
 use App\Models\ConnectingPoint;
 use App\Models\ConnectingPointWorkType;
@@ -14,6 +15,7 @@ use App\Models\RoleRegionUser;
 use App\Models\Street;
 use App\Models\Tp;
 use App\Models\WorkType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,17 +88,39 @@ class ConnectionPointController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Region $region, ConnectingPoint $cp)
     {
-        //
+        $cpWorkTypes = ConnectingPointWorkType::where('pointid', $cp->id)->get();
+        $workTypes = WorkType::all();
+        $customerTypes = CustomerType::all();
+        return view('app.connectionpoints.edit', compact('region', 'cp', 'cpWorkTypes', 'workTypes', 'customerTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateConnectionPointRequest $request, Region $region, ConnectingPoint $cp)
     {
-        //
+        $validated = $request->validated();
+//        dd($validated);
+        $workTypes_id = $validated['workTypes'];
+        if(!is_null($validated['payment_date'])) {
+            if ($validated['power']  == 5) {
+                $days = 45;
+            } elseif ($validated['power']  > 5 && $validated['power']  < 16) {
+                $days = 60;
+            } elseif ($validated['power']  > 15 && $validated['power']  < 30) {
+                $days = 75;
+            } elseif ($validated['power']  >= 30) {
+                $days = 90;
+            }
+            $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days);
+        } else {
+            $validated['perform_by_date'] = null;
+        }
+        unset($validated['workTypes']);
+        $cp->update($validated);
+        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 
     /**

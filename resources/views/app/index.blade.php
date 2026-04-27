@@ -48,7 +48,7 @@
                         @if($region->IsUserCanEdit())
                             <td>
                                 <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
-                                <a href="#">Edit</a>
+                                <a href="{{ route('connection_point.edit',['region' => $point->region_id, 'cp' => $point->id]) }}">Edit</a>
                             </td>
                         @endif
                     </tr>

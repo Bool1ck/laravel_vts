@@ -107,7 +107,7 @@
                 <div>
                     <label>Місце знаходження об'єкту</label>
                     <div class="flex flex-col">
-                        <div class="flex flex-row">
+                        <div class="flex flex-row"><div></div>
                             <div>
                                 <input style="width: 520px" type="text" value="{{ $cp->point_place }}" disabled>
                             </div>
@@ -141,8 +141,12 @@
                         <div><textarea disabled>{{$cp->note}}</textarea></div>
                     </div>
                 </div>
+                @if($region->IsUserCanEdit())
+                    <div>
+                            <div class="p-2"><a href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}" class="btn">Внести зміни</a></div>
+                    </div>
+                @endif
             </div>
-
 
         </div>
     </div>
@@ -162,11 +166,12 @@
         }
 
         .btn {
+            min-width: 100px;
             border: 1px solid #ccc;
             padding: 3px;
             padding-left: 5px;
             padding-right: 5px;
-            background-color: #cfc;
+            background-color: #FFFED3;
         }
 
         .btn:hover {
@@ -174,7 +179,7 @@
             padding: 3px;
             padding-left: 5px;
             padding-right: 5px;
-            background-color: #3f3;
+            background-color: #FFFC4A;
         }
 
         div.tbl {

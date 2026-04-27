@@ -2,8 +2,8 @@
     @if (Route::has('login'))
         <nav class="flex items-center  gap-4">
             @auth
-                <div>User : {{\Illuminate\Support\Facades\Auth::user()->name}}
-                    @isset($region), role: {{$region->userRole()->name}}
+                <div>Користувач : {{\Illuminate\Support\Facades\Auth::user()->name}}
+                    @isset($region), відділ: {{$region->userRole()->name}}
                     @endisset</div>
                 <a
                     href="{{ route('dashboard') }}"
@@ -37,9 +37,15 @@
 </header>
 @if(isset($region))
     <div class="bg-gray-200 flex w-full py-2 px-2">
-        {{$region->name}} >>
-        @if($region->IsUserRoleVtg())
-            <a href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+        <a href="{{ route('app.index',['region' => $region->id]) }}">{{$region->name}}</a>&nbsp;>>
+        @if (Route::is('connection_point.show'))
+            <div>{{$cp->customer}}({{$cp->technical_conditions}})</div>
+        @elseif($region->IsUserCanEdit() && Route::is('connection_point.edit'))
+            <div>{{$cp->customer}}({{$cp->technical_conditions}}) [Внесення змін]</div>
+        @elseif($region->IsUserCanEdit() && !Route::is('connection_point.create'))
+                <a class="ps-1" href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+        @elseif($region->IsUserCanEdit() && Route::is('connection_point.create'))
+            <p class="ps-1" style="color: #1BCD1B">Нова точка приєднання</p>
         @endif
     </div>
 @endif

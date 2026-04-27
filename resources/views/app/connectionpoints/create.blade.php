@@ -3,7 +3,7 @@
 @section('content')
     <div>
         <div class="m-2">
-            <p>New Connection Point</p>
+            {{--            <p class="ps-4" style="font-weight: bold; color: #1BCD1B">Нова точка приєднання</p>--}}
             <form action="{{ route('connection_point.store', ['region' => $region]) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -12,6 +12,11 @@
                     <div>
                         <label>Дані замовника</label>
                         <div>
+                            <div class="flex flex-row">
+                                <div class="form_title">Замовник</div>
+                                <div><input type="text" name="customer" placeholder="ПІБ" value="{{ old('customer') }}">
+                                </div>
+                            </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Технічні умови</div>
                                 <div><input type="text" name="technical_conditions"
@@ -22,11 +27,6 @@
                                 <div class="form_title">Дата ТУ</div>
                                 <div><input type="date" name="technical_conditions_date"
                                             value="{{ old('technical_conditions_date') }}"></div>
-                            </div>
-                            <div class="flex flex-row">
-                                <div class="form_title">Замовник</div>
-                                <div><input type="text" name="customer" placeholder="ПІБ" value="{{ old('customer') }}">
-                                </div>
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Потужність :</div>
@@ -43,15 +43,15 @@
                                         @foreach($customerTypes as $customerType)
                                             @if(old('customer_type_id'))
                                                 <div>
-                                                    <input type="radio" id="huey" name="customer_type_id"
+                                                    <input type="radio" id="customer_type_id" name="customer_type_id"
                                                            value="{{$customerType->id}}" {{old('customer_type_id') == $customerType->id ? "checked":""}}/>
-                                                    <label for="huey">{{$customerType->name}}</label>
+                                                    <label for="customer_type_id">{{$customerType->name}}</label>
                                                 </div>
                                             @else
                                                 <div>
-                                                    <input type="radio" id="huey" name="customer_type_id"
+                                                    <input type="radio" id="customer_type_id" name="customer_type_id"
                                                            value="{{$customerType->id}}" {{$checked}}/>
-                                                    <label for="huey">{{$customerType->name}}</label>
+                                                    <label for="customer_type_id">{{$customerType->name}}</label>
                                                 </div>
                                                     <?php
                                                     $checked = "";
@@ -71,7 +71,8 @@
                                 <div>
                                     <select name="city_id">
                                         @foreach($cities as $city)
-                                            <option {{old('city')==$city->id?"selected":""}} value="{{$city->id}}">{{$city->name}}</option>
+                                            <option
+                                                {{old('city')==$city->id?"selected":""}} value="{{$city->id}}">{{$city->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -81,7 +82,8 @@
                                 <div>
                                     <select name="street_id">
                                         @foreach($streets as $street)
-                                            <option {{old('street')==$street->id?"selected":""}}  value="{{$street->id}}">{{$street->name}}</option>
+                                            <option
+                                                {{old('street')==$street->id?"selected":""}}  value="{{$street->id}}">{{$street->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -111,7 +113,7 @@
                                                     {{old('powerLineType') == $powerLineType->name ? "checked":""}}
                                                     @else
                                                     {{$checked}}
-                                                @endif
+                                                    @endif
                                                 />
                                                 <label for="powerLineType">{{$powerLineType->name}}</label>
                                             </div>

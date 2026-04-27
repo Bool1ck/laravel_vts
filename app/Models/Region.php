@@ -24,22 +24,22 @@ class Region extends Model
     }
 
     public function IsUserRoleVtg() {
-        return $this->userRole()->name == 'vtg';
+        return $this->userRole()->id == '2';
     }
     public function IsUserRoleAdmin() {
-        return $this->userRole()->name == 'admin';
+        return $this->userRole()->id == '1';
     }
 
     public function IsUserRoleLegal() {
-        return $this->userRole()->name == 'legal';
+        return $this->userRole()->id == '3';
     }
 
     public function IsUserRoleHousehold() {
-        return $this->userRole()->name == 'household';
+        return $this->userRole()->id == '4';
     }
 
     public function IsUserRoleViewer() {
-        return $this->userRole()->name == 'viewer';
+        return $this->userRole()->id == '5';
     }
 
     public function IsUserCanEdit() {
