@@ -147,7 +147,16 @@
                             <fieldset class="flex flex-col ms-5">
                                 @foreach($workTypes as $workType)
                                     <div>
-                                        <input type="checkbox" name="workTypes[]" value="{{$workType->id}}">
+                                        <input type="checkbox" name="workTypes[]" value="{{$workType->id}}"
+                                               @if(old('workTypes') !== null)
+                                                   @foreach(old('workTypes') as $owt)
+                                                       @if($owt == $workType->id)
+                                                           checked
+                                            @endif
+                                            @endforeach
+                                            @endif
+
+                                        >
                                         <label for="04">{{$workType->name}}</label>
                                     </div>
                                 @endforeach

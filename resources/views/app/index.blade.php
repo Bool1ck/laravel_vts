@@ -19,7 +19,6 @@
                     <th>Виконано</th>
                     <th>замовлення<br>матеріалів</th>
                     <th>отримання<br>матеріалів</th>
-{{--                    <th>Примітка</th>--}}
                     @if($region->IsUserCanEdit())
                         <th>Операції</th>
                     @endif
@@ -27,7 +26,7 @@
                 @foreach($connectionPoints as $point)
                     <tr>
                         <td>{{$point->technical_conditions}}</td>
-                        <td>{{$point->technical_conditions_date}}</td>
+                        <td>{{\Illuminate\Support\Facades\Date::parse($point->technical_conditions_date)->format('d.m.Y')}}</td>
                         <td>{{$point->customer}}</td>
                         <td>{{$point->customerType->name}}</td>
                         <td>{{$point->point_place}}</td>
@@ -38,13 +37,12 @@
                                 <li class="ms-3">{{$cpwt->name}}</li>
                             @endforeach
                         </td>
-                        <td>{{$point->contract_date}}</td>
-                        <td>{{$point->payment_date}}</td>
-                        <td>{{$point->perform_by_date}}</td>
-                        <td>{{$point->performance_date}}</td>
-                        <td>{{$point->materials_order_date}}</td>
-                        <td>{{$point->materials_receipt_date}}</td>
-{{--                        <td>{{$point->note}}</td>--}}
+                        <td>{{$point->contract_date ? \Illuminate\Support\Facades\Date::parse($point->contract_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->payment_date ? \Illuminate\Support\Facades\Date::parse($point->payment_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->perform_by_date ? \Illuminate\Support\Facades\Date::parse($point->perform_by_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->performance_date ? \Illuminate\Support\Facades\Date::parse($point->performance_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->materials_order_date ? \Illuminate\Support\Facades\Date::parse($point->materials_order_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->materials_receipt_date ? \Illuminate\Support\Facades\Date::parse($point->materials_receipt_date)->format('d.m.Y'):""}}</td>
                         @if($region->IsUserCanEdit())
                             <td>
                                 <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>

@@ -35,7 +35,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Дата договору</div>
                             <div>
-                                <input type="text" value="{{ $cp->contract_date }}" disabled
+                                <input type="date" value="{{ $cp->contract_date }}" disabled
                                        @if(empty($cp->contract_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -49,7 +49,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Дата оплати</div>
                             <div>
-                                <input type="text" value="{{ $cp->payment_date }}" disabled
+                                <input type="date" value="{{ $cp->payment_date }}" disabled
                                        @if(empty($cp->payment_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -60,7 +60,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Виконати до</div>
                             <div>
-                                <input type="text" value="{{ $cp->perform_by_date }}" disabled
+                                <input type="date" value="{{ $cp->perform_by_date }}" disabled
                                        @if(empty($cp->perform_by_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -71,7 +71,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Виконано</div>
                             <div>
-                                <input type="text" value="{{ $cp->performance_date }}" disabled
+                                <input type="date" value="{{ $cp->performance_date }}" disabled
                                        @if(empty($cp->performance_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -85,7 +85,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Замовлено</div>
                             <div>
-                                <input type="text" value="{{ $cp->materials_order_date }}" disabled
+                                <input type="date" value="{{ $cp->materials_order_date }}" disabled
                                        @if(empty($cp->materials_order_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -96,7 +96,7 @@
                         <div class="flex flex-row">
                             <div class="form_title">Отримано</div>
                             <div>
-                                <input type="text" value="{{ $cp->materials_receipt_date }}" disabled
+                                <input type="date" value="{{ $cp->materials_receipt_date }}" disabled
                                        @if(empty($cp->materials_receipt_date))
                                            style="background-color: #FFBDC1"
                                     @endif>
@@ -143,7 +143,7 @@
                 </div>
                 @if($region->IsUserCanEdit())
                     <div>
-                            <div class="p-2"><a href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}" class="btn">Внести зміни</a></div>
+                            <div class="p-2"><a href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}" class="btn">Редагувати</a></div>
                     </div>
                 @endif
             </div>

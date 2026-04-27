@@ -102,7 +102,6 @@ class ConnectionPointController extends Controller
     public function update(UpdateConnectionPointRequest $request, Region $region, ConnectingPoint $cp)
     {
         $validated = $request->validated();
-//        dd($validated);
         $workTypes_id = $validated['workTypes'];
         if(!is_null($validated['payment_date'])) {
             if ($validated['power']  == 5) {
@@ -114,12 +113,13 @@ class ConnectionPointController extends Controller
             } elseif ($validated['power']  >= 30) {
                 $days = 90;
             }
-            $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days);
+            $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days)->format('Y-m-d');
         } else {
             $validated['perform_by_date'] = null;
         }
         unset($validated['workTypes']);
         $cp->update($validated);
+        $cp->workTypes()->sync($workTypes_id);
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 
