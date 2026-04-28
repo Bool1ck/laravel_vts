@@ -40,4 +40,6 @@ class User extends Authenticatable
     public function regionRoles() {
         return $this->hasMany(RoleRegionUser::class);
     }
+
+
 }

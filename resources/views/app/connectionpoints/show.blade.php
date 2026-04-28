@@ -107,7 +107,8 @@
                 <div>
                     <label>Місце знаходження об'єкту</label>
                     <div class="flex flex-col">
-                        <div class="flex flex-row"><div></div>
+                        <div class="flex flex-row">
+                            <div></div>
                             <div>
                                 <input style="width: 520px" type="text" value="{{ $cp->point_place }}" disabled>
                             </div>
@@ -143,7 +144,10 @@
                 </div>
                 @if($region->IsUserCanEdit())
                     <div>
-                            <div class="p-2"><a href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}" class="btn">Редагувати</a></div>
+                        <div class="p-2"><a
+                                href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}"
+                                class="btn">Редагувати</a>
+                        </div>
                     </div>
                 @endif
             </div>

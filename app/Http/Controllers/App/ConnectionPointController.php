@@ -118,8 +118,10 @@ class ConnectionPointController extends Controller
             $validated['perform_by_date'] = null;
         }
         unset($validated['workTypes']);
-        $cp->update($validated);
-        $cp->workTypes()->sync($workTypes_id);
+        if ($region->IsUserCanEdit()) {
+            $cp->update($validated);
+            $cp->workTypes()->sync($workTypes_id);
+        }
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 

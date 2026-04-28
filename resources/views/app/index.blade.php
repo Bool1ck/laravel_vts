@@ -19,9 +19,7 @@
                     <th>Виконано</th>
                     <th>замовлення<br>матеріалів</th>
                     <th>отримання<br>матеріалів</th>
-                    @if($region->IsUserCanEdit())
-                        <th>Операції</th>
-                    @endif
+                    <th>Операції</th>
                 </tr>
                 @foreach($connectionPoints as $point)
                     <tr>
@@ -43,12 +41,12 @@
                         <td>{{$point->performance_date ? \Illuminate\Support\Facades\Date::parse($point->performance_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->materials_order_date ? \Illuminate\Support\Facades\Date::parse($point->materials_order_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->materials_receipt_date ? \Illuminate\Support\Facades\Date::parse($point->materials_receipt_date)->format('d.m.Y'):""}}</td>
-                        @if($region->IsUserCanEdit())
-                            <td>
-                                <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
-                                <a href="{{ route('connection_point.edit',['region' => $point->region_id, 'cp' => $point->id]) }}">Edit</a>
-                            </td>
-                        @endif
+                        <td>
+                            <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
+                            @if($region->IsUserCanEdit())
+                                <a href="{{ route('connection_point.edit', ['region' => $point->region_id, 'cp' => $point->id]) }}">Edit</a>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </table>

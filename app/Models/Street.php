@@ -13,8 +13,8 @@ class Street extends Model
         return Street::all()->where('city_id', $city->id);
     }
 
-    public function streetType()
-    {
-        return $this->belongsTo(StreetType::class, 'street_type_id');
-    }
+//    public function streetType()
+//    {
+//        return $this->belongsTo(StreetType::class, 'street_type_id');
+//    }
 }
