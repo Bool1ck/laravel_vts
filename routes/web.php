@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\admin\CitiesController;
 use App\Http\Controllers\App\ConnectionPointController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/region')->middleware('userHasPermission')->group(function () {
 
         Route::get('/{region}', [ConnectionPointController::class, 'index'])->name
-        ('app.index');
+        ('connection_point.index');
 
         Route::prefix('/{region}/connections-points')->middleware('edit')->group(function () {
             Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
@@ -26,7 +27,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/edit/{cp}', [ConnectionPointController::class, 'edit'])->name('connection_point.edit');
             Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])->name('connection_point.update');
         });
+    });
 
+    Route::prefix('/admin/region/{region}')->middleware(['auth', 'admin'])->group(function () {
+        Route::prefix('/cities')->group(function () {
+            Route::get('/', [CitiesController::class, 'index'])->name('admin.cities.index');
+            Route::get('/create', [CitiesController::class, 'create'])->name('admin.cities.create');
+            Route::put('/store', [CitiesController::class, 'store'])->name('admin.cities.store');
+//            Route::get('/edit/{cp}', [CitiesController::class, 'edit'])->name('admin.cities.edit');
+//            Route::patch('/update/{cp}', [CitiesController::class, 'update'])->name('admin.cities.update');
+        })->name('admin.cities');
 
 
     });

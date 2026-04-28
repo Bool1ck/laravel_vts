@@ -14,7 +14,7 @@ class CityTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $cityType = ['м.', 'с.', 'смт'];
+        $cityType = ['м.', 'с.', 'смт.'];
         foreach ($cityType as $type) {
             CityType::factory()->create([
                 'name' => $type

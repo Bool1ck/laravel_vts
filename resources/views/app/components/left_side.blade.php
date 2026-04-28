@@ -5,7 +5,7 @@
         @if(Auth::user()->regionRoles->count() > 0)
         <ul>
             @foreach(Auth::user()->regionRoles as $regionrole)
-               <li><a href="{{ route('app.index',['region' => $regionrole->region->id]) }}">{{$regionrole->region->name}}</a></li>
+               <li><a href="{{ route('connection_point.index',['region' => $regionrole->region->id]) }}">{{$regionrole->region->name}}</a></li>
             @endforeach
         </ul>
         @else
@@ -21,7 +21,7 @@
             <div class="p-2">
                 <div class="w-full text-center">Admin panel</div>
                 <div><a href="#">Користувачі</a></div>
-                <div><a href="#">Населені пункти</a></div>
+                <div><a href="{{route('admin.cities.index',['region' => $region->id])}}">Населені пункти</a></div>
                 <div><a href="#">Вулиці</a></div>
                 <div><a href="#">ТП</a></div>
             </div>

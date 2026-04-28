@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
     public function cityType() {
         return $this->belongsTo(CityType::class, 'city_type_id');
     }
