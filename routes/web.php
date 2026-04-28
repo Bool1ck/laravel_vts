@@ -27,6 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])->name('connection_point.update');
         });
 
+
+
     });
 
 });

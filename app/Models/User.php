@@ -41,5 +41,10 @@ class User extends Authenticatable
         return $this->hasMany(RoleRegionUser::class);
     }
 
+    public function isAdminInRegion(Region $region) : bool {
+        $data = RoleRegionUser::where('user_id', $this->id)->where('region_id', $region->id)->first();
+        $role = Role::where('id',$data->role_id)->first();
+        return $role->name == 'admin';
+    }
 
 }
