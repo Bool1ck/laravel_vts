@@ -2,9 +2,9 @@
     @if (Route::has('login'))
         <nav class="flex items-center  gap-4">
             @auth
-                <div>Користувач : {{\Illuminate\Support\Facades\Auth::user()->name}}
-{{--                    @isset($region), відділ: {{$region->userRole()->name}}--}}
-{{--                    @endisset--}}
+                <div>Користувач : {{Auth::user()->name}}
+                    @isset($region), відділ: {{Auth::user()->roleInRegion($region)->name}}
+                    @endisset
                 </div>
                 <a
                     href="{{ route('dashboard') }}"
@@ -44,7 +44,9 @@
         @elseif(Route::is('connection_point.edit'))
             <div>{{$cp->customer}}({{$cp->technical_conditions}}) [Внесення змін]</div>
         @elseif(Route::is('connection_point.index'))
+            @if(Auth::user()->isCanEditRegion($region))
                 <a class="ps-1" href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+            @endif
         @elseif(Route::is('connection_point.create'))
             <p class="ps-1" style="color: #1BCD1B">Нова точка приєднання</p>
         @elseif(Route::is('admin.cities.*'))

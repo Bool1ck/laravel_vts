@@ -2,11 +2,12 @@
 
 namespace App\Policies;
 
+use App\Models\City;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class AdminPolicy
+class CityPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +20,7 @@ class AdminPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Region $region): bool
+    public function view(User $user, City $city): bool
     {
         return false;
     }
@@ -35,23 +36,33 @@ class AdminPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Region $region): bool
+    public function update(User $user, City $city): bool
     {
+        $region = Region::find($city->region_id);
+        if ($user->isAdminInRegion($region)) {
+            return true;
+        }
         return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Region $region): bool
+    public function delete(User $user, City $city): bool
     {
+        $region = Region::find($city->region_id);
+        $streets = $city->streets();
+        $tps = $city->tps();
+        if ($user->isAdminInRegion($region) && $streets->count() == 0 && $tps->count() == 0) {
+            return true;
+        }
         return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Region $region): bool
+    public function restore(User $user, City $city): bool
     {
         return false;
     }
@@ -59,7 +70,7 @@ class AdminPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Region $region): bool
+    public function forceDelete(User $user, City $city): bool
     {
         return false;
     }

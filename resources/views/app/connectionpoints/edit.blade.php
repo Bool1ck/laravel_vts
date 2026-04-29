@@ -163,7 +163,7 @@
                             <div><textarea name="note">{{$cp->note}}</textarea></div>
                         </div>
                     </div>
-                    @if($region->IsUserCanEdit())
+                    @if(Auth::user()->isCanEditRegion($region))
                         <div>
                             <div class="p-2">
                                 <input type="submit" value="Зберігти зміни" class="btn"></div>

@@ -16,4 +16,8 @@ class City extends Model
     public function streets() {
         return $this->hasMany(Street::class, 'city_id', 'id');
     }
+
+    public function tps() {
+        return $this->hasMany(Tp::class, 'city_id', 'id');
+    }
 }

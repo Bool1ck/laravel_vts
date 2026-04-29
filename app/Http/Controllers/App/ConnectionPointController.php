@@ -27,9 +27,7 @@ class ConnectionPointController extends Controller
     public function index(Region $region)
     {
           $connectionPoints =[];
-        if ($region->userHasPermission(Auth::user())) {
             $connectionPoints = ConnectingPoint::all()->where('region_id', $region->id);
-        }
         return view('app.index', compact('connectionPoints', 'region'));
     }
 
@@ -118,10 +116,8 @@ class ConnectionPointController extends Controller
             $validated['perform_by_date'] = null;
         }
         unset($validated['workTypes']);
-        if ($region->IsUserCanEdit()) {
             $cp->update($validated);
             $cp->workTypes()->sync($workTypes_id);
-        }
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 

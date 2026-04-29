@@ -2,16 +2,15 @@
 
 <div class="flex flex-col">
     <div class="p-1">
-        @if(Auth::user()->regionRoles->count() > 0)
+        @if(Auth::user()->regions()->count())
         <ul>
-            @foreach(Auth::user()->regionRoles as $regionrole)
-               <li><a href="{{ route('connection_point.index',['region' => $regionrole->region->id]) }}">{{$regionrole->region->name}}</a></li>
+            @foreach(Auth::user()->regions as $region)
+               <li><a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a></li>
             @endforeach
         </ul>
         @else
             <div class="w-full text-center">Доступні РЕМ відсутні</div>
         @endif
-
     </div>
     <div>
         <hr>

@@ -30,13 +30,14 @@
                     </div>
         </form>
                     <div class="ps-3">
-                        <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" value="{{$city->id}}">
-                            <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
-                        </form>
-
+                        @can('delete', $city)
+                            <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" value="{{$city->id}}">
+                                <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
+                            </form>
+                        @endcan
 
                     </div>
                 </div>

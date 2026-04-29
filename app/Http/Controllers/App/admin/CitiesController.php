@@ -11,6 +11,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+
 class CitiesController extends Controller
 {
     /**
@@ -70,6 +71,7 @@ class CitiesController extends Controller
      */
     public function update(UpdateCityRequest $request, Region $region, City $city)
     {
+        $this->authorize('update', $city);
         $validated = $request->validated();
         $request->validate([
             'name' => [
@@ -87,6 +89,7 @@ class CitiesController extends Controller
      */
     public function destroy(Region $region, City $city)
     {
+        $this->authorize('delete', $city);
         $city->delete();
         return redirect(route('admin.cities.index', compact('region')));
     }

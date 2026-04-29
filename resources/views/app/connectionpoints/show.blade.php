@@ -142,7 +142,7 @@
                         <div><textarea disabled>{{$cp->note}}</textarea></div>
                     </div>
                 </div>
-                @if($region->IsUserCanEdit())
+                @if(Auth::user()->isCanEditRegion($region))
                     <div>
                         <div class="p-2"><a
                                 href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}"
