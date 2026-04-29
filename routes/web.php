@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\App\admin\CitiesController;
+use App\Http\Controllers\App\admin\StreetsController;
 use App\Http\Controllers\App\ConnectionPointController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{city}', [CitiesController::class, 'update'])->name('admin.cities.update');
             Route::delete('/destroy/{city}', [CitiesController::class, 'destroy'])->name('admin.cities.destroy');
         })->name('admin.cities');
+
+        Route::prefix('/streets')->group(function () {
+            Route::get('/', [StreetsController::class, 'index'])->name('admin.streets.index');
+            Route::get('/create', [StreetsController::class, 'create'])->name('admin.streets.create');
+            Route::put('/store', [StreetsController::class, 'store'])->name('admin.streets.store');
+            Route::get('/edit/{street}', [StreetsController::class, 'edit'])->name('admin.streets.edit');
+            Route::patch('/update/{street}', [StreetsController::class, 'update'])->name('admin.streets.update');
+            Route::delete('/destroy/{street}', [StreetsController::class, 'destroy'])->name('admin.streets.destroy');
+        })->name('admin.streets');
+
     });
 
 });

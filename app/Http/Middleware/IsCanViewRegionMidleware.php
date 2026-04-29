@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CreateUpdateMidleware
+class IsCanViewRegionMidleware
 {
     /**
      * Handle an incoming request.
@@ -16,8 +17,8 @@ class CreateUpdateMidleware
     public function handle(Request $request, Closure $next): Response
     {
         $region = $request->route('region');
-        if (!$region->IsUserCanEdit()) {
-            abort(403, "Access denied");
+        if (!Auth::user()->isCanViewRegion($region)) {
+            abort(403,'Access denied');
         }
         return $next($request);
     }
