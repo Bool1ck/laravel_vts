@@ -16,7 +16,7 @@
                 @foreach($cities as $city)
                     <tr>
                         <td>{{$city->cityType->name}}{{$city->name}}</td>
-                        <td><a href="#">edit</a></td>
+                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a></td>
                     </tr>
                 @endforeach
             </table>

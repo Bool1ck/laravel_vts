@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCityRequest;
+use App\Http\Requests\Admin\UpdateCityRequest;
 use App\Models\City;
 use App\Models\CityType;
 use App\Models\Region;
@@ -58,24 +59,35 @@ class CitiesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Region $region, City $city)
     {
-        //
+        $cityTypes = CityType::all();
+        return view('app.admin.cities.edit', compact('region', 'city', 'cityTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCityRequest $request, Region $region, City $city)
     {
-        //
+        $validated = $request->validated();
+        $request->validate([
+            'name' => [
+                'required',
+                Rule::unique('cities')->where(fn ($query) => $query->where('city_type_id', $request->city_type_id))
+            ],
+        ]);
+        $validated['region_id'] = $region->id;
+        $city->update($validated);
+        return redirect(route('admin.cities.index', compact('region')));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Region $region, City $city)
     {
-        //
+        $city->delete();
+        return redirect(route('admin.cities.index', compact('region')));
     }
 }

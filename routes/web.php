@@ -34,11 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', [CitiesController::class, 'index'])->name('admin.cities.index');
             Route::get('/create', [CitiesController::class, 'create'])->name('admin.cities.create');
             Route::put('/store', [CitiesController::class, 'store'])->name('admin.cities.store');
-//            Route::get('/edit/{cp}', [CitiesController::class, 'edit'])->name('admin.cities.edit');
-//            Route::patch('/update/{cp}', [CitiesController::class, 'update'])->name('admin.cities.update');
+            Route::get('/edit/{city}', [CitiesController::class, 'edit'])->name('admin.cities.edit');
+            Route::patch('/update/{city}', [CitiesController::class, 'update'])->name('admin.cities.update');
+            Route::delete('/destroy/{city}', [CitiesController::class, 'destroy'])->name('admin.cities.destroy');
         })->name('admin.cities');
-
-
     });
 
 });
