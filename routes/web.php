@@ -10,27 +10,22 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
         return view('app.dashboard');
     })->name('dashboard');
-
-    Route::prefix('/region/{region}')->middleware('isCanViewRegion')->group(function () {
-
+    Route::prefix('/region/{region}')->middleware('UserCanViewRegion')->group(function () {
         Route::get('/', [ConnectionPointController::class, 'index'])->name
         ('connection_point.index');
-
-        Route::prefix('/connections-points')->middleware('isCanEditRegion')->group(function () {
+        Route::prefix('/connections-points')->middleware('UserCanEditRegion')->group(function () {
             Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
             Route::put('/store', [ConnectionPointController::class, 'store'])->name('connection_point.store');
-            Route::get('/show/{cp}', [ConnectionPointController::class, 'show'])->withoutMiddleware('isCanEditRegion')->name('connection_point.show');
+            Route::get('/show/{cp}', [ConnectionPointController::class, 'show'])->withoutMiddleware('UserCanEditRegion')->name('connection_point.show');
             Route::get('/edit/{cp}', [ConnectionPointController::class, 'edit'])->name('connection_point.edit');
             Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])->name('connection_point.update');
         });
     });
-
-    Route::prefix('/admin/region/{region}')->middleware('isAdminInRegion')->group(function () {
+    Route::prefix('/admin/region/{region}')->middleware('UserIsAdminInRegion')->group(function () {
         Route::prefix('/cities')->group(function () {
             Route::get('/', [CitiesController::class, 'index'])->name('admin.cities.index');
             Route::get('/create', [CitiesController::class, 'create'])->name('admin.cities.create');
@@ -39,7 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{city}', [CitiesController::class, 'update'])->name('admin.cities.update');
             Route::delete('/destroy/{city}', [CitiesController::class, 'destroy'])->name('admin.cities.destroy');
         })->name('admin.cities');
-
         Route::prefix('/streets')->group(function () {
             Route::get('/', [StreetsController::class, 'index'])->name('admin.streets.index');
             Route::get('/create', [StreetsController::class, 'create'])->name('admin.streets.create');
@@ -48,9 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{street}', [StreetsController::class, 'update'])->name('admin.streets.update');
             Route::delete('/destroy/{street}', [StreetsController::class, 'destroy'])->name('admin.streets.destroy');
         })->name('admin.streets');
-
     });
-
 });
 
 Route::middleware('auth')->group(function () {
