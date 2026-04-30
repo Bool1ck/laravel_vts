@@ -39,7 +39,7 @@ class StreetsController extends Controller
         $validated = $request->validated();
         $request->validate([
             'name' => [
-                'required',
+                'required', 'string',
                 Rule::unique('streets')->where(fn($query) => $query->where('street_type_id',
                     $request->street_type_id)->where('city_id', $request->city_id))
             ],
@@ -75,7 +75,7 @@ class StreetsController extends Controller
         $validated = $request->validated();
         $request->validate([
             'name' => [
-                'required',
+                'required', 'string',
                 Rule::unique('streets')->where(fn($query) => $query->where('street_type_id',
                     $request->street_type_id)->where('city_id', $request->city_id))
             ],

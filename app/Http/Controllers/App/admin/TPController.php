@@ -9,6 +9,7 @@ use App\Models\Region;
 use App\Models\Tp;
 use App\Models\TpType;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TPController extends Controller
 {
@@ -37,6 +38,9 @@ class TPController extends Controller
     public function store(StoreTpRequest $request, Region $region)
     {
         $validated = $request->validated();
+        if ($region->isHasTpNumber($validated['name'])) {
+            return back()->withErrors(['custom_field' => 'ТП з таким номером вже існує!'])->withInput();
+        }
         $tp = Tp::create($validated);
         return redirect(route('admin.tps.index',['region' => $region]));
     }

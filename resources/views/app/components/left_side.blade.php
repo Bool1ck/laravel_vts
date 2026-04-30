@@ -19,9 +19,9 @@
         @if(Auth::user()->isAdminInRegion($region))
             <div class="p-2">
                 <div class="w-full text-center">Admin panel</div>
-                <div><a href="#">Користувачі</a></div>
-                <div><a href="{{route('admin.cities.index',['region' => $region->id])}}">Населені пункти</a></div>
-                <div><a href="{{route('admin.streets.index',['region' => $region->id])}}">Вулиці</a></div>
+                <div><a href="{{route('admin.users.index', ['region' => $region])}}">Користувачі</a></div>
+                <div><a href="{{route('admin.cities.index',['region' => $region])}}">Населені пункти</a></div>
+                <div><a href="{{route('admin.streets.index',['region' => $region])}}">Вулиці</a></div>
                 <div><a href="{{route('admin.tps.index',['region' => $region])}}">ТП</a></div>
             </div>
         @endif

@@ -55,6 +55,8 @@
             <p class="ps-1" style="color: #1BCD1B">Admin >> Вулиці</p>
         @elseif(Route::is('admin.tps.*'))
             <p class="ps-1" style="color: #1BCD1B">Admin >> ТП</p>
+        @elseif(Route::is('admin.users.*'))
+            <p class="ps-1" style="color: #1BCD1B">Admin >> Користувачі</p>
         @else
             <p>...</p>
         @endif

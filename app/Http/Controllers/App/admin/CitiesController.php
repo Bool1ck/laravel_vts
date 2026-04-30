@@ -40,7 +40,7 @@ class CitiesController extends Controller
         $validated = $request->validated();
         $request->validate([
             'name' => [
-                'required',
+                'required', 'string',
                 Rule::unique('cities')->where(fn ($query) => $query->where('city_type_id', $request->city_type_id))
             ],
         ]);
@@ -75,7 +75,7 @@ class CitiesController extends Controller
         $validated = $request->validated();
         $request->validate([
             'name' => [
-                'required',
+                'required', 'string',
                 Rule::unique('cities')->where(fn ($query) => $query->where('city_type_id', $request->city_type_id))
             ],
         ]);
