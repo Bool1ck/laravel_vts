@@ -53,6 +53,8 @@
             <p class="ps-1" style="color: #1BCD1B">Admin >> Населені пункти</p>
         @elseif(Route::is('admin.streets.*'))
             <p class="ps-1" style="color: #1BCD1B">Admin >> Вулиці</p>
+        @elseif(Route::is('admin.tps.*'))
+            <p class="ps-1" style="color: #1BCD1B">Admin >> ТП</p>
         @else
             <p>...</p>
         @endif

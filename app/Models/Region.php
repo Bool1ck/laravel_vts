@@ -17,4 +17,8 @@ class Region extends Model
     public function Cities() {
         return $this->hasMany(City::class, 'region_id', 'id');
     }
+
+    public function Tps() {
+        return $this->hasMany(Tp::class, 'region_id', 'id');
+    }
 }

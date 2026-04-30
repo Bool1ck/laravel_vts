@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\admin\CitiesController;
 use App\Http\Controllers\App\admin\StreetsController;
+use App\Http\Controllers\App\admin\TPController;
 use App\Http\Controllers\App\ConnectionPointController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{street}', [StreetsController::class, 'update'])->name('admin.streets.update');
             Route::delete('/destroy/{street}', [StreetsController::class, 'destroy'])->name('admin.streets.destroy');
         })->name('admin.streets');
+        Route::prefix('/tps')->group(function () {
+            Route::get('/', [TPController::class, 'index'])->name('admin.tps.index');
+            Route::get('/create', [TPController::class, 'create'])->name('admin.tps.create');
+            Route::put('/store', [TPController::class, 'store'])->name('admin.tps.store');
+            Route::get('/edit/{tp}', [TPController::class, 'edit'])->name('admin.tps.edit');
+            Route::patch('/update/{tp}', [TPController::class, 'update'])->name('admin.tps.update');
+            Route::delete('/destroy/{tp}', [TPController::class, 'destroy'])->name('admin.tps.destroy');
+        })->name('admin.tps');
     });
 });
 

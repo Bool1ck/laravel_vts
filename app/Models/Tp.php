@@ -9,6 +9,7 @@ class Tp extends Model
 {
     use HasFactory;
     //
+    protected $guarded = [];
 
     public function type() {
         return $this->belongsTo(TpType::class, 'tp_type_id');
@@ -16,5 +17,9 @@ class Tp extends Model
 
     public function city() {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function fullName() {
+        return $this->type->name . '-' . $this->name;
     }
 }

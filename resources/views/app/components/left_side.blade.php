@@ -22,7 +22,7 @@
                 <div><a href="#">Користувачі</a></div>
                 <div><a href="{{route('admin.cities.index',['region' => $region->id])}}">Населені пункти</a></div>
                 <div><a href="{{route('admin.streets.index',['region' => $region->id])}}">Вулиці</a></div>
-                <div><a href="#">ТП</a></div>
+                <div><a href="{{route('admin.tps.index',['region' => $region])}}">ТП</a></div>
             </div>
         @endif
     @endif
