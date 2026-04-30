@@ -20,4 +20,8 @@ class City extends Model
     public function tps() {
         return $this->hasMany(Tp::class, 'city_id', 'id');
     }
+
+    public function fullName() {
+        return $this->cityType->name . $this->name;
+    }
 }

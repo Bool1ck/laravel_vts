@@ -3,7 +3,6 @@
 @section('content')
     <div class="flex flex-col">
         <div><a href="{{ route('admin.cities.create',['region' => $region]) }}">Додати нове місто</a></div>
-        <div class=""></div>
         <div>
             <table>
                 <tr>
@@ -11,11 +10,13 @@
                 </tr>
                 <tr>
                     <th>Name</th>
+                    <th>Streets</th>
                     <th>Action</th>
                 </tr>
                 @foreach($cities as $city)
                     <tr>
-                        <td>{{$city->cityType->name}}{{$city->name}}</td>
+                        <td>{{$city->fullName()}}</td>
+                        <td>{{$city->streets()->count()}}</td>
                         <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a></td>
                     </tr>
                 @endforeach

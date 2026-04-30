@@ -2097,7 +2097,7 @@
         <div class="w-full bg-gray-300">
             @include('app.components.header')
         </div>
-        <div>
+        <div class="w-full">
             @yield('content')
         </div>
     </div>

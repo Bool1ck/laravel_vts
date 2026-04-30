@@ -1,28 +1,23 @@
 @extends('app.layouts.main')
 
 @section('content')
-    <div class="flex flex-col">
-        <div><a href="{{ route('admin.cities.create',['region' => $region]) }}">Додати нове місто</a></div>
-        <div class=""></div>
+    <div class="w-fit">
+        <div><a href="{{ route('admin.streets.create',['region' => $region]) }}">Додати нову вулицю</a></div>
         <div>
-            <table>
-                <tr>
-                    <th colspan="2" class="text-center">Cities</th>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <th>Action</th>
-                </tr>
-                @foreach($cities as $city)
-                    <tr>
-                        <td>{{$city->cityType->name}}{{$city->name}}</td>
-                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a></td>
-                    </tr>
-                @endforeach
-            </table>
+            @foreach($cities as $city)
+                <div>
+                    <div class="bg-indigo-50">{{$city->fullName() . " ,Streets count: " . $city->streets()->count()}}</div>
+                </div>
+                <div class="grid grid-cols-2">
+                    @foreach($city->streets as $street)
+                            <div class="w-fit">{{$street->fullName()}}</div>
+                            <div class="w-fit ps-2"><a href="{{route('admin.streets.edit',['region' => $region, 'street' => $street])}}">edit</a></div>
+                    @endforeach
+                </div>
+            @endforeach
         </div>
-        <div>
-            {{ $cities->links() }}
-        </div>
+    </div>
+    <div>
+        {{ $cities->links() }}
     </div>
 @endsection

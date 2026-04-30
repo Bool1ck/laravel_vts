@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Street extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public static function streetsInCity(City $city) {
         return Street::all()->where('city_id', $city->id);
@@ -16,5 +17,9 @@ class Street extends Model
     public function streetType()
     {
         return $this->belongsTo(StreetType::class, 'street_type_id');
+    }
+
+    public function fullName() {
+        return $this->streetType->name . $this->name;
     }
 }

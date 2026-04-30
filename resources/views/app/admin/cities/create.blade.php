@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex">
-        <form action="{{route('admin.cities.store',['region' => $region])}}" method="POST">
+        <form action="{{route('admin.streets.store',['region' => $region])}}" method="POST">
             @csrf
             @method('PUT')
             <div class="flex flex-col tbl">

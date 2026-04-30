@@ -4,53 +4,62 @@
     <div class="flex">
         <div class="flex flex-col tbl">
             <div>
-                <div class="text-center">Редагування населеного пункту</div>
+                <div class="text-center">Редагування street</div>
             </div>
-            <div class="flex flex-row">
-                <form class="flex" action="{{route('admin.cities.update',['region' => $region, 'city' => $city])}}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="flex">
-                        <select id="city_type_id" name="city_type_id">
-                            @foreach($cityTypes as $cityType)
-                                <option value="{{$cityType->id}}"
-                                        @if($cityType->id == $city->city_type_id)
-                                            selected
-                                    @endif
-                                >{{$cityType->name}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="flex ps-1">
-                        <input type="text" name="name" placeholder="CityName" value="{{$city->name}}">
-                    </div>
-                    <div class="flex ps-2">
-                        <input type="submit" value="Внести зміни" class="btn">
-                    </div>
-                </form>
-                <div class="ps-3">
-                    @can('delete', $city)
-                        <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}"
-                              method="POST">
+            <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <div class="flex flex-col tbl">
+                    <div class="flex flex-row">
+                        <div class="p-1">
+                            <select id="city_id" name="city_id">
+                                @foreach($region->cities as $city)
+                                    <option value="{{$city->id}}"
+                                            @if($city->id == $street->city_id)
+                                                selected
+                                            @endif
+                                    >{{$city->fullName()}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="p-1">
+                            <select id="street_type_id" name="street_type_id">
+                                @foreach($streetTypes as $streetType)
+                                    <option value="{{$streetType->id}}"
+                                            @if($streetType->id == $street->street_type_id)
+                                                selected
+                                        @endif
+                                    >{{$streetType->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <input type="text" name="name" placeholder="StreetName" value="{{$street->name}}">
+                        </div>
+                        <div>
+                            <input type="submit" value="Оновити" class="btn">
+                        </div>
+            </form>
+                        <form action="{{ route('admin.streets.destroy', ['region' => $region, 'street' => $street]) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" value="{{$city->id}}">
-                            <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
+                            <input type="text" name="street" value="{{$street->id}}" hidden>
+                            <input type="submit" value="Видалити" class="ms-1 btn btn-danger">
                         </form>
-                    @endcan
+                    </div>
                 </div>
-            </div>
+
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
     </div>
 @endsection
 
@@ -101,7 +110,6 @@
         select {
             height: 30px;
             padding-left: 5px;
-            width: 60px;
             background-color: #FDFFC4;
             border: 1px solid #3498db;
             cursor: pointer;
