@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 
-class CitiesController extends Controller
+class CityController extends Controller
 {
     /**
      * Display a listing of the resource.

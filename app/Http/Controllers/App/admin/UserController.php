@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
-use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\RoleRegionUser;
@@ -71,7 +71,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserUpdateRequest $request, Region $region, User $user)
+    public function update(UpdateUserRequest $request, Region $region, User $user)
     {
         $validated = $request->validated();
         $role_id = $validated['role_id'];

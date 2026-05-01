@@ -11,7 +11,7 @@ use App\Models\StreetType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StreetsController extends Controller
+class StreetController extends Controller
 {
     /**
      * Display a listing of the resource.
