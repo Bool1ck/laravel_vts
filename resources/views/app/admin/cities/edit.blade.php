@@ -1,45 +1,59 @@
 @extends('app.layouts.main')
 
 @section('content')
-    <div class="flex">
-        <div class="flex flex-col tbl">
-            <div>
-                <div class="text-center">Редагування населеного пункту</div>
-            </div>
-            <div class="flex flex-row">
-                <form class="flex" action="{{route('admin.cities.update',['region' => $region, 'city' => $city])}}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="flex">
-                        <select id="city_type_id" name="city_type_id">
-                            @foreach($cityTypes as $cityType)
-                                <option value="{{$cityType->id}}"
-                                        @if($cityType->id == $city->city_type_id)
-                                            selected
-                                    @endif
-                                >{{$cityType->name}}
-                                </option>
-                            @endforeach
-                        </select>
+    <div class="flex flex-col w-fit">
+        <div class="bg-blue-400 text-center font-bold border-b-1 p-2">Редагування населенного пункту</div>
+        <div class="bg-white">
+            <form class="flex" action="{{route('admin.cities.update',['region' => $region, 'city' => $city])}}" method="POST">
+                @csrf
+                @method('PATCH')
+                <div class="table w-full border-collapse m-0">
+                    <div class="table-row-group">
+                        <div class="table-row">
+                            <div class="table-cell p-1 text-left">Тип</div>
+                            <div class="table-cell p-1 text-left">
+                                <select id="city_type_id" name="city_type_id">
+                                    @foreach($cityTypes as $cityType)
+                                        <option value="{{$cityType->id}}"
+                                                @if($cityType->id == $city->city_type_id)
+                                                    selected
+                                            @endif
+                                        >{{$cityType->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex ps-1">
-                        <input type="text" name="name" placeholder="CityName" value="{{$city->name}}">
+                    <div class="table-row-group">
+                        <div class="table-row border-b">
+                            <div class="table-cell p-1">Назва</div>
+                            <div class="table-cell p-1">
+                                <input type="text" name="name" placeholder="CityName"
+                                       @if(old('name'))
+                                           value="{{old('name')}}"
+                                       @else
+                                           value="{{$city->name}}"
+                                    @endif></div>
+                        </div>
                     </div>
-                    <div class="flex ps-2">
-                        <input type="submit" value="Внести зміни" class="btn">
+                    <div class="table-row-group">
+                        <div class="table-row border-b">
+                            <div class="table-cell p-1"><input type="submit" value="Оновити" class="btn"></div>
+                        </div>
                     </div>
-                </form>
-                <div class="ps-3">
-                    @can('delete', $city)
-                        <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}"
-                              method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" value="{{$city->id}}">
-                            <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
-                        </form>
-                    @endcan
                 </div>
+            </form>
+            <div class="p-1">
+                @can('delete', $city)
+                    <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}"
+                          method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" value="{{$city->id}}">
+                        <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
+                    </form>
+                @endcan
             </div>
         </div>
         @if ($errors->any())

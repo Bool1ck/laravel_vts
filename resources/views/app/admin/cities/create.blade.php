@@ -1,40 +1,52 @@
 @extends('app.layouts.main')
 
 @section('content')
-    <div class="flex">
-        <form action="{{route('admin.streets.store',['region' => $region])}}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="flex flex-col tbl">
-                <div>
-                    <div class="text-center">Новий населенний пункт</div>
+    <div class="flex flex-col w-fit">
+        <div class="bg-blue-400 text-center font-bold border-b-1 p-2">Новий населенний пункт</div>
+        <div>
+            <form action="{{route('admin.cities.store',['region' => $region])}}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="table w-full border-collapse bg-white">
+                    <div class="table-header-group">
+                        <div class="table-row">
+                            <div class="table-cell p-1 text-left">Тип</div>
+                            <div class="table-cell p-1 text-left">
+                                <select id="city_type_id" name="city_type_id">
+                                    @foreach($cityTypes as $cityType)
+                                        <option value="{{$cityType->id}}"
+                                        @if(old('city_type_id') == $cityType->id)
+                                            selected
+                                        @endif
+                                        >{{$cityType->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-row-group">
+                        <div class="table-row border-b">
+                            <div class="table-cell p-1">Назва</div>
+                            <div class="table-cell p-1"><input type="text" name="name" placeholder="CityName" value="{{old('name')}}"></div>
+                        </div>
+                    </div>
+                    <div class="table-row-group">
+                        <div class="table-row border-b">
+                            <div class="table-cell p-1"><input type="submit" value="Створити" class="btn"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex flex-row">
-                    <div class="p-1">
-                        <select id="city_type_id" name="city_type_id">
-                            @foreach($cityTypes as $cityType)
-                                <option value="{{$cityType->id}}">{{$cityType->name}}</option>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
                             @endforeach
-                        </select>
+                        </ul>
                     </div>
-                    <div>
-                        <input type="text" name="name" placeholder="CityName">
-                    </div>
-                    <div>
-                        <input type="submit" value="Створити" class="btn">
-                    </div>
-                </div>
-            </div>
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </form>
+                @endif
+            </form>
+        </div>
     </div>
 @endsection
 
@@ -55,7 +67,6 @@
             padding-right: 5px;
             background-color: #3f3;
         }
-
 
 
         div.tbl > div {
