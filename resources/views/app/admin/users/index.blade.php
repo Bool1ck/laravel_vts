@@ -16,7 +16,7 @@
                         <td style="padding: 5px">{{$user->name}}</td>
                         <td style="padding: 5px">{{$user->email}}</td>
                         <td style="padding: 5px">{{$user->roleInRegion($region)->name}}</td>
-                        <td style="padding: 5px">edit</td>
+                        <td style="padding: 5px"><a href="{{route('admin.users.edit',['region' =>$region, 'user' => $user])}}">edit</a></td>
                     </tr>
                 @endforeach
             </table>

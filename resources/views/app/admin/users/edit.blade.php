@@ -4,41 +4,47 @@
     <div class="flex">
         <div class="flex flex-col tbl">
             <div>
-                <div class="text-center">Редагування населеного пункту</div>
+                <div class="text-center">Редагування користувача</div>
             </div>
             <div class="flex flex-row">
-                <form class="flex" action="{{route('admin.cities.update',['region' => $region, 'city' => $city])}}" method="POST">
+                <form class="flex" action="{{route('admin.users.update',['region' => $region, 'user' => $user])}}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <div class="flex">
-                        <select id="city_type_id" name="city_type_id">
-                            @foreach($cityTypes as $cityType)
-                                <option value="{{$cityType->id}}"
-                                        @if($cityType->id == $city->city_type_id)
+                    <div class="flex flex-col tbl">
+                        <div class="flex flex-row">
+                            <div class="p-1">
+                                <select id="role_id" name="role_id">
+                                    @foreach($roles as $role)
+                                        <option value="{{$role->id}}"
+                                        @if($role->id == $user->roleInRegion($region)->id)
                                             selected
-                                    @endif
-                                >{{$cityType->name}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="flex ps-1">
-                        <input type="text" name="name" placeholder="CityName" value="{{$city->name}}">
-                    </div>
-                    <div class="flex ps-2">
-                        <input type="submit" value="Внести зміни" class="btn">
+                                        @endif
+                                        >{{$role->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <input type="text" name="name" placeholder="ПІБ" value="{{$user->name}}">
+                            </div>
+                            <div>
+                                <input type="email" name="email" placeholder="email" value="{{$user->email}}" disabled>
+                            </div>
+                            <div>
+                                <input type="submit" value="Оновити" class="btn">
+                            </div>
+                        </div>
                     </div>
                 </form>
                 <div class="ps-3">
-                    @can('delete', $city)
-                        <form action="{{route('admin.cities.destroy', ['region' => $region, 'city' => $city])}}"
+{{--                    @can('delete', $city)--}}
+                        <form action="{{route('admin.users.destroy', ['region' => $region, 'user' => $user])}}"
                               method="POST">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" value="{{$city->id}}">
-                            <input type="submit" value="Видалити населений пункт" class="btn btn-danger">
+                            <input type="hidden" name="id" value="{{$user->id}}">
+                            <input type="submit" value="Видалити користувача" class="btn btn-danger">
                         </form>
-                    @endcan
+{{--                    @endcan--}}
                 </div>
             </div>
         </div>
@@ -101,17 +107,16 @@
         select {
             height: 30px;
             padding-left: 5px;
-            width: 60px;
             background-color: #FDFFC4;
             border: 1px solid #3498db;
             cursor: pointer;
         }
 
-        input[type=text] {
+        input[type=text],[type=email] {
             height: 30px;
             background-color: #E1EEFF;
             padding-left: 5px;
-            width: 400px;
+            width: 200px;
             border: 1px solid #CCC;
             margin-right: 5px;
         }
