@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStreetRequest;
 use App\Http\Requests\Admin\UpdateStreetRequest;
+use App\Models\City;
 use App\Models\Region;
 use App\Models\Street;
 use App\Models\StreetType;
@@ -18,7 +19,7 @@ class StreetController extends Controller
      */
     public function index(Region $region)
     {
-        $cities = $region->cities()->paginate(1);
+        $cities = $region->cities()->paginate(5);
         return view('app.admin.streets.index', compact('region', 'cities'));
     }
 
@@ -51,9 +52,9 @@ class StreetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Region $region, City $city)
     {
-        //
+        return view('app.admin.streets.show', compact('region', 'city'));
     }
 
     /**

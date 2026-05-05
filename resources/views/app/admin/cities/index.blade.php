@@ -6,19 +6,22 @@
             <a href="{{ route('admin.cities.create',['region' => $region]) }}"><div class="btn">Додати новий населений пункт</div></a>
         </div>
         <div>
+            <a href="{{ route('admin.streets.create',['region' => $region]) }}"><div class="btn">Додати нову вулицю</div></a>
+        </div>
+        <div><a class="btn" href="{{ route('admin.tps.create',['region' => $region]) }}">Додати нове ТП</a></div>
+        <div>
             <table>
-{{--                <tr>--}}
-{{--                    <th colspan="3" class="text-center">Населені пункти</th>--}}
-{{--                </tr>--}}
                 <tr>
                     <th>Населений пункт</th>
-                    <th>Кількість кулиць</th>
+                    <th>Кількість вулиць</th>
+                    <th>Кількість ТП</th>
                     <th>Action</th>
                 </tr>
                 @foreach($cities as $city)
                     <tr>
                         <td>{{$city->fullName()}}</td>
-                        <td>{{$city->streets()->count()}}</td>
+                        <td>{{$city->streets()->count()}}  <a href="{{route('admin.streets.show', ['region' => $region, 'city' => $city])}}">Show street</a></td>
+                        <td>{{$city->tps()->count()}}  <a href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a></td>
                         <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a></td>
                     </tr>
                 @endforeach

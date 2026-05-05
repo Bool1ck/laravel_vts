@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', [StreetController::class, 'create'])->name('admin.streets.create');
             Route::put('/store', [StreetController::class, 'store'])->name('admin.streets.store');
             Route::get('/edit/{street}', [StreetController::class, 'edit'])->name('admin.streets.edit');
+            Route::get('/show/{city}', [StreetController::class, 'show'])->name('admin.streets.show');
             Route::patch('/update/{street}', [StreetController::class, 'update'])->name('admin.streets.update');
             Route::delete('/destroy/{street}', [StreetController::class, 'destroy'])->name('admin.streets.destroy');
         })->name('admin.streets');
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', [TPController::class, 'create'])->name('admin.tps.create');
             Route::put('/store', [TPController::class, 'store'])->name('admin.tps.store');
             Route::get('/edit/{tp}', [TPController::class, 'edit'])->name('admin.tps.edit');
+            Route::get('/show/{city}', [TPController::class, 'show'])->name('admin.tps.show');
             Route::patch('/update/{tp}', [TPController::class, 'update'])->name('admin.tps.update');
             Route::delete('/destroy/{tp}', [TPController::class, 'destroy'])->name('admin.tps.destroy');
         })->name('admin.tps');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTpRequest;
 use App\Http\Requests\Admin\UpdateTpRequest;
+use App\Models\City;
 use App\Models\Region;
 use App\Models\Tp;
 use App\Models\TpType;
@@ -48,9 +49,9 @@ class TPController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Region $region, City $city)
     {
-        //
+        return view('app.admin.tps.show', compact('region', 'city'));
     }
 
     /**

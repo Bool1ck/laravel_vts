@@ -19,7 +19,7 @@ class CityController extends Controller
      */
     public function index(Region $region)
     {
-        $cities = $region->cities()->paginate(15);
+        $cities = $region->cities()->paginate(5);
         return view('app.admin.cities.index', compact('region', 'cities'));
     }
 
@@ -52,9 +52,8 @@ class CityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Region $region, City $city)
     {
-        //
     }
 
     /**

@@ -5,14 +5,9 @@
         <div class="m-1"><a href="{{ route('admin.streets.create',['region' => $region]) }}"><div class="btn">Додати нову вулицю</div></a></div>
         <div>
             @foreach($cities as $city)
-                <div>
+                <div class="flex flex-row">
                     <div class="bg-indigo-50">{{$city->fullName() . " ,Streets count: " . $city->streets()->count()}}</div>
-                </div>
-                <div class="grid grid-cols-2">
-                    @foreach($city->streets as $street)
-                            <div class="w-fit">{{$street->fullName()}}</div>
-                            <div class="w-fit ps-2"><a href="{{route('admin.streets.edit',['region' => $region, 'street' => $street])}}">edit</a></div>
-                    @endforeach
+                    <div><a href="#">Show streets</a></div>
                 </div>
             @endforeach
         </div>
