@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="w-fit">
-        <div><a href="{{ route('admin.tps.create',['region' => $region]) }}">Додати нове ТП</a></div>
+        <div><a class="btn" href="{{ route('admin.tps.create',['region' => $region]) }}">Додати нове ТП</a></div>
         <div>
             @foreach($cities as $city)
                 <div>
@@ -21,3 +21,25 @@
         {{ $cities->links() }}
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .btn {
+            border: 1px solid #ccc;
+            width: 300px;
+            padding: 3px;
+            margin: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #cfc;
+        }
+
+        .btn:hover {
+            border: 1px solid #ccc;
+            padding: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #3f3;
+        }
+    </style>
+@endpush

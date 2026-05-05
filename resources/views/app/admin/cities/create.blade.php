@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex flex-col w-fit">
-        <div class="">
+        <div>
             <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Новий населений пункт</div>
         </div>
         <div>
