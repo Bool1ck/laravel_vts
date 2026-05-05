@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex flex-col w-fit">
-        <div class="bg-blue-400 text-center font-bold border-b-1 p-2">Редагування населенного пункту</div>
+        <div class="bg-blue-400 text-center font-bold border-b-1 p-2">Редагування населеного пункту</div>
         <div class="bg-white">
             <form class="flex" action="{{route('admin.cities.update',['region' => $region, 'city' => $city])}}" method="POST">
                 @csrf

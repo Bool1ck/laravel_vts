@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="flex flex-col w-fit">
-        <div class="bg-blue-400 text-center font-bold border-b-1 p-2">Новий населенний пункт</div>
+        <div class="">
+            <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Новий населений пункт</div>
+        </div>
         <div>
             <form action="{{route('admin.cities.store',['region' => $region])}}" method="POST">
                 @csrf
@@ -78,7 +80,7 @@
 
 
         select {
-            height: 30px;
+            /*height: 30px;*/
             padding-left: 5px;
             width: 60px;
             background-color: #FDFFC4;

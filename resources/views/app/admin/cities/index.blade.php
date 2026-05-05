@@ -3,7 +3,7 @@
 @section('content')
     <div class="flex flex-col">
         <div>
-            <a href="{{ route('admin.cities.create',['region' => $region]) }}"><div class="btn">Додати нове місто</div></a>
+            <a href="{{ route('admin.cities.create',['region' => $region]) }}"><div class="btn">Додати новий населений пункт</div></a>
         </div>
         <div>
             <table>
@@ -11,7 +11,7 @@
 {{--                    <th colspan="3" class="text-center">Населені пункти</th>--}}
 {{--                </tr>--}}
                 <tr>
-                    <th>Населені пункти</th>
+                    <th>Населений пункт</th>
                     <th>Кількість кулиць</th>
                     <th>Action</th>
                 </tr>

@@ -1,28 +1,36 @@
 @extends('app.layouts.main')
 
 @section('content')
-    <div class="flex">
-        <div class="flex flex-col tbl">
+    <div class="flex w-fit bg-white">
+        <div class="flex flex-col">
             <div>
-                <div class="text-center">Редагування street</div>
+                <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Редагування street</div>
             </div>
-            <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}" method="POST">
-                @csrf
-                @method('PATCH')
-                <div class="flex flex-col tbl">
-                    <div class="flex flex-row">
-                        <div class="p-1">
+                <div class="table border-collapse p-0 m-0">
+                    <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                    <div class="table-row-group border-b-1">
+                        <div class="table-cell p-1">
+                            Населенний пункт
+                        </div>
+                        <div class="table-cell p-1">
                             <select id="city_id" name="city_id">
                                 @foreach($region->cities as $city)
                                     <option value="{{$city->id}}"
                                             @if($city->id == $street->city_id)
                                                 selected
-                                            @endif
+                                        @endif
                                     >{{$city->fullName()}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="p-1">
+                    </div>
+                    <div class="table-row-group border-b-1">
+                        <div class="table-cell p-1">
+                            Тип вулиці
+                        </div>
+                        <div class="table-cell p-1">
                             <select id="street_type_id" name="street_type_id">
                                 @foreach($streetTypes as $streetType)
                                     <option value="{{$streetType->id}}"
@@ -33,23 +41,32 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div>
+                    </div>
+                    <div class="table-row-group border-b-1">
+                        <div class="table-cell p-1">
+                            Назва вулиці
+                        </div>
+                        <div class="table-cell p-1">
                             <input type="text" name="name" placeholder="StreetName" value="{{$street->name}}">
                         </div>
-                        <div>
-                            <input type="submit" value="Оновити" class="btn">
+                    </div>
+                    <div class="table-row-group border-b-1">
+                        <div class="table-cell p-1">
+                            <input type="submit" value="Оновити" class="btn btn-submit">
                         </div>
-            </form>
-                        <form action="{{ route('admin.streets.destroy', ['region' => $region, 'street' => $street]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <input type="text" name="street" value="{{$street->id}}" hidden>
-                            <input type="submit" value="Видалити" class="ms-1 btn btn-danger">
-                        </form>
+                    </div>
+                    </form>
+                    <div class="table-row-group">
+                        <div class="table-cell p-0">
+                            <form class="p-1 m-0" action="{{ route('admin.streets.destroy', ['region' => $region, 'street' => $street]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="text" name="street" value="{{$street->id}}" hidden>
+                                <input type="submit" value="Видалити" class="btn btn-danger">
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -65,15 +82,16 @@
 
 @push('styles')
     <style>
-        .btn {
+        .btn-submit {
             border: 1px solid #ccc;
+            border-radius: 5px;
             padding: 3px;
             padding-left: 5px;
             padding-right: 5px;
             background-color: #cfc;
         }
 
-        .btn:hover {
+        .btn-submit:hover {
             border: 1px solid #ccc;
             padding: 3px;
             padding-left: 5px;
@@ -98,19 +116,8 @@
             color: #FFF;
         }
 
-
-        div.tbl > div {
-            background-color: #FFF;
-            padding: 5px;
-            min-height: 30px;
-            align-items: center;
-        }
-
-
         select {
-            height: 30px;
-            padding-left: 5px;
-            background-color: #FDFFC4;
+            background-color: #FDFFC4 !important;
             border: 1px solid #3498db;
             cursor: pointer;
         }

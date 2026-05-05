@@ -1,35 +1,40 @@
 @extends('app.layouts.main')
 
 @section('content')
-    <div class="flex">
+    <div class="flex flex-col w-fit bg-white">
+        <div class="">
+            <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Нова вулиця</div>
+        </div>
         <form action="{{ route('admin.streets.store', ['region' => $region]) }}" method="POST">
             @csrf
             @method('PUT')
-            <div class="flex flex-col tbl">
-                <div>
-                    <div class="text-center">Нова вулиця</div>
-                </div>
-                <div class="flex flex-row">
-                    <div class="p-1">
+            <div class="table border-collapse p-0 m-0">
+                <div class="table-row-group border-b-1">
+                    <div class="table-cell p-1">Населенний пункт</div>
+                    <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
                             @foreach($region->cities as $city)
                                 <option value="{{$city->id}}">{{$city->fullName()}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="p-1">
+                </div>
+                <div class="table-row-group border-b-1">
+                    <div class="table-cell p-1">Тип вулиці</div>
+                    <div class="table-cell p-1">
                         <select id="street_type_id" name="street_type_id">
                             @foreach($streetTypes as $streetType)
                                 <option value="{{$streetType->id}}">{{$streetType->name}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div>
-                        <input type="text" name="name" placeholder="StreetName">
-                    </div>
-                    <div>
-                        <input type="submit" value="Створити" class="btn">
-                    </div>
+                </div>
+                <div class="table-row-group border-b-1">
+                    <div class="table-cell p-1">Назва вулиці</div>
+                    <div class="table-cell p-1"><input type="text" name="name" placeholder="StreetName"></div>
+                </div>
+                <div class="table-row-group border-b-1">
+                    <div class="table-cell p-1"><input type="submit" value="Створити"></div>
                 </div>
             </div>
             @if ($errors->any())
@@ -47,15 +52,16 @@
 
 @push('styles')
     <style>
-        .btn {
+        input[type=submit] {
             border: 1px solid #ccc;
+            border-radius: 5px;
             padding: 3px;
             padding-left: 5px;
             padding-right: 5px;
             background-color: #cfc;
         }
 
-        .btn:hover {
+        input[type=submit]:hover {
             border: 1px solid #ccc;
             padding: 3px;
             padding-left: 5px;
@@ -63,20 +69,8 @@
             background-color: #3f3;
         }
 
-
-
-        div.tbl > div {
-            background-color: #FFF;
-            padding: 5px;
-            min-height: 30px;
-            align-items: center;
-        }
-
-
         select {
-            height: 30px;
-            padding-left: 5px;
-            background-color: #FDFFC4;
+            background-color: #FDFFC4 !important;
             border: 1px solid #3498db;
             cursor: pointer;
         }
