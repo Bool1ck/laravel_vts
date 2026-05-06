@@ -15,9 +15,15 @@
                                 <select id="city_type_id" name="city_type_id">
                                     @foreach($cityTypes as $cityType)
                                         <option value="{{$cityType->id}}"
-                                                @if($cityType->id == $city->city_type_id)
-                                                    selected
-                                            @endif
+                                                @if(old('city_type_id'))
+                                                    @if(old('city_type_id') == $cityType->id)
+                                                        selected
+                                                @endif
+                                                @else
+                                                    @if($cityType->id == $city->city_type_id)
+                                                        selected
+                                                @endif
+                                                @endif
                                         >{{$cityType->name}}
                                         </option>
                                     @endforeach

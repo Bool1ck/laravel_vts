@@ -14,7 +14,11 @@
                     <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
                             @foreach($region->cities as $city)
-                                <option value="{{$city->id}}">{{$city->fullName()}}</option>
+                                <option value="{{$city->id}}"
+                                        @if(old('city_id') == $city->id)
+                                            selected
+                                    @endif
+                                >{{$city->fullName()}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -24,14 +28,18 @@
                     <div class="table-cell p-1">
                         <select id="street_type_id" name="street_type_id">
                             @foreach($streetTypes as $streetType)
-                                <option value="{{$streetType->id}}">{{$streetType->name}}</option>
+                                <option value="{{$streetType->id}}"
+                                        @if(old('street_type_id') == $streetType->id)
+                                            selected
+                                    @endif
+                                >{{$streetType->name}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="table-row-group border-b-1">
                     <div class="table-cell p-1">Назва вулиці</div>
-                    <div class="table-cell p-1"><input type="text" name="name" placeholder="StreetName"></div>
+                    <div class="table-cell p-1"><input type="text" name="name" placeholder="StreetName" value="{{old('name')}}"></div>
                 </div>
                 <div class="table-row-group border-b-1">
                     <div class="table-cell p-1"><input type="submit" value="Створити"></div>

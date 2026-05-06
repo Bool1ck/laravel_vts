@@ -2,6 +2,9 @@
 
 @section('content')
     <div>
+        @if(Auth::user()->isCanEditRegion($region))
+            <a class="btn" href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+        @endif
         @if($connectionPoints)
             <table class="m-2">
                 <tr>
@@ -60,6 +63,23 @@
 
 @push('styles')
     <style>
+        .btn {
+            border: 1px solid #ccc;
+            width: 300px;
+            padding: 3px;
+            margin: 10px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #cfc;
+        }
+
+        .btn:hover {
+            border: 1px solid #ccc;
+            padding: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #3f3;
+        }
         table {
             border-collapse: collapse;
             font-family: Arial, sans-serif;

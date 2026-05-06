@@ -15,9 +15,15 @@
                         <select id="city_id" name="city_id">
                             @foreach($region->cities as $city)
                                 <option value="{{$city->id}}"
-                                        @if($city->id == $tp->city_id)
-                                            selected
-                                    @endif
+                                        @if(old('city_id'))
+                                            @if(old('city_id') == $city->id)
+                                                selected
+                                        @endif
+                                        @else
+                                            @if($city->id == $tp->city_id)
+                                                selected
+                                        @endif
+                                        @endif
                                 >{{$city->fullName()}}</option>
                             @endforeach
                         </select>
@@ -29,9 +35,15 @@
                         <select id="tp_type_id" name="tp_type_id">
                             @foreach($TpTypes as $TpType)
                                 <option value="{{$TpType->id}}"
-                                        @if($TpType->id == $tp->tp_type_id)
-                                            selected
-                                    @endif
+                                        @if(old('tp_type_id'))
+                                            @if(old('tp_type_id') == $TpType->id)
+                                                selected
+                                        @endif
+                                        @else
+                                            @if($TpType->id == $tp->tp_type_id)
+                                                selected
+                                        @endif
+                                        @endif
                                 >{{$TpType->name}}</option>
                             @endforeach
                         </select>
@@ -40,7 +52,7 @@
                 <div class="table-row-group border-b">
                     <div class="table-cell p-1">Назва ТП</div>
                     <div class="table-cell p-1">
-                        <input type="text" name="name" placeholder="TpName" value="{{$tp->name}}">
+                        <input type="text" name="name" placeholder="TpName" value="@if(old('name')){{old('name')}}@else{{$tp->name}}@endif">
                     </div>
                 </div>
                 <div class="table-row-group border-b">

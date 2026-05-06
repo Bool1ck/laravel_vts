@@ -3,7 +3,7 @@
         <nav class="flex items-center  gap-4">
             @auth
                 <div>Користувач : {{Auth::user()->name}}
-                    @isset($region), відділ: {{Auth::user()->roleInRegion($region)->name}}
+                    @isset($region), роль: {{Auth::user()->roleInRegion($region)->name}}
                     @endisset
                 </div>
                 <a
@@ -44,9 +44,7 @@
         @elseif(Route::is('connection_point.edit'))
             <div>{{$cp->customer}}({{$cp->technical_conditions}}) [Внесення змін]</div>
         @elseif(Route::is('connection_point.index'))
-            @if(Auth::user()->isCanEditRegion($region))
-                <a class="ps-1" href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
-            @endif
+            <p class="ps-1" style="color: #1BCD1B">Список точок приєднання</p>
         @elseif(Route::is('connection_point.create'))
             <p class="ps-1" style="color: #1BCD1B">Нова точка приєднання</p>
         @elseif(Route::is('admin.cities.*'))

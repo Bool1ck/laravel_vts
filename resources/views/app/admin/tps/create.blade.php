@@ -14,7 +14,11 @@
                     <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
                             @foreach($region->cities as $city)
-                                <option value="{{$city->id}}">{{$city->fullName()}}</option>
+                                <option value="{{$city->id}}"
+                                        @if(old('city_id') == $city->id)
+                                            selected
+                                    @endif
+                                >{{$city->fullName()}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -24,7 +28,11 @@
                     <div class="table-cell p-1">
                         <select id="tp_type_id" name="tp_type_id">
                             @foreach($TpTypes as $TpType)
-                                <option value="{{$TpType->id}}">{{$TpType->name}}</option>
+                                <option value="{{$TpType->id}}"
+                                        @if(old('tp_type_id') == $TpType->id)
+                                            selected
+                                    @endif
+                                >{{$TpType->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -32,7 +40,7 @@
                 <div class="table-row-group border-b">
                     <div class="table-cell p-1">Назва ТП</div>
                     <div class="table-cell p-1">
-                        <input type="text" name="name" placeholder="TpName">
+                        <input type="text" name="name" placeholder="TpName" value="{{old('name')}}">
                     </div>
                 </div>
                 <div class="table-row-group border-b">

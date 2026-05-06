@@ -18,9 +18,15 @@
                                 <div class="table-cell p-1 text-left"><select id="role_id" name="role_id">
                                         @foreach($roles as $role)
                                             <option value="{{$role->id}}"
-                                                    @if((old('role_id') == $role->id)|($role->id == $user->roleInRegion($region)->id))
-                                                        selected
-                                                @endif
+                                                    @if(old('role_id'))
+                                                        @if(old('role_id') == $role->id)
+                                                            selected
+                                                    @endif
+                                                    @else
+                                                        @if($role->id == $user->roleInRegion($region)->id)
+                                                            selected
+                                                    @endif
+                                                    @endif
                                             >{{$role->name}}</option>
                                         @endforeach
                                     </select></div>
@@ -30,7 +36,7 @@
                             <div class="table-row border-b">
                                 <div class="table-cell p-1">ПІБ</div>
                                 <div class="table-cell p-1"><input type="text" name="name" placeholder="ПІБ"
-                                                                   value="{{$user->name}}"></div>
+                                                                   value="@if(old('name')){{old('name')}}@else{{$user->name}}@endif"></div>
                             </div>
                         </div>
                         <div class="table-row-group">

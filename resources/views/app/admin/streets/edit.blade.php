@@ -6,10 +6,11 @@
             <div>
                 <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Редагування street</div>
             </div>
-                <div class="table border-collapse p-0 m-0">
-                    <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
+            <div class="table border-collapse p-0 m-0">
+                <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}"
+                      method="POST">
+                    @csrf
+                    @method('PATCH')
                     <div class="table-row-group border-b-1">
                         <div class="table-cell p-1">
                             Населенний пункт
@@ -18,8 +19,14 @@
                             <select id="city_id" name="city_id">
                                 @foreach($region->cities as $city)
                                     <option value="{{$city->id}}"
-                                            @if($city->id == $street->city_id)
-                                                selected
+                                            @if(old('city_id'))
+                                                @if(old('city_id') == $city->id)
+                                                    selected
+                                                @endif
+                                            @else
+                                                @if($street->city_id == $city->id)
+                                                    selected
+                                        @endif
                                         @endif
                                     >{{$city->fullName()}}</option>
                                 @endforeach
@@ -34,9 +41,15 @@
                             <select id="street_type_id" name="street_type_id">
                                 @foreach($streetTypes as $streetType)
                                     <option value="{{$streetType->id}}"
-                                            @if($streetType->id == $street->street_type_id)
-                                                selected
-                                        @endif
+                                            @if(old('street_type_id'))
+                                                @if(old('street_type_id') == $streetType->id)
+                                                    selected
+                                            @endif
+                                            @else
+                                                @if($streetType->id == $street->street_type_id)
+                                                    selected
+                                            @endif
+                                            @endif
                                     >{{$streetType->name}}</option>
                                 @endforeach
                             </select>
@@ -47,7 +60,8 @@
                             Назва вулиці
                         </div>
                         <div class="table-cell p-1">
-                            <input type="text" name="name" placeholder="StreetName" value="{{$street->name}}">
+                            <input type="text" name="name" placeholder="StreetName"
+                                   value="@if(old('StreetName')){{old('StreetName')}}@else{{$street->name}}@endif">
                         </div>
                     </div>
                     <div class="table-row-group border-b-1">
@@ -55,18 +69,20 @@
                             <input type="submit" value="Оновити" class="btn btn-submit">
                         </div>
                     </div>
-                    </form>
-                    <div class="table-row-group">
-                        <div class="table-cell p-0">
-                            <form class="p-1 m-0" action="{{ route('admin.streets.destroy', ['region' => $region, 'street' => $street]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <input type="text" name="street" value="{{$street->id}}" hidden>
-                                <input type="submit" value="Видалити" class="btn btn-danger">
-                            </form>
-                        </div>
+                </form>
+                <div class="table-row-group">
+                    <div class="table-cell p-0">
+                        <form class="p-1 m-0"
+                              action="{{ route('admin.streets.destroy', ['region' => $region, 'street' => $street]) }}"
+                              method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="text" name="street" value="{{$street->id}}" hidden>
+                            <input type="submit" value="Видалити" class="btn btn-danger">
+                        </form>
                     </div>
                 </div>
+            </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
