@@ -4,7 +4,7 @@
     <div class="flex w-fit bg-white">
         <div class="flex flex-col">
             <div>
-                <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Редагування street</div>
+                <div class="p-1 bg-blue-400 text-center font-bold border-b-1 p-2">Редагування вулиці</div>
             </div>
             <div class="table border-collapse p-0 m-0">
                 <form action="{{ route('admin.streets.update',['region' => $region, 'street' => $street]) }}"
