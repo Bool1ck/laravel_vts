@@ -3,10 +3,14 @@
 @section('content')
     <div class="flex flex-col">
         <div>
-            <a href="{{ route('admin.cities.create',['region' => $region]) }}"><div class="btn">Додати новий населений пункт</div></a>
+            <a href="{{ route('admin.cities.create',['region' => $region]) }}">
+                <div class="btn">Додати новий населений пункт</div>
+            </a>
         </div>
         <div>
-            <a href="{{ route('admin.streets.create',['region' => $region]) }}"><div class="btn">Додати нову вулицю</div></a>
+            <a href="{{ route('admin.streets.create',['region' => $region]) }}">
+                <div class="btn">Додати нову вулицю</div>
+            </a>
         </div>
         <div><a class="btn" href="{{ route('admin.tps.create',['region' => $region]) }}">Додати нове ТП</a></div>
         <div>
@@ -20,21 +24,35 @@
                 @foreach($cities as $city)
                     <tr>
                         <td>{{$city->fullName()}}</td>
-                        <td>{{$city->streets()->count()}}  <a href="{{route('admin.streets.show', ['region' => $region, 'city' => $city])}}">Show street</a></td>
-                        <td>{{$city->tps()->count()}}  <a href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a></td>
-                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a></td>
+                        <td>{{$city->streets()->count()}} <a
+                                href="{{route('admin.streets.show', ['region' => $region, 'city' => $city])}}">Show
+                                street</a></td>
+                        <td>{{$city->tps()->count()}} <a
+                                href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a>
+                        </td>
+                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a>
+                        </td>
                     </tr>
                 @endforeach
+                <tr class="no-hover">
+                    <td colspan="4" style="border: 0px;">
+                        <div class="pagination-links  flex flex-col">
+                            {{ $cities->links('vendor.pagination.custom') }}
+                        </div>
+                    </td>
+                </tr>
             </table>
+
         </div>
-        <div>
-            {{ $cities->links() }}
-        </div>
+
     </div>
 @endsection
 
 @push('styles')
     <style>
+        .no-hover:hover {
+            background-color: #E5E7EB;
+        }
         .btn {
             border: 1px solid #ccc;
             width: 300px;
@@ -52,6 +70,7 @@
             padding-right: 5px;
             background-color: #3f3;
         }
+
         table {
             border-collapse: collapse;
             font-family: Arial, sans-serif;
@@ -91,7 +110,9 @@
             align-items: center;
         }
 
-
+        div.pagination-links > span {
+            background-color: #4b0600;
+        }
 
     </style>
 @endpush
