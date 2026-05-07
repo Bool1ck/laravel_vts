@@ -9,6 +9,7 @@
             <form action="{{route('admin.cities.store',['region' => $region])}}" method="POST">
                 @csrf
                 @method('PUT')
+                <input type="text" name="region_id" value="{{$region->id}}" hidden>
                 <div class="table w-full border-collapse bg-white">
                     <div class="table-header-group">
                         <div class="table-row">

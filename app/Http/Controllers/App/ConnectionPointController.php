@@ -38,10 +38,9 @@ class ConnectionPointController extends Controller
     {
         $customerTypes = CustomerType::all();
         $powerLineTypes = PowerLineType::all();
-        $cities = $region->Cities;
-        $streets = Street::streetsInCity(City::find($cities->toArray()[0]['id']));
+        $cities = $region->cities;
         $workTypes = WorkType::all();
-        return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities', 'streets', 'workTypes'));
+        return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities', 'workTypes'));
     }
 
     /**

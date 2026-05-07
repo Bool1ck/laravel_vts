@@ -15,7 +15,7 @@ class Region extends Model
         return $this->hasMany(ConnectingPoint::class, 'region_id', 'id');
     }
 
-    public function Cities() {
+    public function cities() {
         return $this->hasMany(City::class, 'region_id', 'id');
     }
 

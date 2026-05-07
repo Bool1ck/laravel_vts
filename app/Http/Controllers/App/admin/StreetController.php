@@ -19,6 +19,7 @@ class StreetController extends Controller
      */
     public function index(Region $region)
     {
+        $this->authorize('viewAny', [Street::class, $region]);
         $cities = $region->cities()->paginate(5);
         return view('app.admin.streets.index', compact('region', 'cities'));
     }
@@ -28,6 +29,7 @@ class StreetController extends Controller
      */
     public function create(Region $region)
     {
+        $this->authorize('create', [Street::class, $region]);
         $streetTypes = StreetType::all();
         return view('app.admin.streets.create', compact('region', 'streetTypes'));
     }
@@ -37,6 +39,7 @@ class StreetController extends Controller
      */
     public function store(StoreStreetRequest $request, Region $region)
     {
+        $this->authorize('create', [Street::class, $region]);
         $validated = $request->validated();
         $request->validate([
             'name' => [
@@ -54,6 +57,7 @@ class StreetController extends Controller
      */
     public function show(Region $region, City $city)
     {
+        $this->authorize('view', [Street::class, $region, $city]);
         return view('app.admin.streets.show', compact('region', 'city'));
     }
 
@@ -62,6 +66,7 @@ class StreetController extends Controller
      */
     public function edit(Region $region, Street $street)
     {
+        $this->authorize('update', [Street::class, $region, $street]);
         $cities = $region->cities();
         $streetTypes = StreetType::all();
         return view('app.admin.streets.edit', compact('region', 'cities', 'streetTypes', 'street'));
@@ -73,6 +78,7 @@ class StreetController extends Controller
      */
     public function update(UpdateStreetRequest $request, Region $region, Street $street)
     {
+        $this->authorize('update', [Street::class, $region, $street]);
         $validated = $request->validated();
         $request->validate([
             'name' => [
@@ -90,6 +96,7 @@ class StreetController extends Controller
      */
     public function destroy(Region $region, Street $street)
     {
+        $this->authorize('delete', [Street::class, $region, $street]);
         $street->delete();
         return redirect(route('admin.streets.index', compact('region')));
     }

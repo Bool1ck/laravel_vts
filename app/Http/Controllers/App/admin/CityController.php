@@ -19,6 +19,7 @@ class CityController extends Controller
      */
     public function index(Region $region)
     {
+        $this->authorize('view', [City::class, $region]);
         $cities = $region->cities()->paginate(5);
         return view('app.admin.cities.index', compact('region', 'cities'));
     }
@@ -28,6 +29,7 @@ class CityController extends Controller
      */
     public function create(Region $region)
     {
+        $this->authorize('create', [City::class, $region]);
         $cityTypes = CityType::all();
         return view('app.admin.cities.create', compact('region', 'cityTypes'));
     }
@@ -37,6 +39,7 @@ class CityController extends Controller
      */
     public function store(StoreCityRequest $request , Region $region)
     {
+        $this->authorize('create', [City::class, $region]);
         $validated = $request->validated();
         $request->validate([
             'name' => [
@@ -44,7 +47,6 @@ class CityController extends Controller
                 Rule::unique('cities')->where(fn ($query) => $query->where('city_type_id', $request->city_type_id))
             ],
         ]);
-        $validated['region_id'] = $region->id;
         $city = City::create($validated);
         return redirect(route('admin.cities.index', compact('region')));
     }
@@ -61,6 +63,7 @@ class CityController extends Controller
      */
     public function edit(Region $region, City $city)
     {
+        $this->authorize('update', $city);
         $cityTypes = CityType::all();
         return view('app.admin.cities.edit', compact('region', 'city', 'cityTypes'));
     }
@@ -78,7 +81,6 @@ class CityController extends Controller
                 Rule::unique('cities')->where(fn ($query) => $query->where('city_type_id', $request->city_type_id))
             ],
         ]);
-        $validated['region_id'] = $region->id;
         $city->update($validated);
         return redirect(route('admin.cities.index', compact('region')));
     }

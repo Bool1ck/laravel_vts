@@ -19,6 +19,7 @@ class TPController extends Controller
      */
     public function index(Region $region)
     {
+        $this->authorize('viewAny', [Tp::class, $region]);
         $cities = $region->cities()->paginate(1);
         return view('app.admin.tps.index', compact('region', 'cities'));
     }
@@ -28,6 +29,7 @@ class TPController extends Controller
      */
     public function create(Region $region)
     {
+        $this->authorize('create', [Tp::class, $region]);
         $TpTypes = TpType::all();
         $cities = $region->cities();
         return view('app.admin.tps.create', compact('region', 'TpTypes', 'cities'));
@@ -38,6 +40,7 @@ class TPController extends Controller
      */
     public function store(StoreTpRequest $request, Region $region)
     {
+        $this->authorize('create', [Tp::class, $region]);
         $validated = $request->validated();
         if ($region->isHasTpNumber($validated['name'])) {
             return back()->withErrors(['custom_field' => 'ТП з таким номером вже існує!'])->withInput();
@@ -51,6 +54,7 @@ class TPController extends Controller
      */
     public function show(Region $region, City $city)
     {
+        $this->authorize('view', [Tp::class, $region, $city]);
         return view('app.admin.tps.show', compact('region', 'city'));
     }
 
@@ -59,6 +63,7 @@ class TPController extends Controller
      */
     public function edit(Region $region, Tp $tp)
     {
+        $this->authorize('update', [Tp::class, $region, $tp]);
         $TpTypes = TpType::all();
         $cities = $region->cities();
         return view('app.admin.tps.edit', compact('region', 'tp', 'TpTypes', 'cities'));
@@ -69,6 +74,7 @@ class TPController extends Controller
      */
     public function update(UpdateTpRequest $request, Region $region, Tp $tp)
     {
+        $this->authorize('update', [Tp::class, $region, $tp]);
         $validated = $request->validated();
         $tp->update($validated);
         return redirect(route('admin.tps.index',['region' => $region]));
@@ -79,6 +85,7 @@ class TPController extends Controller
      */
     public function destroy(Region $region, Tp $tp)
     {
+        $this->authorize('delete', [Tp::class, $region, $tp]);
         $tp->delete();
         return redirect(route('admin.tps.index',['region' => $region]));
     }

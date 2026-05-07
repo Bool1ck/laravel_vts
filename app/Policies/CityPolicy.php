@@ -20,17 +20,17 @@ class CityPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, City $city): bool
+    public function view(User $user, Region $region): bool
     {
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Region $region): bool
     {
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
@@ -39,10 +39,7 @@ class CityPolicy
     public function update(User $user, City $city): bool
     {
         $region = Region::find($city->region_id);
-        if ($user->isAdminInRegion($region)) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**

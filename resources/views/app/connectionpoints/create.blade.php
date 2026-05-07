@@ -3,7 +3,6 @@
 @section('content')
     <div>
         <div class="m-2">
-            {{--            <p class="ps-4" style="font-weight: bold; color: #1BCD1B">Нова точка приєднання</p>--}}
             <form action="{{ route('connection_point.store', ['region' => $region]) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -70,6 +69,7 @@
                                 <div class="form_title">Місто/Село</div>
                                 <div>
                                     <select name="city_id">
+                                        <option value="0" disabled selected hidden></option>
                                         @foreach($cities as $city)
                                             <option
                                                 {{old('city')==$city->id?"selected":""}} value="{{$city->id}}">{{$city->name}}</option>
@@ -81,10 +81,7 @@
                                 <div class="form_title">Вулиця</div>
                                 <div>
                                     <select name="street_id">
-                                        @foreach($streets as $street)
-                                            <option
-                                                {{old('street')==$street->id?"selected":""}}  value="{{$street->id}}">{{$street->name}}</option>
-                                        @endforeach
+                                        <option value="0" disabled selected hidden></option>
                                     </select>
                                 </div>
                             </div>

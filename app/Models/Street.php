@@ -10,8 +10,9 @@ class Street extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public static function streetsInCity(City $city) {
-        return Street::all()->where('city_id', $city->id);
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function streetType()

@@ -20,6 +20,7 @@ class UserController extends Controller
      */
     public function index(Region $region)
     {
+        $this->authorize('viewAny', [User::class, $region]);
         return view('app.admin.users.index', compact('region'));
     }
 
@@ -28,6 +29,7 @@ class UserController extends Controller
      */
     public function create(Region $region)
     {
+        $this->authorize('create', [User::class, $region]);
         $roles = Role::all()->filter(function ($role) {return !in_array($role->name,['admin']);});
         return view('app.admin.users.create', compact('region', 'roles'));
     }
@@ -37,6 +39,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request, Region $region)
     {
+        $this->authorize('create', [User::class, $region]);
         $validated = $request->validated();
         if ($region->isHasUserByEmail($validated['email'])) {
             return back()->withErrors(['custom_field' => 'Користувач з таким email вже існує!'])->withInput();
@@ -64,6 +67,7 @@ class UserController extends Controller
      */
     public function edit(Region $region, User $user)
     {
+        $this->authorize('update', [User::class, $region, $user]);
         $roles = Role::all()->filter(function ($role) {return !in_array($role->name,['admin']);});
         return view('app.admin.users.edit', compact('region', 'user', 'roles'));
     }
@@ -73,6 +77,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, Region $region, User $user)
     {
+        $this->authorize('update', [User::class, $region, $user]);
         $validated = $request->validated();
         $role_id = $validated['role_id'];
         unset($validated['role_id']);
@@ -87,7 +92,7 @@ class UserController extends Controller
      */
     public function destroy(Region $region, User $user)
     {
-
+        $this->authorize('delete', [User::class, $region, $user]);
         $roleRegionUser = RoleRegionUser::where(['region_id' => $region->id, 'user_id' =>
             $user->id])->delete();
         $user->delete();
