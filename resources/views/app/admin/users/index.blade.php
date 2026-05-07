@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="flex flex-col">
-        <div><a href="{{ route('admin.users.create',['region' => $region]) }}"><div class="btn">Додати нового користувача</div></a></div>
+        <div><a href="{{ route('admin.users.create',['region' => $region]) }}">
+                <div class="btn">Додати нового користувача</div>
+            </a></div>
         <div>
             <table style="padding: 5px">
                 <tr>
@@ -14,9 +16,19 @@
                 @foreach($region->users as $user)
                     <tr>
                         <td style="padding: 5px">{{$user->name}}</td>
-                        <td style="padding: 5px">{{$user->email}}</td>
+                        <td style="padding: 5px">
+                            @if(!$user->isAdminInRegion($region))
+                                {{$user->email}}
+                            @else
+                                **********
+                            @endif
+                        </td>
                         <td style="padding: 5px">{{$user->roleInRegion($region)->name}}</td>
-                        <td style="padding: 5px; text-align: center;"><a href="{{route('admin.users.edit',['region' =>$region, 'user' => $user])}}">edit</a></td>
+                        <td style="padding: 5px; text-align: center;">
+                            @if(!$user->isAdminInRegion($region))
+                                <a href="{{route('admin.users.edit',['region' =>$region, 'user' => $user])}}">edit</a>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </table>
@@ -43,6 +55,7 @@
             padding-right: 5px;
             background-color: #3f3;
         }
+
         table {
             border-collapse: collapse;
             font-family: Arial, sans-serif;
@@ -81,7 +94,6 @@
             min-height: 30px;
             align-items: center;
         }
-
 
 
     </style>

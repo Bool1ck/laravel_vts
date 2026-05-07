@@ -19,9 +19,9 @@ class TPController extends Controller
      */
     public function index(Region $region)
     {
-        $this->authorize('viewAny', [Tp::class, $region]);
-        $cities = $region->cities()->paginate(1);
-        return view('app.admin.tps.index', compact('region', 'cities'));
+//        $this->authorize('viewAny', [Tp::class, $region]);
+//        $cities = $region->cities()->paginate(1);
+//        return view('app.admin.tps.index', compact('region', 'cities'));
     }
 
     /**
@@ -46,7 +46,8 @@ class TPController extends Controller
             return back()->withErrors(['custom_field' => 'ТП з таким номером вже існує!'])->withInput();
         }
         $tp = Tp::create($validated);
-        return redirect(route('admin.tps.index',['region' => $region]));
+        $city = $tp->city;
+        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
     }
 
     /**
@@ -77,7 +78,8 @@ class TPController extends Controller
         $this->authorize('update', [Tp::class, $region, $tp]);
         $validated = $request->validated();
         $tp->update($validated);
-        return redirect(route('admin.tps.index',['region' => $region]));
+        $city = $validated['city_id'];
+        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
     }
 
     /**
@@ -86,7 +88,8 @@ class TPController extends Controller
     public function destroy(Region $region, Tp $tp)
     {
         $this->authorize('delete', [Tp::class, $region, $tp]);
+        $city = $tp->city;
         $tp->delete();
-        return redirect(route('admin.tps.index',['region' => $region]));
+        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
     }
 }

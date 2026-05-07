@@ -19,9 +19,9 @@ class StreetController extends Controller
      */
     public function index(Region $region)
     {
-        $this->authorize('viewAny', [Street::class, $region]);
-        $cities = $region->cities()->paginate(5);
-        return view('app.admin.streets.index', compact('region', 'cities'));
+//        $this->authorize('viewAny', [Street::class, $region]);
+//        $cities = $region->cities()->paginate(5);
+//        return view('app.admin.streets.index', compact('region', 'cities'));
     }
 
     /**
@@ -49,7 +49,8 @@ class StreetController extends Controller
             ],
         ]);
         $street = Street::create($validated);
-        return redirect(route('admin.streets.index', compact('region')));
+        $city = $street->city;
+        return redirect(route('admin.streets.show', compact('region', 'city')));
     }
 
     /**
@@ -88,7 +89,8 @@ class StreetController extends Controller
             ],
         ]);
         $street->update($validated);
-        return redirect(route('admin.streets.index', compact('region')));
+        $city = $validated['city_id'];
+        return redirect(route('admin.streets.show', compact('region', 'city')));
     }
 
     /**
@@ -97,7 +99,8 @@ class StreetController extends Controller
     public function destroy(Region $region, Street $street)
     {
         $this->authorize('delete', [Street::class, $region, $street]);
+        $city = $street->city;
         $street->delete();
-        return redirect(route('admin.streets.index', compact('region')));
+        return redirect(route('admin.streets.show', compact('region', 'city')));
     }
 }
