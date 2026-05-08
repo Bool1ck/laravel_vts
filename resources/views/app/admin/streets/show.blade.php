@@ -3,7 +3,7 @@
 @section('content')
     <div class="w-fit">
         <div>
-            <a  class="btn" href="{{ route('admin.streets.create',['region' => $region]) }}">Додати нову вулицю</a>
+            <a  class="btn" href="{{ route('admin.streets.create',['region' => $region, 'city' => $city]) }}">Додати нову вулицю</a>
         </div>
         <div>
             <table class="m-2">

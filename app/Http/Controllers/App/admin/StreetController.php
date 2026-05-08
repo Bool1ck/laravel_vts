@@ -27,11 +27,11 @@ class StreetController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region)
+    public function create(Region $region, City $city = null)
     {
         $this->authorize('create', [Street::class, $region]);
         $streetTypes = StreetType::all();
-        return view('app.admin.streets.create', compact('region', 'streetTypes'));
+        return view('app.admin.streets.create', compact('region', 'streetTypes', 'city'));
     }
 
     /**

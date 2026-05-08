@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="w-fit">
-        <div><a class="btn" href="{{ route('admin.tps.create',['region' => $region]) }}">Додати нове ТП</a></div>
+        <div><a class="btn" href="{{ route('admin.tps.create',['region' => $region, 'city' => $city]) }}">Додати нове ТП</a></div>
         <div>
             <table class="m-2">
                 <tr>

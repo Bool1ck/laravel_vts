@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.cities');
         Route::prefix('/streets')->group(function () {
             Route::get('/', [StreetController::class, 'index'])->name('admin.streets.index');
-            Route::get('/create', [StreetController::class, 'create'])->name('admin.streets.create');
+            Route::get('/create/{city?}', [StreetController::class, 'create'])->name('admin.streets.create');
             Route::put('/store', [StreetController::class, 'store'])->name('admin.streets.store');
             Route::get('/edit/{street}', [StreetController::class, 'edit'])->name('admin.streets.edit');
             Route::get('/show/{city}', [StreetController::class, 'show'])->name('admin.streets.show');
@@ -47,7 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.streets');
         Route::prefix('/tps')->group(function () {
             Route::get('/', [TPController::class, 'index'])->name('admin.tps.index');
-            Route::get('/create', [TPController::class, 'create'])->name('admin.tps.create');
+            Route::get('/create/{city?}', [TPController::class, 'create'])->name('admin.tps.create');
             Route::put('/store', [TPController::class, 'store'])->name('admin.tps.store');
             Route::get('/edit/{tp}', [TPController::class, 'edit'])->name('admin.tps.edit');
             Route::get('/show/{city}', [TPController::class, 'show'])->name('admin.tps.show');

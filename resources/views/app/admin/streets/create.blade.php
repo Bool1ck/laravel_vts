@@ -13,13 +13,17 @@
                     <div class="table-cell p-1">Населенний пункт</div>
                     <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
-                            @foreach($region->cities as $city)
-                                <option value="{{$city->id}}"
-                                        @if(old('city_id') == $city->id)
-                                            selected
-                                    @endif
-                                >{{$city->fullName()}}</option>
-                            @endforeach
+                            @if(isset($city))
+                                <option value="{{$city->id}}" selected>{{$city->fullName()}}</option>
+                            @else
+                                @foreach($region->cities as $city)
+                                    <option value="{{$city->id}}"
+                                            @if(old('city_id') == $city->id)
+                                                selected
+                                        @endif
+                                    >{{$city->fullName()}}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>

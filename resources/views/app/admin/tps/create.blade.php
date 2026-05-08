@@ -13,13 +13,17 @@
                     <div class="table-cell p-1">Населений пункт</div>
                     <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
-                            @foreach($region->cities as $city)
-                                <option value="{{$city->id}}"
-                                        @if(old('city_id') == $city->id)
-                                            selected
-                                    @endif
-                                >{{$city->fullName()}}</option>
-                            @endforeach
+                            @if(isset($city))
+                                <option value="{{$city->id}}" selected>{{$city->fullName()}}</option>
+                            @else
+                                @foreach($region->cities as $city)
+                                    <option value="{{$city->id}}"
+                                            @if(old('city_id') == $city->id)
+                                                selected
+                                        @endif
+                                    >{{$city->fullName()}}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -49,14 +53,14 @@
                     </div>
                 </div>
             </div>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
         </form>
     </div>
@@ -71,6 +75,7 @@
             border: 1px solid #3498db;
             cursor: pointer;
         }
+
         input[type=text] {
             height: 30px;
             background-color: #E1EEFF;
@@ -79,6 +84,7 @@
             border: 1px solid #CCC;
             margin-right: 5px;
         }
+
         .btn-create {
             border: 1px solid #ccc;
             border-radius: 5px;

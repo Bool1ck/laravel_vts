@@ -27,12 +27,11 @@ class TPController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region)
+    public function create(Region $region, City $city = null)
     {
         $this->authorize('create', [Tp::class, $region]);
         $TpTypes = TpType::all();
-        $cities = $region->cities();
-        return view('app.admin.tps.create', compact('region', 'TpTypes', 'cities'));
+        return view('app.admin.tps.create', compact('region', 'TpTypes', 'city'));
     }
 
     /**
