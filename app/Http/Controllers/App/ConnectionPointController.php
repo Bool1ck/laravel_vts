@@ -46,7 +46,7 @@ class ConnectionPointController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreConnectionPointRequest $request)
+    public function store(StoreConnectionPointRequest $request, Region $region)
     {
         $validated = $request->validated();
         $city = City::find($validated['city_id']);
@@ -70,7 +70,7 @@ class ConnectionPointController extends Controller
         foreach ($workTypes_id as $workType_id) {
             ConnectingPointWorkType::create(['worktype_id' => $workType_id, 'pointid' => $connectionPoint->id]);
         }
-        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $connectionPoint->id]));
+        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $connectionPoint]));
     }
 
     /**

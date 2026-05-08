@@ -180,6 +180,31 @@
             </form>
         </div>
     </div>
+    <script type="module">
+        $(document).ready(function() {
+            $('select[name=city_id]').on('change', function() {
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('api.v1.city-streets', [ 'region' => 2, 'city' => 103])}}',
+                    type: "GET", // Specifies the request method
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    }, // Parameters sent in the URL
+                    success: function(response) {
+                        alert('click');
+                        console.log("Success:", response);
+                    },
+                    error: function(xhr) {
+                        alert('error click');
+                        console.log("Error:", xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
 
 @push('styles')

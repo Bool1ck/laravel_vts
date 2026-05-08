@@ -16,10 +16,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
         return view('app.dashboard');
     })->name('dashboard');
+    // ConnectionPoints start
     Route::prefix('/region/{region}')->middleware('UserCanViewRegion')->group(function () {
-        Route::get('/', [ConnectionPointController::class, 'index'])->name
-        ('connection_point.index');
         Route::prefix('/connections-points')->middleware('UserCanEditRegion')->group(function () {
+            Route::get('/', [ConnectionPointController::class, 'index'])->name
+            ('connection_point.index');
             Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
             Route::put('/store', [ConnectionPointController::class, 'store'])->name('connection_point.store');
             Route::get('/show/{cp}', [ConnectionPointController::class, 'show'])->withoutMiddleware('UserCanEditRegion')->name('connection_point.show');
@@ -27,6 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])->name('connection_point.update');
         });
     });
+    // ConnectionPoints end
+
+    //Admin panel start
     Route::prefix('/admin/region/{region}')->middleware('UserIsAdminInRegion')->group(function () {
         Route::prefix('/cities')->group(function () {
             Route::get('/', [CityController::class, 'index'])->name('admin.cities.index');
@@ -63,6 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
         })->name('admin.users');
     });
+    //Admin panel end
 });
 
 Route::middleware('auth')->group(function () {
