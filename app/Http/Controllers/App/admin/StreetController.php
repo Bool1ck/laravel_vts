@@ -19,9 +19,6 @@ class StreetController extends Controller
      */
     public function index(Region $region)
     {
-//        $this->authorize('viewAny', [Street::class, $region]);
-//        $cities = $region->cities()->paginate(5);
-//        return view('app.admin.streets.index', compact('region', 'cities'));
     }
 
     /**

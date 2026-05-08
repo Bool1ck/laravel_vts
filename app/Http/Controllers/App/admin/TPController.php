@@ -19,9 +19,7 @@ class TPController extends Controller
      */
     public function index(Region $region)
     {
-//        $this->authorize('viewAny', [Tp::class, $region]);
-//        $cities = $region->cities()->paginate(1);
-//        return view('app.admin.tps.index', compact('region', 'cities'));
+
     }
 
     /**
