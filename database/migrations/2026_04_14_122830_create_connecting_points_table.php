@@ -29,6 +29,7 @@ return new class extends Migration
             $table->date('contract_date')->nullable();
             $table->date('payment_date')->nullable();
             $table->date('perform_by_date')->nullable();
+            $table->date('planning_date')->nullable();
             $table->date('performance_date')->nullable();
             $table->date('materials_order_date')->nullable();
             $table->date('materials_receipt_date')->nullable();

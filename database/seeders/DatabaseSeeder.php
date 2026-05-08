@@ -41,17 +41,5 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ConnectingPointWorkTypeSeeder::class,
         ]);
-
-
-
-//         User::factory(10)->create();
-//        Role::factory()->create([
-//            'name' => 'admin',
-//        ]);
-
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'app@example.com',
-//        ]);
     }
 }

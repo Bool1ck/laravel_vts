@@ -3,7 +3,7 @@
 @section('content')
     <div>
         @if(Auth::user()->isCanEditRegion($region))
-            <a class="btn" href="{{ route('connection_point.create', ['region' => $region->id]) }}">Нове приєднання</a>
+            <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
         @endif
         @if($connectionPoints)
             <table class="m-2">

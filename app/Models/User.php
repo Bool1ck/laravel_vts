@@ -46,19 +46,24 @@ class User extends Authenticatable
 
     public function isCanViewRegion(Region $region) : bool
     {
-        $canViewRoles = ['admin', 'ВТГ', 'Юридичний', 'Побутовий', 'Глядач'];
+        $canViewRoles = config('roles.view_roles');
         return in_array($this->roleInRegion($region)->name, $canViewRoles);
     }
 
     public function isCanEditRegion(Region $region) : bool
     {
-        $canEditRoles = ['admin', 'ВТГ'];
+        $canEditRoles = config('roles.edit_roles');
         return in_array($this->roleInRegion($region)->name, $canEditRoles);
     }
 
     public function isAdminInRegion(Region $region) : bool {
-        $adminRoles = ['admin'];
+        $adminRoles = config('roles.admin_roles');
         return in_array($this->roleInRegion($region)->name, $adminRoles);
+    }
+
+    public function isMainEngineerInRegion(Region $region) : bool {
+        $MainEngineer = config('roles.main_engineer_roles');
+        return in_array($this->roleInRegion($region)->name, $MainEngineer);
     }
 
 }

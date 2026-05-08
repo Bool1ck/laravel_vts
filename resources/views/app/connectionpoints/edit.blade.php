@@ -81,6 +81,17 @@
                         </div>
                         <div>
                             <div class="flex flex-row">
+                                <div class="form_title">Заплановано<br>на дату</div>
+                                <div>
+                                    <input type="date" value="{{ $cp->planning_date }}"
+                                           @if(empty($cp->planning_date))
+                                               style="background-color: #FFBDC1"
+                                           @endif>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex flex-row">
                                 <div class="form_title">Виконано</div>
                                 <div>
                                     <input type="date" name="performance_date" value="{{ $cp->performance_date }}"

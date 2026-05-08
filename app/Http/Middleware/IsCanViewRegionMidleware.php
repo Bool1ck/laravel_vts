@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Region;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,11 @@ class IsCanViewRegionMidleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $region = $request->route('region');
-        if (!Auth::user()->isCanViewRegion($region)) {
-            abort(403,'Access denied');
-        }
+//        $region = Region::query()->findOrFail($request->route('region'));
+////        $region = $request->route('region');
+//        if (!Auth::user()->isCanViewRegion($region)) {
+//            abort(403,'Access denied');
+//        }
         return $next($request);
     }
 }
