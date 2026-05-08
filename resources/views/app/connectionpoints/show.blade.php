@@ -156,7 +156,7 @@
                 @if(Auth::user()->isCanEditRegion($region))
                     <div>
                         <div class="p-2"><a
-                                href="{{ route('connection_point.edit',['region' => $region->id, 'cp' => $cp->id]) }}"
+                                href="{{ route('connection_point.edit',['region' => $region, 'cp' => $cp]) }}"
                                 class="btn">Редагувати</a>
                         </div>
                     </div>

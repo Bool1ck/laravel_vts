@@ -30,7 +30,7 @@
                         <td>{{$city->tps()->count()}} <a
                                 href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a>
                         </td>
-                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city->id])}}">edit</a>
+                        <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city])}}">edit</a>
                         </td>
                     </tr>
                 @endforeach

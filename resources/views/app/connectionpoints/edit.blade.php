@@ -2,6 +2,15 @@
 
 @section('content')
     <div>
+        @php
+        if(Auth::user()->isCanEditRegion($region)) {
+            $disabled = "";
+            $me_disabled = "disabled";
+        } else {
+            $disabled = "disabled";
+            $me_disabled = "";
+        }
+        @endphp
         <div class="">
             <form action="{{ route('connection_point.update', ['region' => $region, 'cp' => $cp]) }}" method="POST">
                 @csrf
@@ -12,22 +21,22 @@
                         <div>
                             <div class="flex flex-row">
                                 <div class="form_title">Замовник</div>
-                                <div><input type="text" name="customer" value="{{ $cp->customer }}"></div>
+                                <div><input type="text" name="customer" value="{{ $cp->customer }}" {{$disabled}}></div>
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Технічні умови</div>
                                 <div><input type="text" name="technical_conditions"
-                                            value="{{ $cp->technical_conditions }}">
+                                            value="{{ $cp->technical_conditions }}" {{$disabled}}>
                                 </div>
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Дата ТУ</div>
                                 <div><input type="date" name="technical_conditions_date"
-                                            value="{{ $cp->technical_conditions_date }}"></div>
+                                            value="{{ $cp->technical_conditions_date }}" {{$disabled}}></div>
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Потужність(кВт)</div>
-                                <div><input type="number" name="power" value="{{ $cp->power }}">
+                                <div><input type="number" name="power" value="{{ $cp->power }}" {{$disabled}}>
                                 </div>
                             </div>
                             <div class="flex flex-row">
@@ -37,7 +46,7 @@
                                         @foreach($customerTypes as $customerType)
                                             <div>
                                                 <input type="radio" id="customer_type_id" name="customer_type_id"
-                                                       value="{{$customerType->id}}" {{$cp->customerType->id == $customerType->id ? "checked":""}}/>
+                                                       value="{{$customerType->id}}" {{$cp->customerType->id == $customerType->id ? "checked":""}}  {{$disabled}}>
                                                 <label for="customer_type_id">{{$customerType->name}}</label>
                                             </div>
                                         @endforeach
@@ -50,7 +59,7 @@
                                     <input type="date" name="contract_date" value="{{ $cp->contract_date }}"
                                            @if(empty($cp->contract_date))
                                                style="background-color: #FFBDC1"
-                                        @endif>
+                                        @endif  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +73,7 @@
                                     <input type="date" name="payment_date" value="{{ $cp->payment_date }}"
                                            @if(empty($cp->payment_date))
                                                style="background-color: #FFBDC1"
-                                        @endif>
+                                        @endif  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +95,7 @@
                                     <input type="date" value="{{ $cp->planning_date }}"
                                            @if(empty($cp->planning_date))
                                                style="background-color: #FFBDC1"
-                                           @endif>
+                                           @endif  {{$me_disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +106,7 @@
                                     <input type="date" name="performance_date" value="{{ $cp->performance_date }}"
                                            @if(empty($cp->performance_date))
                                                style="background-color: #FFBDC1"
-                                        @endif>
+                                        @endif  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +121,7 @@
                                            value="{{ $cp->materials_order_date }}"
                                            @if(empty($cp->materials_order_date))
                                                style="background-color: #FFBDC1"
-                                        @endif>
+                                        @endif {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +133,7 @@
                                            value="{{ $cp->materials_receipt_date }}"
                                            @if(empty($cp->materials_receipt_date))
                                                style="background-color: #FFBDC1"
-                                        @endif>
+                                        @endif  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +144,7 @@
                             <div class="flex flex-row">
                                 <div>
                                     <input style="width: 520px" name="point_place" type="text"
-                                           value="{{ $cp->point_place }}">
+                                           value="{{ $cp->point_place }}"  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +155,7 @@
                             <div class="flex flex-row">
                                 <div>
                                     <input style="width: 520px" name="power_point" type="text"
-                                           value="{{ $cp->power_point }}">
+                                           value="{{ $cp->power_point }}"  {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -162,6 +171,7 @@
                                                    checked
                                         @endif
                                         @endforeach
+                                        {{$disabled}}
                                     >
                                     <label for="04">{{$workType->name}}</label>
                                 </div>
@@ -171,10 +181,10 @@
                     <div>
                         <label>Note</label>
                         <div class="flex flex-col">
-                            <div><textarea name="note">{{$cp->note}}</textarea></div>
+                            <div><textarea name="note" {{$disabled}}>{{$cp->note}}</textarea></div>
                         </div>
                     </div>
-                    @if(Auth::user()->isCanEditRegion($region))
+                    @if(Auth::user()->isCanEditRegion($region) | Auth::user()->isMainEngineerInRegion($region))
                         <div>
                             <div class="p-2">
                                 <input type="submit" value="Зберігти зміни" class="btn"></div>

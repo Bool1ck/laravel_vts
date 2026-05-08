@@ -17,11 +17,10 @@ class IsCanEditRegionMidleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-//        $region = Region::query()->findOrFail($request->route('region'));
-////        $region = $request->route('region');
-//        if (!Auth::user()->isCanEditRegion($region)) {
-//            abort(403,'Access denied');
-//        }
-        return $next($request);
+        $region = $request->route('region');
+        if (Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region)) {
+            return $next($request);
+        }
+        abort(403,'Access denied');
     }
 }
