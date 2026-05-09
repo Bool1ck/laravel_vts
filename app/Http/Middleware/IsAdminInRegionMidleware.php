@@ -19,7 +19,7 @@ class IsAdminInRegionMidleware
     {
         $region = $request->route('region');
         if (!Auth::user()->isAdminInRegion($region)) {
-            abort(403,'Access denied');
+            abort(403,'Access denied admin');
         }
         return $next($request);
     }

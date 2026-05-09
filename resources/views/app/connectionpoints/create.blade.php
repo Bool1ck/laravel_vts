@@ -123,7 +123,12 @@
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">ТП :</div>
-                                <div><input type="number" name="tp" value="{{ old('tp') }}" placeholder="000"></div>
+                                <div>
+                                    <select name="tp_id">
+                                        <option value="0" disabled selected hidden></option>
+                                    </select>
+                                    {{--                                    <input type="number" name="tp" value="{{ old('tp') }}" placeholder="000">--}}
+                                </div>
                             </div>
                             <div class="flex flex-row">
                                 <div class="form_title">Лінія :</div>
@@ -181,27 +186,38 @@
         </div>
     </div>
     <script type="module">
-        $(document).ready(function() {
-            $('select[name=city_id]').on('change', function() {
+        $(document).ready(function () {
+            $('select[name=city_id]').on('change', function () {
                 $.ajax({
                     headers: {
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{route('api.v1.city-streets', [ 'region' => 2, 'city' => 103])}}',
+                    url: '{{route('api.v1.city-streets', [ 'region' => $region, 'city' => ':city'])}}'.replace(':city', $(this).val()),
                     type: "GET", // Specifies the request method
+                    dataType: 'json',
                     data: {
                         _token: "{{ csrf_token() }}",
                     }, // Parameters sent in the URL
-                    success: function(response) {
-                        alert('click');
-                        console.log("Success:", response);
+                    success: function (response) {
+                        $(document).find('select[name=street_id]').children('option').remove();
+                        $(document).find('select[name=tp_id]').children('option').remove();
+                        $(document).find('select[name=street_id]').append($('<option></option>').val(null).html(""));
+                        $(document).find('select[name=tp_id]').append($('<option></option>').val(null).html(""));
+                        $.each(response.streets, function (index, value) {
+                            $(document).find('select[name=street_id]').append($('<option></option>').val(value.id).html(value.name));
+                        })
+                        $.each(response.tps, function (index, value) {
+                            $(document).find('select[name=tp_id]').append($('<option></option>').val(value.id).html(value.name));
+                        })
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         alert('error click');
                         console.log("Error:", xhr.responseText);
                     }
                 });
+
+
             });
         });
     </script>

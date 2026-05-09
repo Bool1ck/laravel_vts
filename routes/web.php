@@ -18,9 +18,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     // ConnectionPoints start
     Route::prefix('/region/{region}')->middleware('UserCanViewRegion')->group(function () {
-        Route::prefix('/connections-points')->middleware('UserCanEditRegion')->group(function () {
-            Route::get('/', [ConnectionPointController::class, 'index'])->name
-            ('connection_point.index');
+        Route::get('/connections-points', [ConnectionPointController::class, 'index'])->name
+        ('connection_point.index');
+        Route::prefix('')->middleware('UserCanEditRegion')->group(function () {
             Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
             Route::put('/store', [ConnectionPointController::class, 'store'])->name('connection_point.store');
             Route::get('/show/{cp}', [ConnectionPointController::class, 'show'])->withoutMiddleware('UserCanEditRegion')->name('connection_point.show');

@@ -21,6 +21,6 @@ class IsCanEditRegionMidleware
         if (Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region)) {
             return $next($request);
         }
-        abort(403,'Access denied');
+        abort(403,'Access denied edit');
     }
 }

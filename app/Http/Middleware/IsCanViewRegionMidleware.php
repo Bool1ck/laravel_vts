@@ -19,7 +19,7 @@ class IsCanViewRegionMidleware
     {
         $region = $request->route('region');
         if (!Auth::user()->isCanViewRegion($region)) {
-            abort(403,'Access denied');
+            abort(403,'Access denied view');
         }
         return $next($request);
     }

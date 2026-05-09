@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\StreetResource;
+use App\Http\Resources\Api\TpResource;
 use App\Models\City;
 use App\Models\Region;
+use App\Models\StreetType;
 use Illuminate\Http\Request;
 
 class StreetController extends Controller
@@ -15,10 +17,19 @@ class StreetController extends Controller
      */
     public function index(Region $region, City $city)
     {
-//        $data = StreetResource::collection($city->streets());
-//        dump($data);
-        return StreetResource::collection($city->streets());
-//        return 1;
+
+        $streets = $city->streets;
+        $tps = $city->tps;
+        foreach ($streets as &$street) {
+            $street['name'] = $street->fullName();
+        }
+        foreach ($tps as &$tp) {
+            $tp['name'] = $tp->fullName();
+        }
+        return response()->json([
+            'streets' => StreetResource::collection($streets),
+            'tps' => TpResource::collection($tps),
+        ]);
     }
 
     /**
