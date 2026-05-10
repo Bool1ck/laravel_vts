@@ -33,7 +33,6 @@ class UpdateConnectionPointRequest extends FormRequest
             'power' => 'required|numeric',
             'contract_date' => 'nullable|date_format:Y-m-d',
             'payment_date' => 'nullable|date_format:Y-m-d',
-            'planning_date' => 'nullable|date_format:Y-m-d',
             'performance_date' => 'nullable|date_format:Y-m-d',
             'materials_order_date' => 'nullable|date_format:Y-m-d',
             'materials_receipt_date' => 'nullable|date_format:Y-m-d',

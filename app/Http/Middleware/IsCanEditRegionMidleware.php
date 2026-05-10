@@ -18,7 +18,7 @@ class IsCanEditRegionMidleware
     public function handle(Request $request, Closure $next): Response
     {
         $region = $request->route('region');
-        if (Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region)) {
+        if (Auth::user()->isCanEditRegion($region) or Auth::user()->isMainEngineerInRegion($region)) {
             return $next($request);
         }
         abort(403,'Access denied edit');

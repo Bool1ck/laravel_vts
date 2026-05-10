@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreConnectionPointRequest;
+use App\Http\Requests\UpdateConnectionPointMERequest;
 use App\Http\Requests\UpdateConnectionPointRequest;
 use App\Models\City;
 use App\Models\ConnectingPoint;
@@ -17,6 +18,7 @@ use App\Models\Tp;
 use App\Models\WorkType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class ConnectionPointController extends Controller
@@ -51,16 +53,16 @@ class ConnectionPointController extends Controller
         $validated = $request->validated();
         $city = City::find($validated['city_id']);
         $street = Street::find($validated['street_id']);
-        $point_place = $city->cityType->name . ' ' . $city->name .', '.$street->streetType->name . ' ' . $street->name .', буд. ' . $validated['build_number'];
-        $tp = Tp::where('name', $validated['tp'])->first();
-        $power_point = 'ПЛ-' . $validated['powerLineType'] . 'кВ від ' . $tp->type->name . '-' . $tp->name . ' ' .$tp->city->cityType->name  . $tp->city->name . ', ' . $validated['power_line'] . ' опора №' . $validated['pole'];
+        $point_place = $city->fullName() .', '.$street->fullName() .', буд. ' . $validated['build_number'];
+        $tp = Tp::find($validated['tp_id']);
+        $power_point = 'ПЛ-' . $validated['powerLineType'] . 'кВ від ' . $tp->fullName() . ', ' .$tp->city->fullName() . ', ' . $validated['power_line'] . ' опора №' . $validated['pole'];
         $validated['point_place'] = $point_place;
         $validated['power_point'] = $power_point;
         $workTypes_id = $validated['workTypes'];
         $region = $validated['region_id'];
         unset($validated['build_number']);
         unset($validated['workTypes']);
-        unset($validated['tp']);
+        unset($validated['tp_id']);
         unset($validated['pole']);
         unset($validated['power_line']);
         unset($validated['powerLineType']);
@@ -96,27 +98,40 @@ class ConnectionPointController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateConnectionPointRequest $request, Region $region, ConnectingPoint $cp)
+    public function update(Request $request, Region $region, ConnectingPoint $cp)
     {
-        $validated = $request->validated();
-        $workTypes_id = $validated['workTypes'];
+        if(Auth::user()->isMainEngineerInRegion($region)) {
+            $data = app(UpdateConnectionPointMERequest::class)->validated();
+           $this->updateME($data, $region, $cp);
+        }
+        elseif (Auth::user()->isCanEditRegion($region)) {
+            $data = app(UpdateConnectionPointRequest::class)->validated();
+            $this->updateFull($data, $region, $cp);
+        }
+        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
+//        abort(403, 'У вас недостаточно прав для редактирования этой точки.');
+    }
+
+    private function updateFull(array $validated, Region $region, ConnectingPoint $cp) {
+
         if(!is_null($validated['payment_date'])) {
-            if ($validated['power']  == 5) {
-                $days = 45;
-            } elseif ($validated['power']  > 5 && $validated['power']  < 16) {
-                $days = 60;
-            } elseif ($validated['power']  > 15 && $validated['power']  < 30) {
-                $days = 75;
-            } elseif ($validated['power']  >= 30) {
-                $days = 90;
-            }
+            $power = $validated['power'];
+            $days = match (true) {
+                $power <= 5  => 45,
+                $power < 16  => 60,
+                $power < 30  => 75,
+                default      => 90,
+            };
             $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days)->format('Y-m-d');
         } else {
             $validated['perform_by_date'] = null;
         }
-        unset($validated['workTypes']);
-            $cp->update($validated);
-            $cp->workTypes()->sync($workTypes_id);
+        $cp->update(Arr::except($validated, ['workTypes']));
+        $cp->workTypes()->sync($validated['workTypes'] ?? []);
+        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
+    }
+    private function updateME(array $validated, Region $region, ConnectingPoint $cp) {
+        $cp->update($validated);
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 

@@ -20,10 +20,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/region/{region}')->middleware('UserCanViewRegion')->group(function () {
         Route::get('/connections-points', [ConnectionPointController::class, 'index'])->name
         ('connection_point.index');
+        Route::get('/connections-points/show/{cp}', [ConnectionPointController::class, 'show'])->name('connection_point.show');
         Route::prefix('')->middleware('UserCanEditRegion')->group(function () {
             Route::get('/create', [ConnectionPointController::class, 'create'])->name('connection_point.create');
             Route::put('/store', [ConnectionPointController::class, 'store'])->name('connection_point.store');
-            Route::get('/show/{cp}', [ConnectionPointController::class, 'show'])->withoutMiddleware('UserCanEditRegion')->name('connection_point.show');
             Route::get('/edit/{cp}', [ConnectionPointController::class, 'edit'])->name('connection_point.edit');
             Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])->name('connection_point.update');
         });

@@ -34,7 +34,7 @@ class StoreConnectionPointRequest extends FormRequest
             'street_id' => 'required|exists:streets,id',
             'build_number' => 'required|string',
             'powerLineType' => 'required|string',
-            'tp' => 'required|exists:tps,name',
+            'tp_id' => 'required|exists:tps,id',
             'power_line' => 'required|string',
             'pole' => 'required|numeric',
             'note' => 'string|nullable',

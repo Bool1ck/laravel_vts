@@ -92,7 +92,7 @@
                             <div class="flex flex-row">
                                 <div class="form_title">Заплановано<br>на дату</div>
                                 <div>
-                                    <input type="date" value="{{ $cp->planning_date }}"
+                                    <input type="date" name="planning_date" value="{{ $cp->planning_date }}"
                                            @if(empty($cp->planning_date))
                                                style="background-color: #FFBDC1"
                                            @endif  {{$me_disabled}}>
