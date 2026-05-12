@@ -26,11 +26,19 @@ class ConnectionPointController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Region $region)
+    public function index(Region $region, string $completed = '')
     {
           $connectionPoints =[];
-            $connectionPoints = ConnectingPoint::all()->where('region_id', $region->id);
-        return view('app.index', compact('connectionPoints', 'region'));
+            $connectionPoints = ConnectingPoint::where('region_id', $region->id)->when(
+                $completed == "completed",
+                function ($query) {
+                    $query->whereNotNull('performance_date');
+                },
+                function ($query) {
+                    $query->whereNull('performance_date');
+                }
+            )->get();
+        return view('app.index', compact('connectionPoints', 'region', 'completed'));
     }
 
     /**

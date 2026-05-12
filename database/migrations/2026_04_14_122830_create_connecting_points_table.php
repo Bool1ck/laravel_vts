@@ -35,6 +35,7 @@ return new class extends Migration
             $table->date('materials_receipt_date')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

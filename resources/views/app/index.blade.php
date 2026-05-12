@@ -2,9 +2,19 @@
 
 @section('content')
     <div>
-        @if(Auth::user()->isCanEditRegion($region))
-            <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
-        @endif
+        <div class="flex flex-col">
+            @if(Auth::user()->isCanEditRegion($region))
+                <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
+            @endif
+            @if($completed)
+                    <a class="btn btn-completed"
+                       href="{{route('connection_point.index', ['region' => $region, 'completed' => ""])}}">В роботі</a>
+                @else
+                    <a class="btn btn-completed"
+                       href="{{route('connection_point.index', ['region' => $region, 'completed' => "completed"])}}">Завершені</a>
+            @endif
+
+        </div>
         @if($connectionPoints)
             <table class="m-2">
                 <tr>
@@ -80,6 +90,25 @@
             padding-right: 5px;
             background-color: #3f3;
         }
+
+        .btn-completed {
+            border: 1px solid #ccc;
+            width: 300px;
+            padding: 3px;
+            margin: 10px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #FFFEE1;
+        }
+
+        .btn-completed:hover {
+            border: 1px solid #ccc;
+            padding: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: #FCF93A;
+        }
+
         table {
             border-collapse: collapse;
             font-family: Arial, sans-serif;
