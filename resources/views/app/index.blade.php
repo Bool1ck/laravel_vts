@@ -2,7 +2,7 @@
 
 @section('content')
     <div>
-        <div class="flex flex-col">
+        <div class="flex flex-row">
             @if(Auth::user()->isCanEditRegion($region))
                 <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
             @endif
@@ -56,7 +56,7 @@
                         <td>{{$point->materials_receipt_date ? \Illuminate\Support\Facades\Date::parse($point->materials_receipt_date)->format('d.m.Y'):""}}</td>
                         <td>
                             <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
-                            @if(Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region))
+                            @if((Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region))&&!$completed)
                                 <a href="{{ route('connection_point.edit', ['region' => $point->region_id, 'cp' => $point->id]) }}">Edit</a>
                             @endif
 

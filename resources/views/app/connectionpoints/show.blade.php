@@ -155,9 +155,12 @@
                 </div>
                 @if(Auth::user()->isCanEditRegion($region))
                     <div>
-                        <div class="p-2"><a
-                                href="{{ route('connection_point.edit',['region' => $region, 'cp' => $cp]) }}"
-                                class="btn">Редагувати</a>
+                        <div class="p-2">
+                            @if(!$cp->performance_date)
+                                <a
+                                    href="{{ route('connection_point.edit',['region' => $region, 'cp' => $cp]) }}"
+                                    class="btn">Редагувати</a>
+                            @endif
                         </div>
                     </div>
                 @endif

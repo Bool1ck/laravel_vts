@@ -108,16 +108,18 @@ class ConnectionPointController extends Controller
      */
     public function update(Request $request, Region $region, ConnectingPoint $cp)
     {
-        if(Auth::user()->isMainEngineerInRegion($region)) {
-            $data = app(UpdateConnectionPointMERequest::class)->validated();
-           $this->updateME($data, $region, $cp);
+        if (!$cp->performance_date) {
+            if(Auth::user()->isMainEngineerInRegion($region)) {
+                $data = app(UpdateConnectionPointMERequest::class)->validated();
+                $this->updateME($data, $region, $cp);
+            }
+            elseif (Auth::user()->isCanEditRegion($region)) {
+                $data = app(UpdateConnectionPointRequest::class)->validated();
+                $this->updateFull($data, $region, $cp);
+            }
+            return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
         }
-        elseif (Auth::user()->isCanEditRegion($region)) {
-            $data = app(UpdateConnectionPointRequest::class)->validated();
-            $this->updateFull($data, $region, $cp);
-        }
-        return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
-//        abort(403, 'У вас недостаточно прав для редактирования этой точки.');
+        abort(403, 'У вас недостаточно прав для редактирования этой точки.');
     }
 
     private function updateFull(array $validated, Region $region, ConnectingPoint $cp) {
