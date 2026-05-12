@@ -13,9 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'UserIsAdminInRegion' => \App\Http\Middleware\IsAdminInRegionMidleware::class,
-            'UserCanEditRegion' => \App\Http\Middleware\IsCanEditRegionMidleware::class,
-            'UserCanViewRegion' => \App\Http\Middleware\IsCanViewRegionMidleware::class,
+            'UserIsAdminInRegion' => \App\Http\Middleware\IsAdminInRegionMiddleware::class,
+            'UserCanEditRegion' => \App\Http\Middleware\IsCanEditRegionMiddleware::class,
+            'UserCanViewRegion' => \App\Http\Middleware\IsCanViewRegionMiddleware::class,
+            'NoCache' => \App\Http\Middleware\NoCacheMiddleware::class,
         ]);
         //
     })

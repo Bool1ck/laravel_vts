@@ -12,7 +12,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified','NoCache'])->group(function () {
     Route::get('/', function () {
         return view('app.dashboard');
     })->name('dashboard');

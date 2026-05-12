@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Region;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdminInRegionMidleware
+class NoCacheMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,10 +15,10 @@ class IsAdminInRegionMidleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $region = $request->route('region');
-        if (!Auth::user()->isAdminInRegion($region)) {
-            abort(403,'Access denied admin');
-        }
-        return $next($request);
+        $response = $next($request);
+        $response->headers->set('Cache-Control','nocache, no-store, max-age=0, must-revalidate');
+        $response->headers->set('Pragma','no-cache');
+        $response->headers->set('Expires','Fri, 01 Jan 1990 00:00:00 GMT');
+        return $response;
     }
 }

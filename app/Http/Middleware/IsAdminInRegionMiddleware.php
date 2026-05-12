@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsCanViewRegionMidleware
+class IsAdminInRegionMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,8 +18,8 @@ class IsCanViewRegionMidleware
     public function handle(Request $request, Closure $next): Response
     {
         $region = $request->route('region');
-        if (!Auth::user()->isCanViewRegion($region)) {
-            abort(403,'Access denied view');
+        if (!Auth::user()->isAdminInRegion($region)) {
+            abort(403,'Access denied admin');
         }
         return $next($request);
     }
