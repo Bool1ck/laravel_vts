@@ -53,7 +53,8 @@ class TPController extends Controller
     public function show(Region $region, City $city)
     {
         $this->authorize('view', [Tp::class, $region, $city]);
-        return view('app.admin.tps.show', compact('region', 'city'));
+        $tps = $city->tps()->paginate(20);
+        return view('app.admin.tps.show', compact('region', 'city', 'tps'));
     }
 
     /**

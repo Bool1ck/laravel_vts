@@ -21,6 +21,6 @@ class Street extends Model
     }
 
     public function fullName() {
-        return $this->streetType->name . $this->name;
+        return $this->streetType->name . ' ' . $this->name;
     }
 }

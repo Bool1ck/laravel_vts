@@ -9,7 +9,7 @@
                     <td style="background-color: #38479E; color: #fff; font-size: 16px; font-weight: bold"
                         colspan="2">{{$city->fullName() . " ,кількість ТП: " . $city->tps()->count()}}</td>
                 </tr>
-                @foreach($city->tps as $tp)
+                @foreach($tps as $tp)
                     <tr>
                         <td>{{$tp->fullName()}}</td>
                         <td>
@@ -17,6 +17,14 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td colspan="2">
+
+                        <div class="pagination-links  flex flex-col">
+                            {{ $tps->links('vendor.pagination.custom') }}
+                        </div>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

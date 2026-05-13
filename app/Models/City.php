@@ -22,7 +22,7 @@ class City extends Model
     }
 
     public function fullName() {
-        return $this->cityType->name . $this->name;
+        return $this->cityType->name . ' ' . $this->name;
     }
 
     public function region() {

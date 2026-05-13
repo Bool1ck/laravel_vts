@@ -10,12 +10,20 @@
                 <tr>
                     <td style="background-color: #38479E; color: #fff" colspan="2">{{$city->fullName() . ", кількість вулиць: " . $city->streets()->count()}}</td>
                 </tr>
-                @foreach($city->streets as $street)
+                @foreach($streets as $street)
                     <tr>
                         <td>{{$street->fullName()}}</td>
                         <td><a href="{{route('admin.streets.edit',['region' => $region, 'street' => $street])}}">edit</a></td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td colspan="2">
+
+                        <div class="pagination-links  flex flex-col">
+                            {{ $streets->links('vendor.pagination.custom') }}
+                        </div>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -42,7 +50,7 @@
         }
 
         table {
-            min-width: 350px;
+            min-width: 480px;
             border-collapse: collapse;
             font-family: Arial, sans-serif;
             font-size: 14px;

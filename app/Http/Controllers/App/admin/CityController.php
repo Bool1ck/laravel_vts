@@ -20,7 +20,7 @@ class CityController extends Controller
     public function index(Region $region)
     {
         $this->authorize('view', [City::class, $region]);
-        $cities = $region->cities()->paginate(5);
+        $cities = $region->cities()->paginate(20);
         return view('app.admin.cities.index', compact('region', 'cities'));
     }
 

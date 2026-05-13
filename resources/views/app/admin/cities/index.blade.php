@@ -24,11 +24,12 @@
                 @foreach($cities as $city)
                     <tr>
                         <td>{{$city->fullName()}}</td>
-                        <td>{{$city->streets()->count()}} <a
+                        <td><a
                                 href="{{route('admin.streets.show', ['region' => $region, 'city' => $city])}}">Show
-                                street</a></td>
-                        <td>{{$city->tps()->count()}} <a
-                                href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a>
+                                street</a>
+                            {{$city->streets()->count()}}</td>
+                        <td><a
+                                href="{{route('admin.tps.show', ['region' => $region, 'city' => $city])}}">Show TP</a> {{$city->tps()->count()}}
                         </td>
                         <td><a href="{{route('admin.cities.edit',['region' => $region, 'city' => $city])}}">edit</a>
                         </td>
@@ -75,6 +76,7 @@
             border-collapse: collapse;
             font-family: Arial, sans-serif;
             font-size: 14px;
+            min-width: 1024px;
         }
 
         th {

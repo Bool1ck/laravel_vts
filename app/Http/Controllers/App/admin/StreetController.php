@@ -56,7 +56,8 @@ class StreetController extends Controller
     public function show(Region $region, City $city)
     {
         $this->authorize('view', [Street::class, $region, $city]);
-        return view('app.admin.streets.show', compact('region', 'city'));
+        $streets = $city->streets()->paginate(20);
+        return view('app.admin.streets.show', compact('region', 'city', 'streets'));
     }
 
     /**
