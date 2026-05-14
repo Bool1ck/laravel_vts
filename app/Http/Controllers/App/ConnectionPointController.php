@@ -28,16 +28,16 @@ class ConnectionPointController extends Controller
      */
     public function index(Region $region, string $completed = '')
     {
-          $connectionPoints =[];
-            $connectionPoints = ConnectingPoint::where('region_id', $region->id)->when(
-                $completed == "completed",
-                function ($query) {
-                    $query->whereNotNull('performance_date');
-                },
-                function ($query) {
-                    $query->whereNull('performance_date');
-                }
-            )->get();
+        $connectionPoints = [];
+        $connectionPoints = ConnectingPoint::where('region_id', $region->id)->when(
+            $completed == "completed",
+            function ($query) {
+                $query->whereNotNull('performance_date');
+            },
+            function ($query) {
+                $query->whereNull('performance_date');
+            }
+        )->paginate(25);
         return view('app.index', compact('connectionPoints', 'region', 'completed'));
     }
 
@@ -46,6 +46,7 @@ class ConnectionPointController extends Controller
      */
     public function create(Region $region)
     {
+        $this->authorize('create', [ConnectingPoint::class, $region]);
         $customerTypes = CustomerType::all();
         $powerLineTypes = PowerLineType::all();
         $cities = $region->cities;
@@ -58,12 +59,13 @@ class ConnectionPointController extends Controller
      */
     public function store(StoreConnectionPointRequest $request, Region $region)
     {
+        $this->authorize('create', [ConnectingPoint::class, $region]);
         $validated = $request->validated();
         $city = City::find($validated['city_id']);
         $street = Street::find($validated['street_id']);
-        $point_place = $city->fullName() .', '.$street->fullName() .', буд. ' . $validated['build_number'];
+        $point_place = $city->fullName() . ', ' . $street->fullName() . ', буд. ' . $validated['build_number'];
         $tp = Tp::find($validated['tp_id']);
-        $power_point = 'ПЛ-' . $validated['powerLineType'] . 'кВ від ' . $tp->fullName() . ', ' .$tp->city->fullName() . ', ' . $validated['power_line'] . ' опора №' . $validated['pole'];
+        $power_point = 'ПЛ-' . $validated['powerLineType'] . 'кВ від ' . $tp->fullName() . ', ' . $tp->city->fullName() . ', ' . $validated['power_line'] . ' опора №' . $validated['pole'];
         $validated['point_place'] = $point_place;
         $validated['power_point'] = $power_point;
         $workTypes_id = $validated['workTypes'];
@@ -97,6 +99,7 @@ class ConnectionPointController extends Controller
      */
     public function edit(Region $region, ConnectingPoint $cp)
     {
+        $this->authorize('update', $cp);
         $cpWorkTypes = ConnectingPointWorkType::where('pointid', $cp->id)->get();
         $workTypes = WorkType::all();
         $customerTypes = CustomerType::all();
@@ -108,12 +111,12 @@ class ConnectionPointController extends Controller
      */
     public function update(Request $request, Region $region, ConnectingPoint $cp)
     {
+        $this->authorize('update', $cp);
         if (!$cp->performance_date) {
-            if(Auth::user()->isMainEngineerInRegion($region)) {
+            if (Auth::user()->isMainEngineerInRegion($region)) {
                 $data = app(UpdateConnectionPointMERequest::class)->validated();
                 $this->updateME($data, $region, $cp);
-            }
-            elseif (Auth::user()->isCanEditRegion($region)) {
+            } elseif (Auth::user()->isCanEditRegion($region)) {
                 $data = app(UpdateConnectionPointRequest::class)->validated();
                 $this->updateFull($data, $region, $cp);
             }
@@ -122,15 +125,16 @@ class ConnectionPointController extends Controller
         abort(403, 'У вас недостаточно прав для редактирования этой точки.');
     }
 
-    private function updateFull(array $validated, Region $region, ConnectingPoint $cp) {
-
-        if(!is_null($validated['payment_date'])) {
+    private function updateFull(array $validated, Region $region, ConnectingPoint $cp)
+    {
+        $this->authorize('update', $cp);
+        if (!is_null($validated['payment_date'])) {
             $power = $validated['power'];
             $days = match (true) {
-                $power <= 5  => 45,
-                $power < 16  => 60,
-                $power < 30  => 75,
-                default      => 90,
+                $power <= 5 => 45,
+                $power < 16 => 60,
+                $power < 30 => 75,
+                default => 90,
             };
             $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days)->format('Y-m-d');
         } else {
@@ -140,7 +144,10 @@ class ConnectionPointController extends Controller
         $cp->workTypes()->sync($validated['workTypes'] ?? []);
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
-    private function updateME(array $validated, Region $region, ConnectingPoint $cp) {
+
+    private function updateME(array $validated, Region $region, ConnectingPoint $cp)
+    {
+        $this->authorize('update', $cp);
         $cp->update($validated);
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }

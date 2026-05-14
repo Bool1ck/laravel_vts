@@ -65,6 +65,13 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr style="background-color: #E5E7EB">
+                    <td colspan="16" style="border: 0px">
+                        <div class="flex flex-col">
+                            {{ $connectionPoints->links('vendor.pagination.custom') }}
+                        </div>
+                    </td>
+                </tr>
             </table>
         @else
             <div>Empty</div>
@@ -75,6 +82,7 @@
 
 @push('styles')
     <style>
+
         .btn {
             border: 1px solid #ccc;
             width: 300px;

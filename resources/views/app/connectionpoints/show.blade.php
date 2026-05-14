@@ -153,7 +153,7 @@
                         <div><textarea disabled>{{$cp->note}}</textarea></div>
                     </div>
                 </div>
-                @if(Auth::user()->isCanEditRegion($region))
+                @if(Auth::user()->isCanEditRegion($region)||Auth::user()->isMainEngineerInRegion($region))
                     <div>
                         <div class="p-2">
                             @if(!$cp->performance_date)
