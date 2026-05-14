@@ -18,17 +18,18 @@
         @if($connectionPoints)
             <table class="m-2">
                 <tr>
-                    <th>Технічні умови</th>
+                    <th>Технічні<br>умови</th>
                     <th>Дата ТУ</th>
                     <th>Замовник</th>
-                    <th>Тип замовника</th>
+                    <th>Тип<br>замовника</th>
                     <th>Місце знаходження об'єкту</th>
                     <th>Точка забезпечення потужності</th>
                     <th>Потужність</th>
                     <th>Перелік робіт</th>
-                    <th>Дата договору</th>
-                    <th>Дата оплати</th>
+                    <th>Дата<br>договору</th>
+                    <th>Дата<br>оплати</th>
                     <th>Виконати до<br>включно</th>
+                    <th>Заплановано<br>на дату</th>
                     <th>Виконано</th>
                     <th>замовлення<br>матеріалів</th>
                     <th>отримання<br>матеріалів</th>
@@ -51,6 +52,7 @@
                         <td>{{$point->contract_date ? \Illuminate\Support\Facades\Date::parse($point->contract_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->payment_date ? \Illuminate\Support\Facades\Date::parse($point->payment_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->perform_by_date ? \Illuminate\Support\Facades\Date::parse($point->perform_by_date)->format('d.m.Y'):""}}</td>
+                        <td>{{$point->planning_date ? \Illuminate\Support\Facades\Date::parse($point->planning_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->performance_date ? \Illuminate\Support\Facades\Date::parse($point->performance_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->materials_order_date ? \Illuminate\Support\Facades\Date::parse($point->materials_order_date)->format('d.m.Y'):""}}</td>
                         <td>{{$point->materials_receipt_date ? \Illuminate\Support\Facades\Date::parse($point->materials_receipt_date)->format('d.m.Y'):""}}</td>
