@@ -24,9 +24,15 @@ class StoreCityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'region_id' => 'required|int|exists:regions,id',
             'city_type_id' => 'required|int|exists:city_types,id',
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                // Валидация уникальности с учетом типа города
+                Rule::unique('cities')->where(function ($query) {
+                    return $query->where('city_type_id', $this->city_type_id);
+                })
+            ],
         ];
     }
 }
