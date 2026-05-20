@@ -26,7 +26,11 @@ class StoreStreetRequest extends FormRequest
         return [
             'city_id' => 'required|exists:cities,id',
             'street_type_id' => 'required|exists:street_types,id',
-            'name' => 'required|string',
+            'name' => [
+                'required', 'string',
+                Rule::unique('streets')->where(fn($query) => $query->where('street_type_id',
+                    $this->street_type_id)->where('city_id', $this->city_id))
+            ],
         ];
     }
 }
