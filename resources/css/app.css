@@ -6,3 +6,27 @@
 /*@tailwind base;*/
 /*@tailwind components;*/
 /*@tailwind utilities;*/
+
+@font-face {
+    font-family: 'Figtree';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/figtree/figtree-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Figtree';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('../fonts/figtree/figtree-latin-300-normal.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Figtree';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../fonts/figtree/figtree-latin-500-normal.woff2') format('woff2');
+}
