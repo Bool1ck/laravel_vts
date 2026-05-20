@@ -2,15 +2,13 @@
 
 namespace App\Services\Admin;
 
-use App\Models\City;
-use App\Models\Region;
 use App\Models\Street;
 use Illuminate\Support\Facades\DB;
 
 class StreetService
 {
     /**
-     * Создать город, строго привязанный к указанному региону.
+     * Создать street
      */
     public function create(array $data): Street
     {

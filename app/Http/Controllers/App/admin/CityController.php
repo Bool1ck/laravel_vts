@@ -10,14 +10,19 @@ use App\Models\CityType;
 use App\Models\Region;
 use App\Services\Admin\CityService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 
 class CityController extends Controller
 {
+
+    public function __construct(
+        protected CityService $cityService
+    ) {}
     /**
      * Display a listing of the resource.
      */
-    public function index(Region $region)
+    public function index(Region $region) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [City::class, $region]);
@@ -30,7 +35,7 @@ class CityController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region)
+    public function create(Region $region) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [City::class, $region]);
@@ -43,16 +48,16 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCityRequest $request, Region $region, CityService $cityService): RedirectResponse
+    public function store(StoreCityRequest $request, Region $region): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [City::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
-        $cityService->create($region, $request->validated());
+        $this->cityService->create($region, $request->validated());
 
         // 3. HTTP-ответ
-        return redirect()->route('admin.cities.index', compact('region'));
+        return to_route('admin.cities.index', compact('region'));
     }
 
     /**
@@ -65,7 +70,7 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Region $region, City $city)
+    public function edit(Region $region, City $city) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', $city);
@@ -78,26 +83,26 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCityRequest $request, Region $region, City $city, CityService $cityService)
+    public function update(UpdateCityRequest $request, Region $region, City $city) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', $city);
         // 2. Делегирование бизнес-логики сервису
-        $cityService->update($city, $request->validated());
+        $this->cityService->update($city, $request->validated());
         // 3. HTTP-ответ
-        return redirect(route('admin.cities.index', compact('region')));
+        return to_route('admin.cities.index', compact('region'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Region $region, City $city, CityService $cityService)
+    public function destroy(Region $region, City $city) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('delete', $city);
         // 2. Делегирование бизнес-логики сервису
-        $cityService->delete($city);
+        $this->cityService->delete($city);
         // 3. HTTP-ответ
-        return redirect(route('admin.cities.index', compact('region')));
+        return to_route('admin.cities.index', compact('region'));
     }
 }

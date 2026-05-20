@@ -10,11 +10,15 @@ use App\Models\Region;
 use App\Models\Street;
 use App\Models\StreetType;
 use App\Services\Admin\StreetService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StreetController extends Controller
 {
+    public function __construct(
+        protected StreetService $streetService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +29,7 @@ class StreetController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region, City $city = null)
+    public function create(Region $region, City $city = null) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [Street::class, $region]);
@@ -40,23 +44,23 @@ class StreetController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStreetRequest $request, Region $region, StreetService $streetService)
+    public function store(StoreStreetRequest $request, Region $region) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [Street::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
-        $street = $streetService->create($request->validated());
+        $street = $this->streetService->create($request->validated());
 
         $city = $street->city;
         // 3. HTTP-ответ
-        return redirect(route('admin.streets.show', compact('region', 'city')));
+        return to_route('admin.streets.show', compact('region', 'city'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Region $region, City $city)
+    public function show(Region $region, City $city) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [Street::class, $region, $city]);
@@ -69,13 +73,13 @@ class StreetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Region $region, Street $street)
+    public function edit(Region $region, Street $street) : View
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', [Street::class, $region, $street]);
 
         //2. cities and streetTypes lists
-        $cities = $region->cities();
+        $cities = $region->cities()->select('id', 'name')->orderBy('id')->get();
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
 
         // 3. HTTP-ответ
@@ -86,25 +90,25 @@ class StreetController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStreetRequest $request, Region $region, Street $street, StreetService $streetService)
+    public function update(UpdateStreetRequest $request, Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', [Street::class, $region, $street]);
 
         // 2. Делегирование бизнес-логики сервису
-        $street = $streetService->update($street, $request->validated());
+        $street = $this->streetService->update($street, $request->validated());
 
         // 2.1. City of Street
         $city = $street->city;
 
         // 3. HTTP-ответ
-        return redirect(route('admin.streets.show', compact('region', 'city')));
+        return to_route('admin.streets.show', compact('region', 'city'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Region $region, Street $street, StreetService $streetService)
+    public function destroy(Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('delete', [Street::class, $region, $street]);
@@ -113,9 +117,9 @@ class StreetController extends Controller
         $city = $street->city;
 
         // 2.1 Делегирование бизнес-логики сервису
-        $streetService->delete($street);
+        $this->streetService->delete($street);
 
         // 3. HTTP-ответ
-        return redirect(route('admin.streets.show', compact('region', 'city')));
+        return to_route('admin.streets.show', compact('region', 'city'));
     }
 }
