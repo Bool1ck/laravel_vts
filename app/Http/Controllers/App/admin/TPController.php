@@ -9,85 +9,119 @@ use App\Models\City;
 use App\Models\Region;
 use App\Models\Tp;
 use App\Models\TpType;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Services\Admin\TPService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TPController extends Controller
 {
+    // Внедряем сервис через конструктор
+    public function __construct(
+        protected TPService $tpService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index(Region $region)
     {
-
+        // Метод пустой, так как список выводится в разрезе городов в методе show
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region, City $city = null)
+    public function create(Region $region, City $city = null) : View
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [Tp::class, $region]);
-        $TpTypes = TpType::all();
+
+        // 2. Список типов TP
+        $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
+
+        // 3. HTTP-ответ
         return view('app.admin.tps.create', compact('region', 'TpTypes', 'city'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTpRequest $request, Region $region)
+    public function store(StoreTpRequest $request, Region $region) : RedirectResponse
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('create', [Tp::class, $region]);
-        $validated = $request->validated();
-        if ($region->isHasTpNumber($validated['name'])) {
-            return back()->withErrors(['custom_field' => 'ТП з таким номером вже існує!'])->withInput();
-        }
-        $tp = Tp::create($validated);
+
+        // 3. Делегирование бизнес-логики сервису
+        $tp = $this->tpService->create($request->validated());
+
         $city = $tp->city;
-        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
+
+        // 4. HTTP-ответ
+        return to_route('admin.tps.show', compact('region', 'city'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Region $region, City $city)
+    public function show(Region $region, City $city) : View
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [Tp::class, $region, $city]);
+
         $tps = $city->tps()->paginate(20);
+
+        // 3. HTTP-ответ
         return view('app.admin.tps.show', compact('region', 'city', 'tps'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Region $region, Tp $tp)
+    public function edit(Region $region, Tp $tp) : View
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', [Tp::class, $region, $tp]);
-        $TpTypes = TpType::all();
-        $cities = $region->cities();
+
+        $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
+
+        // 2. ИСПРАВЛЕНО: Вызываем метод get() вместо сырого Relation объекта
+        $cities = $region->cities()->select('id', 'name')->get();
+
+        // 3. HTTP-ответ
         return view('app.admin.tps.edit', compact('region', 'tp', 'TpTypes', 'cities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTpRequest $request, Region $region, Tp $tp)
+    public function update(UpdateTpRequest $request, Region $region, Tp $tp) : RedirectResponse
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('update', [Tp::class, $region, $tp]);
-        $validated = $request->validated();
-        $tp->update($validated);
-        $city = $validated['city_id'];
-        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
+
+        // 2. Обновление через сервис
+        $updatedTp = $this->tpService->update($tp, $request->validated());
+
+        $city = $updatedTp->city;
+
+        // 3. HTTP-ответ
+        return to_route('admin.tps.show', compact('region', 'city'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Region $region, Tp $tp)
+    public function destroy(Region $region, Tp $tp) : RedirectResponse
     {
+        // 1. Проверка прав (HTTP-слой)
         $this->authorize('delete', [Tp::class, $region, $tp]);
+
         $city = $tp->city;
-        $tp->delete();
-        return redirect(route('admin.tps.show',['region' => $region, 'city' => $city]));
+
+        // 2. Удаление через сервис
+        $this->tpService->delete($tp);
+
+        // 3. HTTP-ответ
+        return to_route('admin.tps.show', compact('region', 'city'));
     }
 }
