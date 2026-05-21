@@ -13,7 +13,7 @@
                     <th style="padding: 5px">Role</th>
                     <th style="padding: 5px">Action</th>
                 </tr>
-                @foreach($region->users as $user)
+                @foreach($users as $user)
                     <tr>
                         <td style="padding: 5px">{{$user->name}}</td>
                         <td style="padding: 5px">
@@ -32,6 +32,7 @@
                     </tr>
                 @endforeach
             </table>
+{{--            {{ $users->links() }}--}}
         </div>
     </div>
 @endsection
