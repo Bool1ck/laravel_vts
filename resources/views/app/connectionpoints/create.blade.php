@@ -72,7 +72,7 @@
                                         <option value="0" disabled selected hidden></option>
                                         @foreach($cities as $city)
                                             <option
-                                                {{old('city')==$city->id?"selected":""}} value="{{$city->id}}">{{$city->name}}</option>
+                                                {{old('city')==$city->id?"selected":""}} value="{{$city->id}}">{{$city->fullName()}}</option>
                                         @endforeach
                                     </select>
                                 </div>

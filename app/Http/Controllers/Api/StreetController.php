@@ -18,8 +18,8 @@ class StreetController extends Controller
     public function index(Region $region, City $city)
     {
 
-        $streets = $city->streets;
-        $tps = $city->tps;
+        $streets = $city->streets()->with('streetType')->get();
+        $tps = $city->tps()->with('type')->get();
         foreach ($streets as &$street) {
             $street['name'] = $street->fullName();
         }

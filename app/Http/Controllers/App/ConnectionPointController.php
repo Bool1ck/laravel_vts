@@ -47,10 +47,10 @@ class ConnectionPointController extends Controller
     public function create(Region $region)
     {
         $this->authorize('create', [ConnectingPoint::class, $region]);
-        $customerTypes = CustomerType::all();
-        $powerLineTypes = PowerLineType::all();
-        $cities = $region->cities;
-        $workTypes = WorkType::all();
+        $customerTypes = CustomerType::select('id', 'name')->orderBy('id')->get();
+        $powerLineTypes = PowerLineType::select('id', 'name')->orderBy('id')->get();
+        $cities = $region->cities()->with('cityType')->get();
+        $workTypes = WorkType::select('id', 'name')->orderBy('id')->get();
         return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities', 'workTypes'));
     }
 
@@ -90,7 +90,7 @@ class ConnectionPointController extends Controller
      */
     public function show(Region $region, ConnectingPoint $cp)
     {
-        $cpWorkTypes = ConnectingPointWorkType::where('pointid', $cp->id)->get();
+        $cpWorkTypes = ConnectingPointWorkType::with('workType')->where('pointid', $cp->id)->get();
         return view('app.connectionpoints.show', compact('region', 'cp', 'cpWorkTypes'));
     }
 
@@ -100,9 +100,9 @@ class ConnectionPointController extends Controller
     public function edit(Region $region, ConnectingPoint $cp)
     {
         $this->authorize('update', $cp);
-        $cpWorkTypes = ConnectingPointWorkType::where('pointid', $cp->id)->get();
-        $workTypes = WorkType::all();
-        $customerTypes = CustomerType::all();
+        $cpWorkTypes = ConnectingPointWorkType::with('workType')->where('pointid', $cp->id)->get();
+        $workTypes = WorkType::select('id', 'name')->orderBy('id')->get();
+        $customerTypes = CustomerType::select('id', 'name')->orderBy('id')->get();
         return view('app.connectionpoints.edit', compact('region', 'cp', 'cpWorkTypes', 'workTypes', 'customerTypes'));
     }
 
@@ -115,7 +115,7 @@ class ConnectionPointController extends Controller
         if (!$cp->performance_date) {
             if (Auth::user()->isMainEngineerInRegion($region)) {
                 $data = app(UpdateConnectionPointMERequest::class)->validated();
-                $this->updateME($data, $region, $cp);
+                $this->updateForMainEnginier($data, $region, $cp);
             } elseif (Auth::user()->isCanEditRegion($region)) {
                 $data = app(UpdateConnectionPointRequest::class)->validated();
                 $this->updateFull($data, $region, $cp);
@@ -145,7 +145,7 @@ class ConnectionPointController extends Controller
         return redirect(route('connection_point.show', ['region' => $region, 'cp' => $cp]));
     }
 
-    private function updateME(array $validated, Region $region, ConnectingPoint $cp)
+    private function updateForMainEnginier(array $validated, Region $region, ConnectingPoint $cp)
     {
         $this->authorize('update', $cp);
         $cp->update($validated);
