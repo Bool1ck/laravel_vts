@@ -38,8 +38,7 @@ class CityPolicy
      */
     public function update(User $user, City $city): bool
     {
-        $region = Region::find($city->region_id);
-        return $user->isAdminInRegion($region);
+        return $user->isAdminInRegion($city->region);
     }
 
     /**
@@ -47,13 +46,17 @@ class CityPolicy
      */
     public function delete(User $user, City $city): bool
     {
-        $region = Region::find($city->region_id);
-        $streets = $city->streets();
-        $tps = $city->tps();
-        if ($user->isAdminInRegion($region) && $streets->count() == 0 && $tps->count() == 0) {
-            return true;
+        // 1. Проверяем, является ли пользователь админом в регионе этого города
+        if (!$user->isAdminInRegion($city->region)) {
+            return false;
         }
-        return false;
+
+        // 2. Быстрая проверка на отсутствие связанных улиц и ТП
+        if ($city->streets()->exists() || $city->tps()->exists()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

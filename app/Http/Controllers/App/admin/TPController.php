@@ -87,7 +87,7 @@ class TPController extends Controller
     public function edit(Region $region, Tp $tp) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Tp::class, $region, $tp]);
+        $this->authorize('update', [Tp::class, $tp]);
 
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
 
@@ -104,7 +104,7 @@ class TPController extends Controller
     public function update(UpdateTpRequest $request, Region $region, Tp $tp) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Tp::class, $region, $tp]);
+        $this->authorize('update', [Tp::class, $tp]);
 
         // 2. Обновление через сервис
         $updatedTp = $this->tpService->update($tp, $request->validated());
@@ -121,7 +121,7 @@ class TPController extends Controller
     public function destroy(Region $region, Tp $tp) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('delete', [Tp::class, $region, $tp]);
+        $this->authorize('delete', [Tp::class, $tp]);
 
         $city = $tp->city;
 

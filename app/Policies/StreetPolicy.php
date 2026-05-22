@@ -26,7 +26,7 @@ class StreetPolicy
      */
     public function view(User $user, Region $region, City $city): bool
     {
-        if ($user->isAdminInRegion($region) && $city->region == $region) {
+        if ($user->isAdminInRegion($region) && $city->region_id == $region->id) {
             return true;
         }
         return false;
@@ -46,23 +46,19 @@ class StreetPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Region $region, Street $street): bool
+    public function update(User $user, Street $street): bool
     {
-        if ($user->isAdminInRegion($region) && $street->city->region == $region) {
-            return true;
-        }
-        return false;
+        $region = $street->city->region;
+        return $region && $user->isAdminInRegion($region);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Region $region,Street $street): bool
+    public function delete(User $user, Street $street): bool
     {
-        if ($user->isAdminInRegion($region) && $street->city->region == $region) {
-            return true;
-        }
-        return false;
+        $region = $street->city->region;
+        return $region && $user->isAdminInRegion($region);
     }
 
     /**

@@ -12,17 +12,17 @@ class ConnectingPointPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Region $region): bool
     {
-        return false;
+        return $user->isCanViewRegion($region);
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ConnectingPoint $connectingPoint): bool
+    public function view(User $user, Region $region): bool
     {
-        return false;
+        return $user->isCanViewRegion($region);
     }
 
     /**
@@ -30,8 +30,7 @@ class ConnectingPointPolicy
      */
     public function create(User $user, Region $region)
     {
-        return $user->isCanEditRegion($region)? Response::allow()
-            : Response::deny('Вы не можете удалить чужой пост.');
+        return $user->isCanEditRegion($region);
     }
 
     /**
@@ -39,8 +38,17 @@ class ConnectingPointPolicy
      */
     public function update(User $user, ConnectingPoint $connectingPoint): bool
     {
-        $region = Region::find($connectingPoint->region_id);
-        return ($user->isCanEditRegion($region)||$user->isMainEngineerInRegion($region));
+        $region = $connectingPoint->region;
+
+        if (!$region) {
+            return false;
+        }
+
+        // БИЗНЕС-ПРАВИЛО: Если точка уже выполнена (закрыта), ее редактирование запрещено
+        if ($connectingPoint->performance_date) {
+            return false;
+        }
+        return ($user->isCanEditRegion($connectingPoint->region)||$user->isMainEngineerInRegion($connectingPoint->region));
     }
 
     /**

@@ -82,7 +82,7 @@ class StreetController extends Controller
     public function edit(Region $region, Street $street) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Street::class, $region, $street]);
+        $this->authorize('update', [Street::class, $street]);
 
         //2. cities and streetTypes lists
         $cities = $region->cities()->with('cityType')->orderBy('id')->get();
@@ -99,7 +99,7 @@ class StreetController extends Controller
     public function update(UpdateStreetRequest $request, Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Street::class, $region, $street]);
+        $this->authorize('update', [Street::class, $street]);
 
         // 2. Делегирование бизнес-логики сервису
         $street = $this->streetService->update($street, $request->validated());
@@ -117,7 +117,7 @@ class StreetController extends Controller
     public function destroy(Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('delete', [Street::class, $region, $street]);
+        $this->authorize('delete', [Street::class, $street]);
 
         // 2. City of Street
         $city = $street->city;

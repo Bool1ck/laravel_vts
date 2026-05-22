@@ -15,21 +15,15 @@ class TpPolicy
      */
     public function viewAny(User $user, Region $region): bool
     {
-        if ($user->isAdminInRegion($region)) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user,Region $region, City $city): bool
+    public function view(User $user, Region $region, City $city): bool
     {
-        if ($user->isAdminInRegion($region) && $city->region == $region) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region) && $city->region_id === $region->id;
     }
 
     /**
@@ -37,32 +31,25 @@ class TpPolicy
      */
     public function create(User $user, Region $region): bool
     {
-        if ($user->isAdminInRegion($region)) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user,Region $region, Tp $tp): bool
+    public function update(User $user, Tp $tp): bool
     {
-        if ($user->isAdminInRegion($region) && $tp->city->region == $region) {
-            return true;
-        }
-        return false;
+        $region = $tp->city->region;
+        return $region && $user->isAdminInRegion($region);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user,Region $region, Tp $tp): bool
+    public function delete(User $user, Tp $tp): bool
     {
-        if ($user->isAdminInRegion($region) && $tp->city->region == $region) {
-            return true;
-        }
-        return false;
+        $region = $tp->city->region;
+        return $region && $user->isAdminInRegion($region);
     }
 
     /**

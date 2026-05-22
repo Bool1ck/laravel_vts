@@ -38,6 +38,7 @@ class ConnectionPointController extends Controller
      */
     public function index(Region $region, string $completed = ''): View
     {
+        $this->authorize('viewAny', [ConnectingPoint::class, $region]);
         // 1. Делегирование бизнес-логики сервису
         $connectionPoints = $this->connectionPointService->index($region, $completed);
         // 2. HTTP-ответ
