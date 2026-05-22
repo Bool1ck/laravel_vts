@@ -20,9 +20,9 @@ class ConnectingPointPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Region $region): bool
+    public function view(User $user, ConnectingPoint $connectingPoint): bool
     {
-        return $user->isCanViewRegion($region);
+        return $user->isCanViewRegion($connectingPoint->region);
     }
 
     /**

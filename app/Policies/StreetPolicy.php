@@ -15,10 +15,7 @@ class StreetPolicy
      */
     public function viewAny(User $user, Region $region): bool
     {
-        if ($user->isAdminInRegion($region)) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
@@ -37,10 +34,7 @@ class StreetPolicy
      */
     public function create(User $user, Region $region): bool
     {
-        if ($user->isAdminInRegion($region)) {
-            return true;
-        }
-        return false;
+        return $user->isAdminInRegion($region);
     }
 
     /**
