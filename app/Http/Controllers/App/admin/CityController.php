@@ -27,7 +27,7 @@ class CityController extends Controller
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [City::class, $region]);
         // 2. список городов
-        $cities = $region->cities()->paginate(20);
+        $cities = $region->cities()->with('cityType')->paginate(20);
         // 3. HTTP-ответ
         return view('app.admin.cities.index', compact('region', 'cities'));
     }

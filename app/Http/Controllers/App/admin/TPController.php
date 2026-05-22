@@ -38,9 +38,13 @@ class TPController extends Controller
 
         // 2. Список типов TP
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
+        if (!is_null($city)) {
+            $city->load('cityType');
+        }
+        $cities = $region->cities()->with('cityType')->get();
 
         // 3. HTTP-ответ
-        return view('app.admin.tps.create', compact('region', 'TpTypes', 'city'));
+        return view('app.admin.tps.create', compact('region', 'TpTypes', 'city', 'cities'));
     }
 
     /**
@@ -68,7 +72,10 @@ class TPController extends Controller
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [Tp::class, $region, $city]);
 
-        $tps = $city->tps()->paginate(20);
+        // 2. Список всех тп в городе
+        $tps = $city->tps()->with('type')->paginate(20);
+        // 2.1. Жадная подгрузка типов города
+        $city->load('cityType');
 
         // 3. HTTP-ответ
         return view('app.admin.tps.show', compact('region', 'city', 'tps'));
@@ -85,7 +92,7 @@ class TPController extends Controller
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
 
         // 2. ИСПРАВЛЕНО: Вызываем метод get() вместо сырого Relation объекта
-        $cities = $region->cities()->select('id', 'name')->get();
+        $cities = $region->cities()->with('cityType')->get();
 
         // 3. HTTP-ответ
         return view('app.admin.tps.edit', compact('region', 'tp', 'TpTypes', 'cities'));

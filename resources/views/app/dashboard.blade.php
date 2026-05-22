@@ -2,10 +2,10 @@
 
 @section('content')
     <div>
-        @foreach(\Illuminate\Support\Facades\Auth::user()->regions as $reg)
-            <div>РЕМ: {{ $reg->name }}, права :
-                {{ \Illuminate\Support\Facades\Auth::user()->roleInRegion($reg)->name }},
-                точок приєднання: {{$reg->allConnectionPoints->count()}}
+        @foreach(Auth::user()->regions as $region)
+            <div>РЕМ: {{ $region->name }}, права :
+                {{ Auth::user()->roleInRegion($region)->name }},
+                точок приєднання: {{$region->allConnectionPoints->count()}}
             </div>
         @endforeach
     </div>

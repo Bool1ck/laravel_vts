@@ -13,7 +13,7 @@
                     <div class="table-cell p-1">Населений пункт</div>
                     <div class="table-cell p-1">
                         <select id="city_id" name="city_id">
-                            @foreach($region->cities as $city)
+                            @foreach($cities as $city)
                                 <option value="{{$city->id}}"
                                         @if(old('city_id'))
                                             @if(old('city_id') == $city->id)

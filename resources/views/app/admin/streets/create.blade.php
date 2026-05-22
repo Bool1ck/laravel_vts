@@ -16,7 +16,7 @@
                             @if(isset($city))
                                 <option value="{{$city->id}}" selected>{{$city->fullName()}}</option>
                             @else
-                                @foreach($region->cities as $city)
+                                @foreach($cities as $city)
                                     <option value="{{$city->id}}"
                                             @if(old('city_id') == $city->id)
                                                 selected

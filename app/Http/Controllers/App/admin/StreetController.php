@@ -37,8 +37,14 @@ class StreetController extends Controller
         // 2. список типов улиц
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
 
+        if (!is_null($city)) {
+            $city->load('cityType');
+        }
+
+        $cities = $region->cities()->with('cityType')->get();
+
         // 3. HTTP-ответ
-        return view('app.admin.streets.create', compact('region', 'streetTypes', 'city'));
+        return view('app.admin.streets.create', compact('region', 'streetTypes', 'cities', 'city'));
     }
 
     /**
@@ -64,8 +70,8 @@ class StreetController extends Controller
     {
         // 1. Проверка прав (HTTP-слой)
         $this->authorize('view', [Street::class, $region, $city]);
-        // 2. Streets list
-        $streets = $city->streets()->paginate(20);
+        // 2. Streets list with streetType
+        $streets = $city->streets()->with('streetType')->paginate(20);
         // 3. HTTP-ответ
         return view('app.admin.streets.show', compact('region', 'city', 'streets'));
     }
@@ -79,7 +85,7 @@ class StreetController extends Controller
         $this->authorize('update', [Street::class, $region, $street]);
 
         //2. cities and streetTypes lists
-        $cities = $region->cities()->select('id', 'name')->orderBy('id')->get();
+        $cities = $region->cities()->with('cityType')->orderBy('id')->get();
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
 
         // 3. HTTP-ответ
