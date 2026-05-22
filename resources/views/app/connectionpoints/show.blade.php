@@ -140,8 +140,8 @@
                     <label>Перелік робіт</label>
                     <div class="flex flex-col ms-4">
                         <div>
-                            @foreach($cpWorkTypes as $cpWorkType)
-                                <li>{{$cpWorkType->workType->name}}</li>
+                            @foreach($cp->workTypes as $cpWorkType)
+                                <li>{{$cpWorkType->name}}</li>
                             @endforeach
                         </div>
 

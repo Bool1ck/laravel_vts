@@ -166,8 +166,8 @@
                             @foreach($workTypes as $workType)
                                 <div>
                                     <input type="checkbox" name="workTypes[]" value="{{$workType->id}}"
-                                           @foreach($cpWorkTypes as $cpWorkType)
-                                               @if($cpWorkType->workType->id == $workType->id)
+                                           @foreach($cp->WorkTypes as $cpWorkType)
+                                               @if($cpWorkType->id == $workType->id)
                                                    checked
                                         @endif
                                         @endforeach
