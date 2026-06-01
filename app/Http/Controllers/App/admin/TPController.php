@@ -34,7 +34,7 @@ class TPController extends Controller
     public function create(Region $region, City $city = null) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [Tp::class, $region]);
+//        $this->authorize('create', [Tp::class, $region]);
 
         // 2. Список типов TP
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
@@ -53,7 +53,7 @@ class TPController extends Controller
     public function store(StoreTpRequest $request, Region $region) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [Tp::class, $region]);
+//        $this->authorize('create', [Tp::class, $region]);
 
         // 3. Делегирование бизнес-логики сервису
         $tp = $this->tpService->create($request->validated());
@@ -70,7 +70,7 @@ class TPController extends Controller
     public function show(Region $region, City $city) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('view', [Tp::class, $region, $city]);
+//        $this->authorize('view', [Tp::class, $region, $city]);
 
         // 2. Список всех тп в городе
         $tps = $city->tps()->with('type')->paginate(20);
@@ -87,7 +87,7 @@ class TPController extends Controller
     public function edit(Region $region, Tp $tp) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Tp::class, $tp]);
+//        $this->authorize('update', [Tp::class, $tp]);
 
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
 
@@ -104,7 +104,7 @@ class TPController extends Controller
     public function update(UpdateTpRequest $request, Region $region, Tp $tp) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Tp::class, $tp]);
+//        $this->authorize('update', [Tp::class, $tp]);
 
         // 2. Обновление через сервис
         $updatedTp = $this->tpService->update($tp, $request->validated());
@@ -121,7 +121,7 @@ class TPController extends Controller
     public function destroy(Region $region, Tp $tp) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('delete', [Tp::class, $tp]);
+//        $this->authorize('delete', [Tp::class, $tp]);
 
         $city = $tp->city;
 

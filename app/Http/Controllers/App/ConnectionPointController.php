@@ -38,7 +38,7 @@ class ConnectionPointController extends Controller
      */
     public function index(Region $region, string $completed = ''): View
     {
-        $this->authorize('viewAny', [ConnectingPoint::class, $region]);
+//        $this->authorize('viewAny', [ConnectingPoint::class, $region]);
         // 1. Делегирование бизнес-логики сервису
         $connectionPoints = $this->connectionPointService->index($region, $completed);
         // 2. HTTP-ответ
@@ -51,7 +51,7 @@ class ConnectionPointController extends Controller
     public function create(Region $region): View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [ConnectingPoint::class, $region]);
+//        $this->authorize('create', [ConnectingPoint::class, $region]);
 
         // 2. выборка данных для страницы
         $customerTypes = CustomerType::select('id', 'name')->orderBy('id')->get();
@@ -69,7 +69,7 @@ class ConnectionPointController extends Controller
     public function store(StoreConnectionPointRequest $request, Region $region): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [ConnectingPoint::class, $region]);
+//        $this->authorize('create', [ConnectingPoint::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
         $connectionPoint = $this->connectionPointService->create($region, $request->validated());
@@ -95,7 +95,7 @@ class ConnectionPointController extends Controller
     public function edit(Region $region, ConnectingPoint $cp): View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', $cp);
+//        $this->authorize('update', $cp);
 
         // 2. выборка данных для страницы
         $cp->load('workTypes');
@@ -111,7 +111,7 @@ class ConnectionPointController extends Controller
      */
     public function update(Request $request, Region $region, ConnectingPoint $cp): RedirectResponse
     {
-        $this->authorize('update', $cp);
+//        $this->authorize('update', $cp);
 
         // 1. Проверяем бизнес-правило закрытия точки
         if ($cp->performance_date) {

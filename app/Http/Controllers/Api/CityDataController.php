@@ -4,19 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\StreetResource;
+use App\Models\ConnectingPoint;
 use App\Http\Resources\Api\TpResource;
 use App\Models\City;
 use App\Models\Region;
 use App\Models\StreetType;
 use Illuminate\Http\Request;
 
-class StreetController extends Controller
+class CityDataController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Region $region, City $city)
     {
+        if ($city->region_id !== $region->id) {
+            abort(403, 'Населенний пункт з іншого регіону');
+        }
 
         $streets = $city->streets()->with('streetType')->get();
         $tps = $city->tps()->with('type')->get();

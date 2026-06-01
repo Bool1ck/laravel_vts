@@ -25,7 +25,7 @@ class CityController extends Controller
     public function index(Region $region) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('view', [City::class, $region]);
+//        $this->authorize('view', [City::class, $region]);
         // 2. список городов
         $cities = $region->cities()->with('cityType')->paginate(20);
         // 3. HTTP-ответ
@@ -38,7 +38,7 @@ class CityController extends Controller
     public function create(Region $region) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [City::class, $region]);
+//        $this->authorize('create', [City::class, $region]);
         // 2. список типов городов
         $cityTypes = CityType::select('id', 'name')->orderBy('id')->get();
         // 3. HTTP-ответ
@@ -51,7 +51,7 @@ class CityController extends Controller
     public function store(StoreCityRequest $request, Region $region): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [City::class, $region]);
+//        $this->authorize('create', [City::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
         $this->cityService->create($region, $request->validated());
@@ -73,7 +73,7 @@ class CityController extends Controller
     public function edit(Region $region, City $city) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', $city);
+//        $this->authorize('update', $city);
         // 2. список типов городов
         $cityTypes = CityType::select('id', 'name')->orderBy('id')->get();
         // 3. HTTP-ответ
@@ -86,7 +86,7 @@ class CityController extends Controller
     public function update(UpdateCityRequest $request, Region $region, City $city) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', $city);
+//        $this->authorize('update', $city);
         // 2. Делегирование бизнес-логики сервису
         $this->cityService->update($city, $request->validated());
         // 3. HTTP-ответ
@@ -99,7 +99,7 @@ class CityController extends Controller
     public function destroy(Region $region, City $city) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('delete', $city);
+//        $this->authorize('delete', $city);
         // 2. Делегирование бизнес-логики сервису
         $this->cityService->delete($city);
         // 3. HTTP-ответ

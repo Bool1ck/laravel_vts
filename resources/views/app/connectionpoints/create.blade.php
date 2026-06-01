@@ -189,11 +189,14 @@
         $(document).ready(function () {
             $('select[name=city_id]').on('change', function () {
                 $.ajax({
+                    xhrFields: {
+                        withCredentials: true // Позволяет передавать сессионные куки на API
+                    },
                     headers: {
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{route('api.v1.city-streets', [ 'region' => $region, 'city' => ':city'])}}'.replace(':city', $(this).val()),
+                    url: '{{route('api.v1.city-data', [ 'region' => $region, 'city' => ':city'])}}'.replace(':city', $(this).val()),
                     type: "GET", // Specifies the request method
                     dataType: 'json',
                     data: {
@@ -212,7 +215,7 @@
                         })
                     },
                     error: function (xhr) {
-                        alert('error click');
+                        alert('error get data by API');
                         console.log("Error:", xhr.responseText);
                     }
                 });

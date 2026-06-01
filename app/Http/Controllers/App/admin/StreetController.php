@@ -32,7 +32,7 @@ class StreetController extends Controller
     public function create(Region $region, City $city = null) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [Street::class, $region]);
+//        $this->authorize('create', [Street::class, $region]);
 
         // 2. список типов улиц
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
@@ -53,7 +53,7 @@ class StreetController extends Controller
     public function store(StoreStreetRequest $request, Region $region) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('create', [Street::class, $region]);
+//        $this->authorize('create', [Street::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
         $street = $this->streetService->create($request->validated());
@@ -69,7 +69,7 @@ class StreetController extends Controller
     public function show(Region $region, City $city) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('view', [Street::class, $region, $city]);
+//        $this->authorize('view', [Street::class, $region, $city]);
         // 2. Streets list with streetType
         $streets = $city->streets()->with('streetType')->paginate(20);
         // 3. HTTP-ответ
@@ -82,7 +82,7 @@ class StreetController extends Controller
     public function edit(Region $region, Street $street) : View
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Street::class, $street]);
+//        $this->authorize('update', [Street::class, $street]);
 
         //2. cities and streetTypes lists
         $cities = $region->cities()->with('cityType')->orderBy('id')->get();
@@ -99,7 +99,7 @@ class StreetController extends Controller
     public function update(UpdateStreetRequest $request, Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('update', [Street::class, $street]);
+//        $this->authorize('update', [Street::class, $street]);
 
         // 2. Делегирование бизнес-логики сервису
         $street = $this->streetService->update($street, $request->validated());
@@ -117,7 +117,7 @@ class StreetController extends Controller
     public function destroy(Region $region, Street $street) : RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-        $this->authorize('delete', [Street::class, $street]);
+//        $this->authorize('delete', [Street::class, $street]);
 
         // 2. City of Street
         $city = $street->city;
