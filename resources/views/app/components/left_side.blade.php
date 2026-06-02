@@ -22,6 +22,12 @@
                 <div><a href="{{route('admin.users.index', ['region' => $region])}}">Користувачі</a></div>
                 <div><a href="{{route('admin.cities.index',['region' => $region])}}">Довідник</a></div>
             </div>
+        @elseif(Auth::user()->isCanEditRegion($region) || Auth::user()->isMainEngineerInRegion($region))
+            <div class="p-2">
+                <div class="w-full text-center">Some menu</div>
+                <div><a href="#">1</a></div>
+                <div><a href="#">2</a></div>
+            </div>
         @endif
     @endif
 </div>
