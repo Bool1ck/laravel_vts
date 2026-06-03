@@ -6,13 +6,13 @@
             @if(Auth::user()->isCanEditRegion($region))
                 <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
             @endif
-            @if($completed)
-                    <a class="btn btn-completed"
-                       href="{{route('connection_point.index', ['region' => $region, 'completed' => ""])}}">В роботі</a>
-                @else
-                    <a class="btn btn-completed"
-                       href="{{route('connection_point.index', ['region' => $region, 'completed' => "completed"])}}">Завершені</a>
-            @endif
+{{--            @if($completed)--}}
+{{--                    <a class="btn btn-completed"--}}
+{{--                       href="{{route('connection_point.index', ['region' => $region, 'completed' => ""])}}">В роботі</a>--}}
+{{--                @else--}}
+{{--                    <a class="btn btn-completed"--}}
+{{--                       href="{{route('connection_point.index', ['region' => $region, 'completed' => "completed"])}}">Завершені</a>--}}
+{{--            @endif--}}
 
         </div>
         @if($connectionPoints)
@@ -58,7 +58,7 @@
                         <td>{{$point->materials_receipt_date ? Date::parse($point->materials_receipt_date)->format('d.m.Y'):""}}</td>
                         <td>
                             <a href="{{route('connection_point.show', ['region' => $point->region_id, 'cp' => $point->id])}}">Show</a>
-                            @if((Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region))&&!$completed)
+                            @if((Auth::user()->isCanEditRegion($region)|Auth::user()->isMainEngineerInRegion($region))&&!$point->performance_date)
                                 <a href="{{ route('connection_point.edit', ['region' => $point->region_id, 'cp' => $point->id]) }}">Edit</a>
                             @endif
 

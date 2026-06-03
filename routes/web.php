@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
     Route::prefix('/region/{region}')->group(function () {
 
         // Список точек (вызывает viewAny в ConnectingPointPolicy)
-        Route::get('/connections-points/{completed?}', [ConnectionPointController::class, 'index'])
+        Route::get('/connections-points/{filter?}', [ConnectionPointController::class, 'index'])
             ->middleware('can:viewAny,App\Models\ConnectingPoint,region')
             ->name('connection_point.index');
 

@@ -14,16 +14,34 @@ use Illuminate\Support\Facades\DB;
 
 class ConnectionPointService
 {
-    public function index(Region $region, string $completed): LengthAwarePaginator
+    public function index(Region $region, string $filter): LengthAwarePaginator
     {
+        $oneWeekAdd = Carbon::now()->addWeek()->format('Y-m-d'); // Минус 1 неделя от текущего времени
+        $now = Carbon::now()->format('Y-m-d');
         return ConnectingPoint::with('customerType', 'workTypes')
             ->where('region_id', $region->id)
             ->when(
-                $completed === "completed",
-                fn ($query) => $query->whereNotNull('performance_date'),
-                fn ($query) => $query->whereNull('performance_date')
+                $filter === "execution_out",
+                fn($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereBetween('perform_by_date', [$now, $oneWeekAdd])
             )
-            ->paginate(25);
+            ->when(
+                $filter === "execution_fail",
+                fn($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereDate('perform_by_date', '<', $now)
+            )
+            ->when(
+                $filter === "ordering_materials_out",
+                fn($query) => $query->whereNull('materials_order_date')->whereNull('performance_date')
+            )
+            ->when(
+                $filter === "all_active",
+                fn($query) => $query->whereNull('performance_date')
+            )
+            ->when(
+                $filter === "completed",
+                fn($query) => $query->whereNotNull('performance_date')
+            )
+            ->paginate(25)
+        ;
     }
 
     public function create(Region $region, array $data): ConnectingPoint
@@ -38,7 +56,7 @@ class ConnectionPointService
 
         $data['point_place'] = $point_place;
         $data['power_point'] = $power_point;
-        $data['region_id']   = $region->id; // Привязываем к региону
+        $data['region_id'] = $region->id; // Привязываем к региону
 
         $workTypes_id = $data['workTypes'] ?? [];
 
@@ -75,7 +93,7 @@ class ConnectionPointService
                 $power <= 5 => 45,
                 $power < 16 => 60,
                 $power < 30 => 75,
-                default     => 90,
+                default => 90,
             };
             $validated['perform_by_date'] = Carbon::parse($validated['payment_date'])->addDays($days)->format('Y-m-d');
         } else {
