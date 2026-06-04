@@ -6,14 +6,19 @@
             @if(Auth::user()->isCanEditRegion($region))
                 <a class="btn" href="{{ route('connection_point.create', ['region' => $region]) }}">Нове приєднання</a>
             @endif
-{{--            @if($completed)--}}
-{{--                    <a class="btn btn-completed"--}}
-{{--                       href="{{route('connection_point.index', ['region' => $region, 'completed' => ""])}}">В роботі</a>--}}
-{{--                @else--}}
-{{--                    <a class="btn btn-completed"--}}
-{{--                       href="{{route('connection_point.index', ['region' => $region, 'completed' => "completed"])}}">Завершені</a>--}}
-{{--            @endif--}}
-
+                <div class="flex flex-row">
+                    <div class="flex flex-row items-center justify-center">
+                        <div class="ms-3">з:</div>
+                        <div class="ms-3"><input class="" type="date" name="start_date"></div>
+                    </div>
+                    <div class="flex flex-row items-center justify-center">
+                        <div class="ms-3">По:</div>
+                        <div class="ms-3"><input class="" type="date" name="end_date"></div>
+                    </div>
+                    <div>
+                        <a id="date_filter" class="btn btn-date" style="width: 100px" href="{{url()->current()}}">Вибрати</a>
+                    </div>
+                </div>
         </div>
         @if($connectionPoints)
             <table class="m-2">
@@ -76,8 +81,24 @@
         @else
             <div>Empty</div>
         @endif
-
     </div>
+    <script type="module">
+        $(document).ready(function () {
+            $('a[id=date_filter]').on('click', function () {
+                event.preventDefault()
+                let link = $(this).attr('href');
+                link = link.split(/[?#]/)[0];
+                let start = $(document).find('input[name=start_date]').val();
+                let end = $(document).find('input[name=end_date]').val();
+                if ((start == "") || (end == "")) {
+                    alert("Не обран проміжок дат");
+                } else {
+                    let newLink = link + '/?start_date=' + start + '&end_date=' + end
+                    window.location.href = newLink;
+                }
+            });
+        });
+    </script>
 @endsection
 
 @push('styles')
@@ -101,22 +122,23 @@
             background-color: #3f3;
         }
 
-        .btn-completed {
+        .btn-date {
             border: 1px solid #ccc;
             width: 300px;
             padding: 3px;
             margin: 10px;
             padding-left: 5px;
             padding-right: 5px;
-            background-color: #FFFEE1;
+            background-color: #C1C1C1;
         }
 
-        .btn-completed:hover {
+        .btn-date:hover {
+            color: #FFF;
             border: 1px solid #ccc;
             padding: 3px;
             padding-left: 5px;
             padding-right: 5px;
-            background-color: #FCF93A;
+            background-color: #8E8E8E;
         }
 
         table {
@@ -148,6 +170,14 @@
         th {
             background-color: #38479E;
             color: white;
+        }
+
+        input {
+            width: 150px;
+            background-color: #FFFEE1;
+            padding-left: 5px;
+            border: 1px solid #CCC;
+            margin-right: 5px;
         }
     </style>
 @endpush

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class ConnectionPointService
 {
-    public function index(Region $region, string $filter): LengthAwarePaginator
+    public function index(Region $region, string $filter, string $start_date, string $end_date): LengthAwarePaginator
     {
         $oneWeekAdd = Carbon::now()->addWeek()->format('Y-m-d'); // Минус 1 неделя от текущего времени
         $now = Carbon::now()->format('Y-m-d');
@@ -39,6 +39,10 @@ class ConnectionPointService
             ->when(
                 $filter === "completed",
                 fn($query) => $query->whereNotNull('performance_date')
+            )
+            ->when(
+                $start_date && $end_date,
+                fn($query) => $query->whereBetween('technical_conditions_date', [$start_date, $end_date])
             )
             ->paginate(25)
         ;

@@ -36,9 +36,11 @@ class ConnectionPointController extends Controller
      * Display a listing of the resource.
      * $completed ключ из роута для фильтрации вывода завершенных точек
      */
-    public function index(Region $region, string $filter = 'all_active'): View
+    public function index(Request $request, Region $region, string $filter = 'all_active'): View
     {
-        $connectionPoints = $this->connectionPointService->index($region, $filter);
+        $start_date = $request->query('start_date', '');
+        $end_date = $request->query('end_date', '');
+        $connectionPoints = $this->connectionPointService->index($region, $filter, $start_date, $end_date);
         // 2. HTTP-ответ
         return view('app.index', compact('connectionPoints', 'region'));
     }
