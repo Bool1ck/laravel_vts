@@ -21,9 +21,7 @@ class CityFactory extends Factory
     {
         return [
             'name' => fake()->unique()->city(),
-//            'city_type_id' => CityType::all()->random()->getAttribute('id'),
             'city_type_id' => fake()->randomElement(CityType::all()->pluck('id')->toArray()),
-//            'region_id' => Region::all()->random()->getAttribute('id'),
             'region_id' => fake()->randomElement(Region::all()->pluck('id')->toArray()),
         ];
     }
