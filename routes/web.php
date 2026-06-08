@@ -57,44 +57,96 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
 
         // --- ГОРОДА (City) ---
         Route::prefix('/cities')->group(function () {
-            Route::get('/', [CityController::class, 'index'])->middleware('can:view,App\Models\City,region')->name('admin.cities.index');
-            Route::get('/create', [CityController::class, 'create'])->middleware('can:create,App\Models\City,region')->name('admin.cities.create');
-            Route::put('/store', [CityController::class, 'store'])->middleware('can:create,App\Models\City,region')->name('admin.cities.store');
-            Route::get('/edit/{city}', [CityController::class, 'edit'])->middleware('can:update,city')->name('admin.cities.edit');
-            Route::patch('/update/{city}', [CityController::class, 'update'])->middleware('can:update,city')->name('admin.cities.update');
-            Route::delete('/destroy/{city}', [CityController::class, 'destroy'])->middleware('can:delete,city')->name('admin.cities.destroy');
+            Route::get('/', [CityController::class, 'index'])
+                ->middleware('can:view,App\Models\City,region')
+                ->name('admin.cities.index');
+            Route::get('/create', [CityController::class, 'create'])
+                ->middleware('can:create,App\Models\City,region')
+                ->name('admin.cities.create');
+            Route::put('/store', [CityController::class, 'store'])
+                ->middleware('can:create,App\Models\City,region')
+                ->name('admin.cities.store');
+            Route::get('/edit/{city}', [CityController::class, 'edit'])
+                ->middleware('can:update,city')
+                ->name('admin.cities.edit');
+            Route::patch('/update/{city}', [CityController::class, 'update'])
+                ->middleware('can:update,city')
+                ->name('admin.cities.update');
+            Route::delete('/destroy/{city}', [CityController::class, 'destroy'])
+                ->middleware('can:delete,city')
+                ->name('admin.cities.destroy');
         });
 
         // --- УЛИЦЫ (Street) ---
         Route::prefix('/streets')->group(function () {
-            Route::get('/', [StreetController::class, 'index'])->middleware('can:viewAny,App\Models\Street,region')->name('admin.streets.index');
-            Route::get('/create/{city?}', [StreetController::class, 'create'])->middleware('can:create,App\Models\Street,region')->name('admin.streets.create');
-            Route::put('/store', [StreetController::class, 'store'])->middleware('can:create,App\Models\Street,region')->name('admin.streets.store');
-            Route::get('/edit/{street}', [StreetController::class, 'edit'])->middleware('can:update,street')->name('admin.streets.edit');
-            Route::get('/show/{city}', [StreetController::class, 'show'])->middleware('can:view,App\Models\Street,region,city')->name('admin.streets.show');
-            Route::patch('/update/{street}', [StreetController::class, 'update'])->middleware('can:update,street')->name('admin.streets.update');
-            Route::delete('/destroy/{street}', [StreetController::class, 'destroy'])->middleware('can:delete,street')->name('admin.streets.destroy');
+            Route::get('/', [StreetController::class, 'index'])
+                ->middleware('can:viewAny,App\Models\Street,region')
+                ->name('admin.streets.index');
+            Route::get('/create/{city?}', [StreetController::class, 'create'])
+                ->middleware('can:create,App\Models\Street,region')
+                ->name('admin.streets.create');
+            Route::put('/store', [StreetController::class, 'store'])
+                ->middleware('can:create,App\Models\Street,region')
+                ->name('admin.streets.store');
+            Route::get('/edit/{street}', [StreetController::class, 'edit'])
+                ->middleware('can:update,street')
+                ->name('admin.streets.edit');
+            Route::get('/show/{city}', [StreetController::class, 'show'])
+                ->middleware('can:view,App\Models\Street,region,city')
+                ->name('admin.streets.show');
+            Route::patch('/update/{street}', [StreetController::class, 'update'])
+                ->middleware('can:update,street')
+                ->name('admin.streets.update');
+            Route::delete('/destroy/{street}', [StreetController::class, 'destroy'])
+                ->middleware('can:delete,street')
+                ->name('admin.streets.destroy');
         });
 
         // --- ТРАНСФОРМАТОРЫ (TP) ---
         Route::prefix('/tps')->group(function () {
-            Route::get('/', [TPController::class, 'index'])->middleware('can:viewAny,App\Models\Tp,region')->name('admin.tps.index');
-            Route::get('/create/{city?}', [TPController::class, 'create'])->middleware('can:create,App\Models\Tp,region')->name('admin.tps.create');
-            Route::put('/store', [TPController::class, 'store'])->middleware('can:create,App\Models\Tp,region')->name('admin.tps.store');
-            Route::get('/edit/{tp}', [TPController::class, 'edit'])->middleware('can:update,tp')->name('admin.tps.edit');
-            Route::get('/show/{city}', [TPController::class, 'show'])->middleware('can:view,App\Models\Tp,region,city')->name('admin.tps.show');
-            Route::patch('/update/{tp}', [TPController::class, 'update'])->middleware('can:update,tp')->name('admin.tps.update');
-            Route::delete('/destroy/{tp}', [TPController::class, 'destroy'])->middleware('can:delete,tp')->name('admin.tps.destroy');
+            Route::get('/', [TPController::class, 'index'])
+                ->middleware('can:viewAny,App\Models\Tp,region')
+                ->name('admin.tps.index');
+            Route::get('/create/{city?}', [TPController::class, 'create'])
+                ->middleware('can:create,App\Models\Tp,region')
+                ->name('admin.tps.create');
+            Route::put('/store', [TPController::class, 'store'])
+                ->middleware('can:create,App\Models\Tp,region')
+                ->name('admin.tps.store');
+            Route::get('/edit/{tp}', [TPController::class, 'edit'])
+                ->middleware('can:update,tp')
+                ->name('admin.tps.edit');
+            Route::get('/show/{city}', [TPController::class, 'show'])
+                ->middleware('can:view,App\Models\Tp,region,city')
+                ->name('admin.tps.show');
+            Route::patch('/update/{tp}', [TPController::class, 'update'])
+                ->middleware('can:update,tp')
+                ->name('admin.tps.update');
+            Route::delete('/destroy/{tp}', [TPController::class, 'destroy'])
+                ->middleware('can:delete,tp')
+                ->name('admin.tps.destroy');
         });
 
         // --- ПОЛЬЗОВАТЕЛИ (User) ---
         Route::prefix('/users')->group(function () {
-            Route::get('/', [UserController::class, 'index'])->middleware('can:viewAny,App\Models\User,region')->name('admin.users.index');
-            Route::get('/create', [UserController::class, 'create'])->middleware('can:create,App\Models\User,region')->name('admin.users.create');
-            Route::put('/store', [UserController::class, 'store'])->middleware('can:create,App\Models\User,region')->name('admin.users.create');
-            Route::get('/edit/{user}', [UserController::class, 'edit'])->middleware('can:update,region,user')->name('admin.users.edit');
-            Route::patch('/update/{user}', [UserController::class, 'update'])->middleware('can:update,region,user')->name('admin.users.update');
-            Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->middleware('can:delete,region,user')->name('admin.users.destroy');
+            Route::get('/', [UserController::class, 'index'])
+                ->middleware('can:viewAny,App\Models\User,region')
+                ->name('admin.users.index');
+            Route::get('/create', [UserController::class, 'create'])
+                ->middleware('can:create,App\Models\User,region')
+                ->name('admin.users.create');
+            Route::put('/store', [UserController::class, 'store'])
+                ->middleware('can:create,App\Models\User,region')
+                ->name('admin.users.store');
+            Route::get('/edit/{user}', [UserController::class, 'edit'])
+                ->middleware('can:update,region,user')
+                ->name('admin.users.edit');
+            Route::patch('/update/{user}', [UserController::class, 'update'])
+                ->middleware('can:update,region,user')
+                ->name('admin.users.update');
+            Route::delete('/destroy/{user}', [UserController::class, 'destroy'])
+                ->middleware('can:delete,region,user')
+                ->name('admin.users.destroy');
         });
     });
 });
