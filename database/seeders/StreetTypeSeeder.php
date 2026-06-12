@@ -13,10 +13,10 @@ class StreetTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $streetType = ['вул.', 'пров.', 'проспект'];
-        foreach ($streetType as $type) {
+        $streetTypes = config('street_types.street_types');
+        foreach ($streetTypes as $streetType) {
             StreetType::factory()->create([
-                'name' => $type
+                'name' => $streetType
             ]);
         }
     }

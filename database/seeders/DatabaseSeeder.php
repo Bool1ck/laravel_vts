@@ -23,14 +23,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(SystemDictionariesSeeder::class);
         $this->call([
-            RoleSeeder::class,
             UserSeeder::class,
-            CityTypeSeeder::class,
-            StreetTypeSeeder::class,
-            PowerLineTypeSeeder::class,
-            TpTypeSeeder::class,
-            CustomerTypeSeeder::class,
         ]);
         Region::factory(10)->create();
         City::factory(100)->create();

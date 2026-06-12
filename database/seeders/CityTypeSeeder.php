@@ -14,10 +14,10 @@ class CityTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $cityType = ['м.', 'с.', 'смт.'];
-        foreach ($cityType as $type) {
+        $cityTypes = config('city_types.city_types');
+        foreach ($cityTypes as $cityType) {
             CityType::factory()->create([
-                'name' => $type
+                'name' => $cityType
             ]);
         }
     }

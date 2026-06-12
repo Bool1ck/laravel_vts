@@ -14,10 +14,10 @@ class TpTypeSeeder extends Seeder
 
     public function run(): void
     {
-        $TpType = ['КТП', 'ЗТП', 'ЩТП'];
-        foreach ($TpType as $type) {
+        $TpTypes = ['КТП', 'ЗТП', 'ЩТП'];
+        foreach ($TpTypes as $TpType) {
             TpType::factory()->create([
-                'name' => $type
+                'name' => $TpType
             ]);
         }
     }
