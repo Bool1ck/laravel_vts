@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\CityDataController;
 use Illuminate\Support\Facades\Route;
-use App\Models\ConnectingPoint;
 
 Route::get('/region/{region}/cities/{city}/data', [CityDataController::class, 'index'])
     ->middleware('auth','can:create,App\Models\ConnectingPoint,region')

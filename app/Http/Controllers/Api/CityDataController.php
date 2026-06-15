@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\StreetResource;
-use App\Models\ConnectingPoint;
 use App\Http\Resources\Api\TpResource;
 use App\Models\City;
 use App\Models\Region;
-use App\Models\StreetType;
 use Illuminate\Http\Request;
 
 class CityDataController extends Controller

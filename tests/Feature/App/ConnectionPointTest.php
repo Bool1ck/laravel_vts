@@ -11,7 +11,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 // Накатываем миграции на чистую тестовую базу перед запуском
 uses(RefreshDatabase::class);
 
-test('авторизованный инженер региона может получить данные городов через AJAX', function () {
+test('Перевірка доступу до даних міст([streets, tps]) по API AJAX запиту для ролей користувачів :',
+    function (string $roleName) {
 
     // 1. Явно запускаем сидер справочников (роли и типы городов)
     $this->seed(SystemDictionariesSeeder::class);
@@ -22,12 +23,12 @@ test('авторизованный инженер региона может по
     $user = User::factory()->create();
 
     // Находим ID роли инженера, которую создал сидер справочников
-    $VTG_Role = Role::where('name', 'Головний інженер')->first();
+    $currentRole  = Role::where('name', $roleName)->first();
 
     // 3. Связываем пользователя с регионом и ролью через вашу модель связей
     RoleRegionUser::create([
         'user_id' => $user->id,
-        'role_id' => $VTG_Role->id,
+        'role_id' => $currentRole->id,
         'region_id' => $region->id
     ]);
 
@@ -37,11 +38,14 @@ test('авторизованный инженер региона может по
             'region' => $region->id,
             'city' => $city->id
         ]));
+    $allowedRoles = config('roles.edit_roles');
 
-    // 5. Проверяем, что права сработали (200 OK) и вернулись нужные массивы данных
-    $response->assertStatus(200)
-        ->assertJsonStructure([
-            'streets',
-            'tps'
-        ]);
-});
+    if (in_array($roleName, $allowedRoles)) {
+        // Если роль в белом списке — проверяем успешный ответ и структуру JSON
+        $response->assertStatus(200)
+            ->assertJsonStructure(['streets', 'tps']);
+    } else {
+        // Если роли доступ запрещен — робот проверяет, что сервер вернул 403 Forbidden
+        $response->assertStatus(403);
+    }
+})->with(['admin', 'Головний інженер', 'ВТГ', 'Глядач']);
