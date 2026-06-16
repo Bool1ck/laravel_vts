@@ -24,9 +24,18 @@ class StoreTpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tp_type_id' => 'required|exists:tp_types,id',
-            'city_id' => 'required|exists:cities,id',
-            'name' => 'required|string',
+            'city_id'    => 'required|integer|exists:cities,id',
+            'tp_type_id' => 'required|integer|exists:tp_types,id',
+            'name'       => [
+                'required',
+                'string',
+                'max:255',
+                // ИСПРАВЛЕНО: добавляем правило уникальности в рамках этого же города и типа ТП
+                Rule::unique('tps')->where(function ($query) {
+                    return $query->where('city_id', $this->city_id)
+                        ->where('tp_type_id', $this->tp_type_id);
+                }),
+            ],
         ];
     }
 }

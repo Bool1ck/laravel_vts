@@ -84,7 +84,7 @@ class UserController extends Controller
     public function edit(Region $region, User $user): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('update', [User::class, $region, $user]);
+        $this->authorize('update', [User::class, $region, $user]);
 
         // 2. Все роли, исключая роль "admin"
         $roles = Role::select('id', 'name')
@@ -102,7 +102,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, Region $region, User $user): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('update', [User::class, $region, $user]);
+        $this->authorize('update', [User::class, $region, $user]);
 
         // 2. Делегирование бизнес-логики сервису
         $this->userService->update($user, $region, $request->validated());
@@ -117,7 +117,7 @@ class UserController extends Controller
     public function destroy(Region $region, User $user): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('delete', [User::class, $region, $user]);
+        $this->authorize('delete', [User::class, $region, $user]);
 
         // 2. Делегирование бизнес-логики сервису
         $this->userService->delete($region, $user);

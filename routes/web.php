@@ -139,13 +139,13 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
                 ->middleware('can:create,App\Models\User,region')
                 ->name('admin.users.store');
             Route::get('/edit/{user}', [UserController::class, 'edit'])
-                ->middleware('can:update,region,user')
+//                ->middleware('can:update,region,user')
                 ->name('admin.users.edit');
             Route::patch('/update/{user}', [UserController::class, 'update'])
-                ->middleware('can:update,region,user')
+//                ->middleware('can:update,region,user')
                 ->name('admin.users.update');
             Route::delete('/destroy/{user}', [UserController::class, 'destroy'])
-                ->middleware('can:delete,region,user')
+//                ->middleware('can:delete,region,user')
                 ->name('admin.users.destroy');
         });
     });
@@ -154,7 +154,7 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';

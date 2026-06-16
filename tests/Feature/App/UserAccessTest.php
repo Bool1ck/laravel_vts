@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 // Инструмент очистки базы данных перед тестом
 uses(RefreshDatabase::class);
 
-test('доступ авторизованного пользователя к главной странице', function () {
+test('доступ авторизованого користувача до головної сторінки', function () {
     // 1. ПОДГОТОВКА: Создаем в базе одного фейкового пользователя через фабрику
     $user = User::factory()->create();
 

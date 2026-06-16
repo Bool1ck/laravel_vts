@@ -8,13 +8,13 @@ use App\Models\RoleRegionUser;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-// Накатываем миграции на чистую тестовую базу перед запуском
+// Накочуємо міграції на чисту тестову базу перед запуском
 uses(RefreshDatabase::class);
 
 test('Перевірка доступу до даних міст([streets, tps]) по API AJAX запиту для ролей користувачів :',
     function (string $roleName) {
 
-    // 1. Явно запускаем сидер справочников (роли и типы городов)
+        // 1. Явно запускаємо сидер довідників (ролі та типи міст)
     $this->seed(SystemDictionariesSeeder::class);
 
     // 2. Генерируем тестовое окружение через фабрики

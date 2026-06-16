@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Admin;
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Role;
+use App\Models\Street;
 use App\Models\User;
 use App\Models\RoleRegionUser;
 use App\Models\StreetType;
@@ -79,4 +80,72 @@ test('адміністратор одного регіону не має дос�
     // 3. ПРОВЕРКА: Тепер Laravel знайде обидві моделі, передасть у StreetPolicy@view,
     // і ваша умова `$city->region_id === $region->id` заблокує хакера з кодом 403!
     $response->assertStatus(403);
+});
+
+test('система блокує створення вулиці з ім\'ям, що дублюється, в одному місті', function () {
+    $this->seed(SystemDictionariesSeeder::class);
+
+    $region = Region::factory()->create();
+    $city = City::factory()->create(['region_id' => $region->id]);
+    $user = User::factory()->create();
+    $streetType = StreetType::first();
+
+    $adminRole = Role::where('name', 'admin')->first();
+    RoleRegionUser::create([
+        'user_id'   => $user->id,
+        'role_id'   => $adminRole->id,
+        'region_id' => $region->id
+    ]);
+
+    // Створюємо ОДНУ вулицю в базі через фабрику
+    Street::factory()->create([
+        'name'           => 'Грушевського',
+        'street_type_id' => $streetType->id,
+        'city_id'        => $city->id
+    ]);
+
+    // Намагаємось надіслати форму-дублікат з таким самим ім'ям
+    $invalidFormData = [
+        'name'           => 'Грушевського',
+        'street_type_id' => $streetType->id,
+        'city_id'        => $city->id,
+    ];
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.streets.store', ['region' => $region->id]), $invalidFormData);
+
+    // Перевірка: система повертає назад на форму та складає помилку валідації в сесію
+    $response->assertStatus(302);
+    $response->assertSessionHasErrors(['name']);
+});
+
+test('адміністратор регіону може успішно видалити вулицю', function () {
+    $this->seed(SystemDictionariesSeeder::class);
+
+    $region = Region::factory()->create();
+    $city = City::factory()->create(['region_id' => $region->id]);
+    $user = User::factory()->create();
+
+    $adminRole = Role::where('name', 'admin')->first();
+    RoleRegionUser::create([
+        'user_id'   => $user->id,
+        'role_id'   => $adminRole->id,
+        'region_id' => $region->id
+    ]);
+
+    // Створюємо вулицю, яку будемо видаляти
+    $street = Street::factory()->create(['city_id' => $city->id]);
+
+    // ДІЯ: надсилаємо DELETE запрос
+    $response = $this->actingAs($user)
+        ->delete(route('admin.streets.destroy', ['region' => $region->id, 'street' => $street->id]));
+
+    // Перевірка: успішний редирект назад на сторінку перегляду вулиць цього міста
+    $response->assertStatus(302)
+        ->assertRedirect(route('admin.streets.show', ['region' => $region->id, 'city' => $city->id]));
+
+    // Перевіряємо, що запис фізично зник із таблиці СУБД
+    $this->assertDatabaseMissing('streets', [
+        'id' => $street->id
+    ]);
 });

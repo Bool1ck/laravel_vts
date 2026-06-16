@@ -94,3 +94,75 @@ test('адміністратор регіону не має права реда�
     // 3. ПЕРЕВІРКА: Наша UserPolicy@update повинна заблокувати цю спробу з кодом 403
     $response->assertStatus(403);
 });
+
+test('адміністратор регіону може успішно видалити звичайного користувача (не-адміна)', function () {
+    $this->seed(\Database\Seeders\SystemDictionariesSeeder::class);
+
+    $region = \App\Models\Region::factory()->create();
+    $adminUser = User::factory()->create();
+
+    // Поточний користувач — адмін регіону
+    $adminRole = \App\Models\Role::where('name', 'admin')->first();
+    \App\Models\RoleRegionUser::create([
+        'user_id'   => $adminUser->id,
+        'role_id'   => $adminRole->id,
+        'region_id' => $region->id
+    ]);
+
+    // Створюємо звичайного інженера ВТГ, якого будемо видаляти
+    $engineerUser = User::factory()->create();
+    $vtgRole = \App\Models\Role::where('name', 'ВТГ')->first();
+    \App\Models\RoleRegionUser::create([
+        'user_id'   => $engineerUser->id,
+        'role_id'   => $vtgRole->id,
+        'region_id' => $region->id
+    ]);
+
+    // ДІЯ: Адмін надсилає DELETE-запит на видалення інженера
+    // Роут із web.php: Route::delete('/destroy/{user}', [UserController::class, 'destroy'])
+    $response = $this->actingAs($adminUser)
+        ->delete(route('admin.users.destroy', ['region' => $region->id, 'user' => $engineerUser->id]));
+
+    // ПЕРЕВІРКА: успішний редирект назад на список користувачів
+    $response->assertStatus(302)
+        ->assertRedirect(route('admin.users.index', ['region' => $region->id]));
+
+    // Перевіряємо, що користувач зник із загальної таблиці СУБД (або заsoft-delete'ився)
+    $this->assertDatabaseMissing('users', [
+        'id' => $engineerUser->id
+    ]);
+});
+
+test('адміністратор регіону заборонено видаляти іншого адміністратора цього ж регіону', function () {
+    $this->seed(\Database\Seeders\SystemDictionariesSeeder::class);
+
+    $region = \App\Models\Region::factory()->create();
+    $adminOne = User::factory()->create();
+    $adminTwo = User::factory()->create();
+
+    $adminRole = \App\Models\Role::where('name', 'admin')->first();
+
+    // Обидва стають адмінами в одному регіоні
+    \App\Models\RoleRegionUser::create([
+        'user_id'   => $adminOne->id,
+        'role_id'   => $adminRole->id,
+        'region_id' => $region->id
+    ]);
+    \App\Models\RoleRegionUser::create([
+        'user_id'   => $adminTwo->id,
+        'role_id'   => $adminRole->id,
+        'region_id' => $region->id
+    ]);
+
+    // ДІЯ: Перший адмін намагається видалити другого адміна
+    $response = $this->actingAs($adminOne)
+        ->delete(route('admin.users.destroy', ['region' => $region->id, 'user' => $adminTwo->id]));
+
+    // ПЕРЕВІРКА: Наша UserPolicy@delete зобов'язана заблокувати запит з кодом 403 Forbidden
+    $response->assertStatus(403);
+
+    // Перевіряємо, що другий адмін залишився в базі неушкодженим
+    $this->assertDatabaseHas('users', [
+        'id' => $adminTwo->id
+    ]);
+});
