@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\ConnectingPoint;
@@ -19,8 +21,8 @@ class ConnectingPointWorkTypeFactory extends Factory
     public function definition(): array
     {
         return [
-//            'worktype_id' => $this->faker->randomElement(ConnectingPointWorkType::all()->pluck('id')->toArray()),
-//            'pointid' => $this->faker->randomElement(ConnectingPoint::all()->pluck('id')->toArray()),
+            //            'worktype_id' => $this->faker->randomElement(ConnectingPointWorkType::all()->pluck('id')->toArray()),
+            //            'pointid' => $this->faker->randomElement(ConnectingPoint::all()->pluck('id')->toArray()),
         ];
     }
 }

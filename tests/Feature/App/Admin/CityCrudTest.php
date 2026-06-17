@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 // ИСПРАВЛЕНО: Прописан точный namespace, соответствующий вашей структуре папок
+
 namespace Tests\Feature\App\Admin;
 
 use App\Models\City;
 use App\Models\CityType;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\User;
 use App\Models\RoleRegionUser;
+use App\Models\User;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -27,16 +30,16 @@ test('адміністратор регіону може успішно ство
     // Находим ID роли 'admin' и связываем пользователя с регионом через вашу пивот-модель
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Имитируем данные, которые админ заполнил на форме
     $formData = [
-        'name'         => 'Нове Місто',
+        'name' => 'Нове Місто',
         'city_type_id' => $cityType->id,
-        'region_id'    => $region->id,
+        'region_id' => $region->id,
     ];
 
     // 2. ДЕЙСТВИЕ: Робот логинится, заходит на маршрут '.store' и отправляет форму методом PUT
@@ -49,9 +52,9 @@ test('адміністратор регіону може успішно ство
 
     // Самый главный шаг: робот лезет в БД и проверяет, что город физически записался в таблицу `cities`
     $this->assertDatabaseHas('cities', [
-        'name'         => 'Нове Місто',
+        'name' => 'Нове Місто',
         'city_type_id' => $cityType->id,
-        'region_id'    => $region->id,
+        'region_id' => $region->id,
     ]);
 });
 
@@ -66,23 +69,23 @@ test('система блокує створення міста з ім\'ям, �
     // Привязываем роль админа региона
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Создаем в базе ОДИН город с именем 'Малин' через фабрику
     City::factory()->create([
         'name' => 'Малин',
         'city_type_id' => $cityType->id,
-        'region_id' => $region->id
+        'region_id' => $region->id,
     ]);
 
     // Имитируем, что админ пытается через форму создать ЕЩЕ ОДИН город с точно таким же именем и типом
     $invalidFormData = [
-        'name'         => 'Малин', // Дубликат!
+        'name' => 'Малин', // Дубликат!
         'city_type_id' => $cityType->id,
-        'region_id'    => $region->id,
+        'region_id' => $region->id,
     ];
 
     // 2. ДЕЙСТВИЕ: Робот пытается отправить форму-дубликат
@@ -107,9 +110,9 @@ test('адміністратор регіону може видалити пор
     // Привязываем роль админа региона
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Создаем город, который мы будем удалять
@@ -126,7 +129,7 @@ test('адміністратор регіону може видалити пор
 
     // Убеждаемся, что город физически ИСЧЕЗ из базы данных
     $this->assertDatabaseMissing('cities', [
-        'id' => $city->id
+        'id' => $city->id,
     ]);
 });
 
@@ -139,9 +142,9 @@ test('система забороняє видаляти місто, якщо у
     // Привязываем роль админа региона
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Создаем город и привязываем к нему ОДНУ улицу через фабрику (или напрямую)
@@ -159,6 +162,6 @@ test('система забороняє видаляти місто, якщо у
 
     // Убеждаемся, что город НЕ исчез и остался в базе данных невредимым
     $this->assertDatabaseHas('cities', [
-        'id' => $city->id
+        'id' => $city->id,
     ]);
 });

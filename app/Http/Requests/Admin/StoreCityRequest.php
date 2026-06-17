@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -31,7 +33,7 @@ class StoreCityRequest extends FormRequest
                 // Валидация уникальности с учетом типа города
                 Rule::unique('cities')->where(function ($query) {
                     return $query->where('city_type_id', $this->city_type_id);
-                })
+                }),
             ],
         ];
     }

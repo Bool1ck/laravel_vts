@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\App\admin;
 
 use App\Http\Controllers\Controller;
@@ -17,7 +19,7 @@ class TPController extends Controller
 {
     // Внедряем сервис через конструктор
     public function __construct(
-        protected TPService $tpService
+        protected TPService $tpService,
     ) {}
 
     /**
@@ -31,14 +33,14 @@ class TPController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Region $region, City $city = null) : View
+    public function create(Region $region, ?City $city = null): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('create', [Tp::class, $region]);
+        //        $this->authorize('create', [Tp::class, $region]);
 
         // 2. Список типов TP
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
-        if (!is_null($city)) {
+        if (! is_null($city)) {
             $city->load('cityType');
         }
         $cities = $region->cities()->with('cityType')->get();
@@ -50,10 +52,10 @@ class TPController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTpRequest $request, Region $region) : RedirectResponse
+    public function store(StoreTpRequest $request, Region $region): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('create', [Tp::class, $region]);
+        //        $this->authorize('create', [Tp::class, $region]);
 
         // 3. Делегирование бизнес-логики сервису
         $tp = $this->tpService->create($request->validated());
@@ -67,10 +69,10 @@ class TPController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Region $region, City $city) : View
+    public function show(Region $region, City $city): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('view', [Tp::class, $region, $city]);
+        //        $this->authorize('view', [Tp::class, $region, $city]);
 
         // 2. Список всех тп в городе
         $tps = $city->tps()->with('type')->paginate(20);
@@ -84,10 +86,10 @@ class TPController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Region $region, Tp $tp) : View
+    public function edit(Region $region, Tp $tp): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('update', [Tp::class, $tp]);
+        //        $this->authorize('update', [Tp::class, $tp]);
 
         $TpTypes = TpType::select('id', 'name')->orderBy('id')->get();
 
@@ -101,10 +103,10 @@ class TPController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTpRequest $request, Region $region, Tp $tp) : RedirectResponse
+    public function update(UpdateTpRequest $request, Region $region, Tp $tp): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('update', [Tp::class, $tp]);
+        //        $this->authorize('update', [Tp::class, $tp]);
 
         // 2. Обновление через сервис
         $updatedTp = $this->tpService->update($tp, $request->validated());
@@ -118,10 +120,10 @@ class TPController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Region $region, Tp $tp) : RedirectResponse
+    public function destroy(Region $region, Tp $tp): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('delete', [Tp::class, $tp]);
+        //        $this->authorize('delete', [Tp::class, $tp]);
 
         $city = $tp->city;
 

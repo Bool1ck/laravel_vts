@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\ConnectingPoint;
 use App\Models\ConnectingPointWorkType;
 use App\Models\WorkType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ConnectingPointWorkTypeSeeder extends Seeder

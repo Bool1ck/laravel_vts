@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Role;
@@ -18,7 +20,7 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-//            'name' => fake()->name(),
+            //            'name' => fake()->name(),
             //
         ];
     }

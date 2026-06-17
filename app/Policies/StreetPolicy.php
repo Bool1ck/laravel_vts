@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Street;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class StreetPolicy
 {
@@ -26,6 +27,7 @@ class StreetPolicy
         if ($user->isAdminInRegion($region) && $city->region_id == $region->id) {
             return true;
         }
+
         return false;
     }
 
@@ -43,6 +45,7 @@ class StreetPolicy
     public function update(User $user, Street $street): bool
     {
         $region = $street->city->region;
+
         return $region && $user->isAdminInRegion($region);
     }
 
@@ -52,6 +55,7 @@ class StreetPolicy
     public function delete(User $user, Street $street): bool
     {
         $region = $street->city->region;
+
         return $region && $user->isAdminInRegion($region);
     }
 

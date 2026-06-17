@@ -1,36 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreConnectionPointRequest;
 use App\Http\Requests\UpdateConnectionPointMERequest;
 use App\Http\Requests\UpdateConnectionPointRequest;
-use App\Models\City;
 use App\Models\ConnectingPoint;
-use App\Models\ConnectingPointWorkType;
 use App\Models\CustomerType;
 use App\Models\PowerLineType;
 use App\Models\Region;
-use App\Models\Street;
-use App\Models\Tp;
 use App\Models\WorkType;
 use App\Services\App\ConnectionPointService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ConnectionPointController extends Controller
-
 {
     public function __construct(
-        protected ConnectionPointService $connectionPointService
-    )
-    {
-    }
+        protected ConnectionPointService $connectionPointService,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -41,6 +33,7 @@ class ConnectionPointController extends Controller
         $start_date = $request->query('start_date', '');
         $end_date = $request->query('end_date', '');
         $connectionPoints = $this->connectionPointService->index($region, $filter, $start_date, $end_date);
+
         // 2. HTTP-ответ
         return view('app.index', compact('connectionPoints', 'region'));
     }
@@ -81,6 +74,7 @@ class ConnectionPointController extends Controller
     {
         // 1. Жадная подгрузка данных
         $cp->load('workTypes');
+
         // 3. HTTP-ответ
         return view('app.connectionpoints.show', compact('region', 'cp'));
     }

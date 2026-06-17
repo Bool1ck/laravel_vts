@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\User;
 use App\Models\RoleRegionUser;
+use App\Models\User;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,37 +17,37 @@ test('Перевірка доступу до даних міст([streets, tps])
     function (string $roleName) {
 
         // 1. Явно запускаємо сидер довідників (ролі та типи міст)
-    $this->seed(SystemDictionariesSeeder::class);
+        $this->seed(SystemDictionariesSeeder::class);
 
-    // 2. Генерируем тестовое окружение через фабрики
-    $region = Region::factory()->create();
-    $city = City::factory()->create(['region_id' => $region->id]);
-    $user = User::factory()->create();
+        // 2. Генерируем тестовое окружение через фабрики
+        $region = Region::factory()->create();
+        $city = City::factory()->create(['region_id' => $region->id]);
+        $user = User::factory()->create();
 
-    // Находим ID роли инженера, которую создал сидер справочников
-    $currentRole  = Role::where('name', $roleName)->first();
+        // Находим ID роли инженера, которую создал сидер справочников
+        $currentRole = Role::where('name', $roleName)->first();
 
-    // 3. Связываем пользователя с регионом и ролью через вашу модель связей
-    RoleRegionUser::create([
-        'user_id' => $user->id,
-        'role_id' => $currentRole->id,
-        'region_id' => $region->id
-    ]);
+        // 3. Связываем пользователя с регионом и ролью через вашу модель связей
+        RoleRegionUser::create([
+            'user_id' => $user->id,
+            'role_id' => $currentRole->id,
+            'region_id' => $region->id,
+        ]);
 
-    // 4. Робот авторизуется под созданным пользователем и шлет AJAX-запрос к API
-    $response = $this->actingAs($user)
-        ->json('GET', route('api.v1.city-data', [
-            'region' => $region->id,
-            'city' => $city->id
-        ]));
-    $allowedRoles = config('roles.edit_roles');
+        // 4. Робот авторизуется под созданным пользователем и шлет AJAX-запрос к API
+        $response = $this->actingAs($user)
+            ->json('GET', route('api.v1.city-data', [
+                'region' => $region->id,
+                'city' => $city->id,
+            ]));
+        $allowedRoles = config('roles.edit_roles');
 
-    if (in_array($roleName, $allowedRoles)) {
-        // Если роль в белом списке — проверяем успешный ответ и структуру JSON
-        $response->assertStatus(200)
-            ->assertJsonStructure(['streets', 'tps']);
-    } else {
-        // Если роли доступ запрещен — робот проверяет, что сервер вернул 403 Forbidden
-        $response->assertStatus(403);
-    }
-})->with(['admin', 'Головний інженер', 'ВТГ', 'Глядач']);
+        if (in_array($roleName, $allowedRoles)) {
+            // Если роль в белом списке — проверяем успешный ответ и структуру JSON
+            $response->assertStatus(200)
+                ->assertJsonStructure(['streets', 'tps']);
+        } else {
+            // Если роли доступ запрещен — робот проверяет, что сервер вернул 403 Forbidden
+            $response->assertStatus(403);
+        }
+    })->with(['admin', 'Головний інженер', 'ВТГ', 'Глядач']);

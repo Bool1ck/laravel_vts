@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\ConnectingPoint;
 use App\Models\Region;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ConnectingPointPolicy
 {
@@ -40,7 +41,7 @@ class ConnectingPointPolicy
     {
         $region = $connectingPoint->region;
 
-        if (!$region) {
+        if (! $region) {
             return false;
         }
 
@@ -48,7 +49,8 @@ class ConnectingPointPolicy
         if ($connectingPoint->performance_date) {
             return false;
         }
-        return ($user->isCanEditRegion($connectingPoint->region)||$user->isMainEngineerInRegion($connectingPoint->region));
+
+        return $user->isCanEditRegion($connectingPoint->region) || $user->isMainEngineerInRegion($connectingPoint->region);
     }
 
     /**

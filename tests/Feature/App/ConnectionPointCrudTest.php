@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\App;
 
 use App\Models\City;
+use App\Models\ConnectingPoint;
 use App\Models\CustomerType;
 use App\Models\Region;
 use App\Models\Role;
+use App\Models\RoleRegionUser;
 use App\Models\Street;
 use App\Models\Tp;
 use App\Models\User;
-use App\Models\RoleRegionUser;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,9 +28,9 @@ test('користувач із роллю ВТГ може успішно від
     // Прив'язуємо користувачу роль ВТГ для цього регіону
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $region->id,
     ]);
 
     // 2. ДІЯ: Робот намагається зайти на сторінку створення ТДК
@@ -51,29 +54,28 @@ test('користувач із роллю ВТГ може успішно збе
     // Прив'язуємо роль ВТГ
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $region->id,
     ]);
-
 
     // Імітуємо заповнення повної форми створення ТДК на фронтенді
     $customerType = CustomerType::first();
     $formData = [
-        'region_id'                 => $region->id,
-        'technical_conditions'      => 'ТУ-123/26',
+        'region_id' => $region->id,
+        'technical_conditions' => 'ТУ-123/26',
         'technical_conditions_date' => '2026-06-01',
-        'customer'                  => 'ПП Новий Заявник',
-        'customer_type_id'          => $customerType->id,
-        'city_id'                   => $city->id,
-        'street_id'                 => $street->id,
-        'build_number'              => '45',
-        'tp_id'                     => $tp->id,
-        'powerLineType'             => '10',
-        'power_line'                => 'Л-3',
-        'pole'                      => '21',
-        'power'                     => 15,
-        'workTypes'                 => []
+        'customer' => 'ПП Новий Заявник',
+        'customer_type_id' => $customerType->id,
+        'city_id' => $city->id,
+        'street_id' => $street->id,
+        'build_number' => '45',
+        'tp_id' => $tp->id,
+        'powerLineType' => '10',
+        'power_line' => 'Л-3',
+        'pole' => '21',
+        'power' => 15,
+        'workTypes' => [],
     ];
 
     // 2. ДІЯ: Надсилаємо форму методом PUT на збереження
@@ -82,16 +84,16 @@ test('користувач із роллю ВТГ може успішно збе
         ->put(route('connection_point.store', ['region' => $region->id]), $formData);
 
     // 3. ПЕРЕВІРКА: Після успішного збереження система повинна перенаправити на список точок
-    $latestCp = \App\Models\ConnectingPoint::first();
+    $latestCp = ConnectingPoint::first();
     $response->assertStatus(302)
         ->assertRedirect(route('connection_point.show', ['region' => $region->id, 'cp' => $latestCp->id]));
 
     // Перевіряємо, що запис успішно з'явився у таблиці СУБД
     $this->assertDatabaseHas('connecting_points', [
         'technical_conditions' => 'ТУ-123/26',
-        'customer'             => 'ПП Новий Заявник',
-        'power'                => 15,
-        'region_id'            => $region->id,
+        'customer' => 'ПП Новий Заявник',
+        'power' => 15,
+        'region_id' => $region->id,
     ]);
 });
 
@@ -103,9 +105,9 @@ test('система блокує створення ТДК, якщо обов\'
 
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Відправляємо абсолютно пусту форму
@@ -121,6 +123,6 @@ test('система блокує створення ТДК, якщо обов\'
     $response->assertSessionHasErrors([
         'technical_conditions',
         'technical_conditions_date',
-        'customer'
+        'customer',
     ]);
 });

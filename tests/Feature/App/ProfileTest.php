@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\App;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
@@ -25,8 +27,8 @@ test('користувач у своєму профілі може успішн�
 
     // Дані форми зміни пароля згідно з логікою вашого PasswordController
     $passwordData = [
-        'current_password'      => 'old-password-123',
-        'password'              => 'new-secure-password',
+        'current_password' => 'old-password-123',
+        'password' => 'new-secure-password',
         'password_confirmation' => 'new-secure-password',
     ];
 

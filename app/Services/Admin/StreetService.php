@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admin;
 
 use App\Models\Street;
@@ -24,6 +26,7 @@ class StreetService
     {
         return DB::transaction(function () use ($street, $data) {
             $street->update($data);
+
             return $street;
         });
     }
@@ -37,5 +40,4 @@ class StreetService
             return $street->delete();
         });
     }
-
 }

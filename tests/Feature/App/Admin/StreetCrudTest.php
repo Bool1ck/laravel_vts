@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\App\Admin;
 
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\Street;
-use App\Models\User;
 use App\Models\RoleRegionUser;
+use App\Models\Street;
 use App\Models\StreetType;
+use App\Models\User;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -26,15 +28,15 @@ test('адміністратор регіону може успішно дода
 
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     $formData = [
-        'name'           => 'Шевченка',
+        'name' => 'Шевченка',
         'street_type_id' => $streetType->id,
-        'city_id'        => $city->id,
+        'city_id' => $city->id,
     ];
 
     // 2. ДЕЙСТВИЕ
@@ -46,9 +48,9 @@ test('адміністратор регіону може успішно дода
         ->assertRedirect(route('admin.streets.show', ['region' => $region->id, 'city' => $city->id]));
 
     $this->assertDatabaseHas('streets', [
-        'name'           => 'Шевченка',
+        'name' => 'Шевченка',
         'street_type_id' => $streetType->id,
-        'city_id'        => $city->id,
+        'city_id' => $city->id,
     ]);
 });
 
@@ -67,9 +69,9 @@ test('адміністратор одного регіону не має дос�
     // Наш користувач є адміном ТІЛЬКИ в Регіоні №1
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $regionOne->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $regionOne->id,
     ]);
 
     // 2. ДЕЙСТВИЕ: Адмін намагається обдурити систему. Он запрашивает роут СВОЕГО Региона 1,
@@ -92,23 +94,23 @@ test('система блокує створення вулиці з ім\'ям,
 
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо ОДНУ вулицю в базі через фабрику
     Street::factory()->create([
-        'name'           => 'Грушевського',
+        'name' => 'Грушевського',
         'street_type_id' => $streetType->id,
-        'city_id'        => $city->id
+        'city_id' => $city->id,
     ]);
 
     // Намагаємось надіслати форму-дублікат з таким самим ім'ям
     $invalidFormData = [
-        'name'           => 'Грушевського',
+        'name' => 'Грушевського',
         'street_type_id' => $streetType->id,
-        'city_id'        => $city->id,
+        'city_id' => $city->id,
     ];
 
     $response = $this->actingAs($user)
@@ -128,9 +130,9 @@ test('адміністратор регіону може успішно вида
 
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо вулицю, яку будемо видаляти
@@ -146,6 +148,6 @@ test('адміністратор регіону може успішно вида
 
     // Перевіряємо, що запис фізично зник із таблиці СУБД
     $this->assertDatabaseMissing('streets', [
-        'id' => $street->id
+        'id' => $street->id,
     ]);
 });

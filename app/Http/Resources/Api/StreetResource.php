@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class StreetResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
         ];
+
         return parent::toArray($request);
     }
 }

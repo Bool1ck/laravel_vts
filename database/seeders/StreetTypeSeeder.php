@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\StreetType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StreetTypeSeeder extends Seeder
@@ -16,7 +17,7 @@ class StreetTypeSeeder extends Seeder
         $streetTypes = config('street_types.street_types');
         foreach ($streetTypes as $streetType) {
             StreetType::factory()->create([
-                'name' => $streetType
+                'name' => $streetType,
             ]);
         }
     }

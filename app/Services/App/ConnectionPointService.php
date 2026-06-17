@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\App;
 
 use App\Models\City;
@@ -18,34 +20,34 @@ class ConnectionPointService
     {
         $oneWeekAdd = Carbon::now()->addWeek()->format('Y-m-d'); // Минус 1 неделя от текущего времени
         $now = Carbon::now()->format('Y-m-d');
+
         return ConnectingPoint::with('customerType', 'workTypes')
             ->where('region_id', $region->id)
             ->when(
-                $filter === "execution_out",
-                fn($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereBetween('perform_by_date', [$now, $oneWeekAdd])
+                $filter === 'execution_out',
+                fn ($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereBetween('perform_by_date', [$now, $oneWeekAdd]),
             )
             ->when(
-                $filter === "execution_fail",
-                fn($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereDate('perform_by_date', '<', $now)
+                $filter === 'execution_fail',
+                fn ($query) => $query->whereNull('performance_date')->whereNotNull('perform_by_date')->whereDate('perform_by_date', '<', $now),
             )
             ->when(
-                $filter === "ordering_materials_out",
-                fn($query) => $query->whereNull('materials_order_date')->whereNull('performance_date')
+                $filter === 'ordering_materials_out',
+                fn ($query) => $query->whereNull('materials_order_date')->whereNull('performance_date'),
             )
             ->when(
-                $filter === "all_active",
-                fn($query) => $query->whereNull('performance_date')
+                $filter === 'all_active',
+                fn ($query) => $query->whereNull('performance_date'),
             )
             ->when(
-                $filter === "completed",
-                fn($query) => $query->whereNotNull('performance_date')
+                $filter === 'completed',
+                fn ($query) => $query->whereNotNull('performance_date'),
             )
             ->when(
                 $start_date && $end_date,
-                fn($query) => $query->whereBetween('technical_conditions_date', [$start_date, $end_date])
+                fn ($query) => $query->whereBetween('technical_conditions_date', [$start_date, $end_date]),
             )
-            ->paginate(25)
-        ;
+            ->paginate(25);
     }
 
     public function create(Region $region, array $data): ConnectingPoint
@@ -91,7 +93,7 @@ class ConnectionPointService
 
     private function updateFull(array $validated, ConnectingPoint $cp): ConnectingPoint
     {
-        if (!empty($validated['payment_date'])) {
+        if (! empty($validated['payment_date'])) {
             $power = $validated['power'] ?? 0;
             $days = match (true) {
                 $power <= 5 => 45,
@@ -119,6 +121,7 @@ class ConnectionPointService
     {
         return DB::transaction(function () use ($cp, $validated) {
             $cp->update($validated);
+
             return $cp;
         });
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -24,9 +26,9 @@ class StoreTpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'city_id'    => 'required|integer|exists:cities,id',
+            'city_id' => 'required|integer|exists:cities,id',
             'tp_type_id' => 'required|integer|exists:tp_types,id',
-            'name'       => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',

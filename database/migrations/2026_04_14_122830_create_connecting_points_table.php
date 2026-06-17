@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,7 @@ return new class extends Migration
             $table->foreign('region_id')->references('id')->on('regions');
             $table->string('technical_conditions');
             /* for prod */
-//            $table->unique(['region_id', 'technical_conditions']);
+            //            $table->unique(['region_id', 'technical_conditions']);
             /* for prod */
             $table->date('technical_conditions_date');
             $table->string('customer');

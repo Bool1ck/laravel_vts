@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Region;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -37,7 +38,7 @@ class UserPolicy
      */
     public function update(User $user, Region $region, User $model): bool
     {
-        return $user->isAdminInRegion($region) && $model->roleInRegion($region) && !$model->isAdminInRegion($region);
+        return $user->isAdminInRegion($region) && $model->roleInRegion($region) && ! $model->isAdminInRegion($region);
     }
 
     /**
@@ -45,7 +46,7 @@ class UserPolicy
      */
     public function delete(User $user, Region $region, User $model): bool
     {
-        return $user->isAdminInRegion($region) && $model->roleInRegion($region) && !$model->isAdminInRegion($region);
+        return $user->isAdminInRegion($region) && $model->roleInRegion($region) && ! $model->isAdminInRegion($region);
     }
 
     /**

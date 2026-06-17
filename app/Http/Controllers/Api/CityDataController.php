@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -28,6 +30,7 @@ class CityDataController extends Controller
         foreach ($tps as &$tp) {
             $tp['name'] = $tp->fullName();
         }
+
         return response()->json([
             'streets' => StreetResource::collection($streets),
             'tps' => TpResource::collection($tps),

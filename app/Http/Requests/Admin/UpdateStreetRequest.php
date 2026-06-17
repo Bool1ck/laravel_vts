@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -28,8 +30,8 @@ class UpdateStreetRequest extends FormRequest
             'street_type_id' => 'required|exists:street_types,id',
             'name' => [
                 'required', 'string',
-                Rule::unique('streets')->where(fn($query) => $query->where('street_type_id',
-                    $this->street_type_id)->where('city_id', $this->city_id))
+                Rule::unique('streets')->where(fn ($query) => $query->where('street_type_id',
+                    $this->street_type_id)->where('city_id', $this->city_id)),
             ],
         ];
     }

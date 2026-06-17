@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\App;
 
-use App\Models\City;
+use App\Models\ConnectingPoint;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\Street;
-use App\Models\Tp;
-use App\Models\User;
 use App\Models\RoleRegionUser;
-use App\Models\ConnectingPoint;
+use App\Models\User;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -26,35 +25,35 @@ test('система автоматичного розрахунку дати в
     // Видаємо користувачу роль ВТГ (інженер, який має право редагувати точки)
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо базову точку ПДК в базі (без дати оплати та без розрахованого строку)
     $connectionPoint = ConnectingPoint::factory()->create([
-        'region_id'                 => $region->id,
-        'technical_conditions'      => 'ТУ-001/26',
+        'region_id' => $region->id,
+        'technical_conditions' => 'ТУ-001/26',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Тестовий Клієнт',
-        'point_place'               => 'Адреса оригінальна',
-        'power_point'               => 'Опора оригінальна',
-        'power'                     => 5,
-        'payment_date'              => null,
-        'perform_by_date'           => null,
+        'customer' => 'Тестовий Клієнт',
+        'point_place' => 'Адреса оригінальна',
+        'power_point' => 'Опора оригінальна',
+        'power' => 5,
+        'payment_date' => null,
+        'perform_by_date' => null,
     ]);
 
     // Дані, які інженер вносить на формі РЕДАГУВАННЯ
     $updateData = [
-        'technical_conditions'      => 'ТУ-001/26',
+        'technical_conditions' => 'ТУ-001/26',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Тестовий Клієнт',
-        'customer_type_id'          => $connectionPoint->customer_type_id, // Беремо реальний ID створеного типу
-        'point_place'               => 'Адреса оригінальна',
-        'power_point'               => 'Опора оригінальна',
-        'payment_date'              => '2026-06-01', // Фіксуємо дату оплати!
-        'power'                     => $power,        // Потужність прилітає з датасету Pest
-        'workTypes'                 => []
+        'customer' => 'Тестовий Клієнт',
+        'customer_type_id' => $connectionPoint->customer_type_id, // Беремо реальний ID створеного типу
+        'point_place' => 'Адреса оригінальна',
+        'power_point' => 'Опора оригінальна',
+        'payment_date' => '2026-06-01', // Фіксуємо дату оплати!
+        'power' => $power,        // Потужність прилітає з датасету Pest
+        'workTypes' => [],
     ];
 
     // 2. ДІЯ: Робот шле PATCH запит на оновлення
@@ -67,14 +66,14 @@ test('система автоматичного розрахунку дати в
 
     // 3. ПЕРЕВІРКА: Перевіряємо, чи спрацював калькулятор у сервісі updateFull
     $this->assertDatabaseHas('connecting_points', [
-        'id'              => $connectionPoint->id,
-        'payment_date'    => '2026-06-01',
-        'perform_by_date' => $expected // Строк має математично розрахуватись
+        'id' => $connectionPoint->id,
+        'payment_date' => '2026-06-01',
+        'perform_by_date' => $expected, // Строк має математично розрахуватись
     ]);
 })->with([
-    'до 5 кВт (+45 днів)'     => ['power' => 4,  'expected' => '2026-07-16'],
-    'до 16 кВт (+60 днів)'    => ['power' => 12, 'expected' => '2026-07-31'],
-    'до 30 кВт (+75 днів)'    => ['power' => 25, 'expected' => '2026-08-15'],
+    'до 5 кВт (+45 днів)' => ['power' => 4,  'expected' => '2026-07-16'],
+    'до 16 кВт (+60 днів)' => ['power' => 12, 'expected' => '2026-07-31'],
+    'до 30 кВт (+75 днів)' => ['power' => 25, 'expected' => '2026-08-15'],
     'понад 30 кВт (+90 днів)' => ['power' => 45, 'expected' => '2026-08-30'],
 ]);
 
@@ -86,30 +85,29 @@ test('система жорстко забороняє редагувати то
 
     $VTGRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $VTGRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $VTGRole->id,
+        'region_id' => $region->id,
     ]);
 
     $completedPoint = ConnectingPoint::factory()->create([
-        'region_id'                 => $region->id,
-        'technical_conditions'      => 'ТУ-ЗАКРИТО',
+        'region_id' => $region->id,
+        'technical_conditions' => 'ТУ-ЗАКРИТО',
         'technical_conditions_date' => '2026-01-01',
-        'customer'                  => 'Тестовий Заявник',
-        'point_place'               => 'Адреса',
-        'power_point'               => 'Опора',
-        'power'                     => 10,
-        'performance_date'          => '2026-06-15' // Точка закрита
+        'customer' => 'Тестовий Заявник',
+        'point_place' => 'Адреса',
+        'power_point' => 'Опора',
+        'power' => 10,
+        'performance_date' => '2026-06-15', // Точка закрита
     ]);
 
     $response = $this->actingAs($user)
         ->patch(route('connection_point.update', ['region' => $region->id, 'cp' => $completedPoint->id]), [
-            'name' => 'Спроба змінити закриті дані'
+            'name' => 'Спроба змінити закриті дані',
         ]);
 
     $response->assertStatus(403);
 });
-
 
 test('користувач із роллю ВТГ має право успішно оновити всі дані форми ТДК', function () {
     $this->seed(SystemDictionariesSeeder::class);
@@ -119,43 +117,43 @@ test('користувач із роллю ВТГ має право успішн
 
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо точку з повним набором обов'язкових полів СУБД
     $cp = ConnectingPoint::factory()->create([
-        'region_id'                 => $region->id,
-        'technical_conditions'      => 'ТУ-001',
+        'region_id' => $region->id,
+        'technical_conditions' => 'ТУ-001',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Старий Заявник',
-        'point_place'               => 'Адреса',
-        'power_point'               => 'Опора',
-        'power'                     => 10,
+        'customer' => 'Старий Заявник',
+        'point_place' => 'Адреса',
+        'power_point' => 'Опора',
+        'power' => 10,
     ]);
 
     $updateData = [
-        'technical_conditions'      => 'ТУ-001',
+        'technical_conditions' => 'ТУ-001',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Новий Заявник',
-        'customer_type_id'          => $cp->customer_type_id,
-        'point_place'               => 'Адреса нова',
-        'power_point'               => 'Опора нова',
-        'payment_date'              => '2026-06-01',
-        'power'                     => 10,
-        'workTypes'                 => []
+        'customer' => 'Новий Заявник',
+        'customer_type_id' => $cp->customer_type_id,
+        'point_place' => 'Адреса нова',
+        'power_point' => 'Опора нова',
+        'payment_date' => '2026-06-01',
+        'power' => 10,
+        'workTypes' => [],
     ];
 
     $response = $this->actingAs($user)
         ->patch(route('connection_point.update', ['region' => $region->id, 'cp' => $cp->id]), $updateData);
 
-//    $response->dumpSession();
+    //    $response->dumpSession();
     $response->assertStatus(302);
 
     $this->assertDatabaseHas('connecting_points', [
-        'id'       => $cp->id,
-        'customer' => 'Новий Заявник'
+        'id' => $cp->id,
+        'customer' => 'Новий Заявник',
     ]);
 });
 
@@ -169,34 +167,34 @@ test('Головний інженер може змінювати тільки �
     // Перевіряємо роль "Головний інженер"
     $mainEngineerRole = Role::where('name', 'Головний інженер')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $mainEngineerRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $mainEngineerRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо точку з повним набором обов'язкових полів СУБД
     $cp = ConnectingPoint::factory()->create([
-        'region_id'                 => $region->id,
-        'technical_conditions'      => 'ТУ-ОРИГІНАЛ',
+        'region_id' => $region->id,
+        'technical_conditions' => 'ТУ-ОРИГІНАЛ',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Оригінальний Заявник',
-        'point_place'               => 'Адреса оригінальна',
-        'power_point'               => 'Опора оригінальна',
-        'power'                     => 10,
-        'planning_date'             => null
+        'customer' => 'Оригінальний Заявник',
+        'point_place' => 'Адреса оригінальна',
+        'power_point' => 'Опора оригінальна',
+        'power' => 10,
+        'planning_date' => null,
     ]);
 
     // Імітуємо повну форму редагування: ME-Request пропустить тільки planning_date,
     // але інші required-поля ми зобов'язані передати, щоб форма пройшла базову валідацію HTTP
     $updateData = [
-        'technical_conditions'      => 'ТУ-ОРИГІНАЛ',
+        'technical_conditions' => 'ТУ-ОРИГІНАЛ',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Хакерська Спроба Змінити', // Буде проігноровано сервісом/реквестом
-        'customer_type_id'          => $cp->customer_type_id,
-        'point_place'               => 'Адреса оригінальна',
-        'power_point'               => 'Опора оригінальна',
-        'power'                     => 10,
-        'planning_date'             => '2026-07-01', // Дозволене поле для ME
+        'customer' => 'Хакерська Спроба Змінити', // Буде проігноровано сервісом/реквестом
+        'customer_type_id' => $cp->customer_type_id,
+        'point_place' => 'Адреса оригінальна',
+        'power_point' => 'Опора оригінальна',
+        'power' => 10,
+        'planning_date' => '2026-07-01', // Дозволене поле для ME
     ];
 
     // 2. ДІЯ: Головний інженер відправляє форму оновлення
@@ -208,14 +206,14 @@ test('Головний інженер може змінювати тільки �
 
     // Перевіряємо, що дата планування успішно оновилася в базі даних
     $this->assertDatabaseHas('connecting_points', [
-        'id'            => $cp->id,
-        'planning_date' => '2026-07-01'
+        'id' => $cp->id,
+        'planning_date' => '2026-07-01',
     ]);
 
     // Перевіряємо, що ім'я клієнта залишилося СТАРИМ (спроба хакінгу відсічена вашим UpdateConnectionPointMERequest)
     $this->assertDatabaseHas('connecting_points', [
-        'id'       => $cp->id,
-        'customer' => 'Оригінальний Заявник'
+        'id' => $cp->id,
+        'customer' => 'Оригінальний Заявник',
     ]);
 });
 
@@ -232,20 +230,20 @@ test('користувач ролі ВТГ не має доступу до пе�
     // Наш інженер працює тільки в Регіоні №1
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $regionOne->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $regionOne->id,
     ]);
 
     // Створюємо точку підключення, яка належить чужому Регіону №2
     $cpInRegionTwo = ConnectingPoint::factory()->create([
-        'region_id'                 => $regionTwo->id,
-        'technical_conditions'      => 'ТУ-ЧУЖИЙ',
+        'region_id' => $regionTwo->id,
+        'technical_conditions' => 'ТУ-ЧУЖИЙ',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Чужий Клієнт',
-        'point_place'               => 'Адреса',
-        'power_point'               => 'Опора',
-        'power'                     => 10,
+        'customer' => 'Чужий Клієнт',
+        'point_place' => 'Адреса',
+        'power_point' => 'Опора',
+        'power' => 10,
     ]);
 
     // ІСПРАВЛЕНО: Запитуємо роут СВОГО Регіону 1, але підставляємо ID точки з чужого Регіону 2
@@ -267,31 +265,31 @@ test('користувач ролі ВТГ заборонено оновлюва
     // Інженер прив'язаний тільки до Регіону №1
     $vtgRole = Role::where('name', 'ВТГ')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $vtgRole->id,
-        'region_id' => $regionOne->id
+        'user_id' => $user->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $regionOne->id,
     ]);
 
     // Точка належить Регіону №2
     $cpInRegionTwo = ConnectingPoint::factory()->create([
-        'region_id'                 => $regionTwo->id,
-        'technical_conditions'      => 'ТУ-ЧУЖИЙ',
+        'region_id' => $regionTwo->id,
+        'technical_conditions' => 'ТУ-ЧУЖИЙ',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Чужий Клієнт',
-        'point_place'               => 'Адреса',
-        'power_point'               => 'Опора',
-        'power'                     => 10,
+        'customer' => 'Чужий Клієнт',
+        'point_place' => 'Адреса',
+        'power_point' => 'Опора',
+        'power' => 10,
     ]);
 
     $updateData = [
-        'technical_conditions'      => 'ТУ-ХАК',
+        'technical_conditions' => 'ТУ-ХАК',
         'technical_conditions_date' => '2026-05-01',
-        'customer'                  => 'Спроба Змінити Чуже',
-        'customer_type_id'          => $cpInRegionTwo->customer_type_id,
-        'point_place'               => 'Адреса',
-        'power_point'               => 'Опора',
-        'power'                     => 10,
-        'workTypes'                 => []
+        'customer' => 'Спроба Змінити Чуже',
+        'customer_type_id' => $cpInRegionTwo->customer_type_id,
+        'point_place' => 'Адреса',
+        'power_point' => 'Опора',
+        'power' => 10,
+        'workTypes' => [],
     ];
 
     // ІСПРАВЛЕНО: Шлемо PATCH на свій Регіон 1, але намагаємось оновити чужу точку cpId

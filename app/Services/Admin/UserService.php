@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admin;
 
 use App\Models\Region;
@@ -17,17 +19,18 @@ class UserService
     {
         $role_id = $data['role_id'];
         unset($data['role_id']);
-        $data['password'] = Hash::make("genby[eqkj");
+        $data['password'] = Hash::make('genby[eqkj');
+
         return DB::transaction(function () use ($region, $role_id, $data) {
-            $user =  User::create($data);
+            $user = User::create($data);
             RoleRegionUser::create([
                 'role_id' => $role_id,
                 'region_id' => $region->id,
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
+
             return $user;
         });
-
 
     }
 
@@ -38,12 +41,14 @@ class UserService
     {
         $role_id = $data['role_id'];
         unset($data['role_id']);
+
         return DB::transaction(function () use ($user, $region, $role_id, $data) {
             RoleRegionUser::updateOrCreate(
                 ['region_id' => $region->id, 'user_id' => $user->id], // По чем искать
-                ['role_id' => $role_id]                               // Что обновлять/создавать
+                ['role_id' => $role_id],                               // Что обновлять/создавать
             );
             $user->update($data);
+
             return $user;
         });
     }
@@ -57,10 +62,10 @@ class UserService
         return DB::transaction(function () use ($user, $region) {
             RoleRegionUser::where([
                 'region_id' => $region->id,
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ])->delete();
+
             return $user->delete();
         });
     }
-
 }

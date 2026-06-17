@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\App\Admin;
 
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\Tp;
-use App\Models\User;
 use App\Models\RoleRegionUser;
+use App\Models\Tp;
 use App\Models\TpType;
+use App\Models\User;
 use Database\Seeders\SystemDictionariesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -28,16 +30,16 @@ test('адміністратор регіону може успішно дода
     // Прив'язуємо користувачу роль адміна для цього регіону
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Імітуємо дані форми створення ТП
     $formData = [
-        'name'       => 'ТП-110',
+        'name' => 'ТП-110',
         'tp_type_id' => $tpType->id,
-        'city_id'    => $city->id,
+        'city_id' => $city->id,
     ];
 
     // 2. ДІЯ: Робот надсилає PUT запис на збереження ТП
@@ -51,9 +53,9 @@ test('адміністратор регіону може успішно дода
 
     // Перевіряємо, що ТП реально записалась в базу даних
     $this->assertDatabaseHas('tps', [
-        'name'       => 'ТП-110',
+        'name' => 'ТП-110',
         'tp_type_id' => $tpType->id,
-        'city_id'    => $city->id,
+        'city_id' => $city->id,
     ]);
 });
 
@@ -72,9 +74,9 @@ test('адміністратор одного регіону не має дос�
     // Наш користувач є адміном ТІЛЬКИ в Регіоні №1
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $regionOne->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $regionOne->id,
     ]);
 
     // 2. ДІЯ: Адмін намагається переглянути ТП в місті з чужого Регіону 2 через свій Регіон 1
@@ -95,23 +97,23 @@ test('система блокує створення ТП з ім\'ям, що д
 
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо ОДНУ підстанцію "ЗТП-12" в цьому місті через фабрику
     Tp::factory()->create([
-        'name'       => 'ЗТП-12',
+        'name' => 'ЗТП-12',
         'tp_type_id' => $tpType->id,
-        'city_id'    => $city->id
+        'city_id' => $city->id,
     ]);
 
     // Намагаємось відправити форму-дублікат
     $invalidFormData = [
-        'name'       => 'ЗТП-12', // Дублікат!
+        'name' => 'ЗТП-12', // Дублікат!
         'tp_type_id' => $tpType->id,
-        'city_id'    => $city->id,
+        'city_id' => $city->id,
     ];
 
     $response = $this->actingAs($user)
@@ -131,9 +133,9 @@ test('адміністратор регіону може успішно вида
 
     $adminRole = Role::where('name', 'admin')->first();
     RoleRegionUser::create([
-        'user_id'   => $user->id,
-        'role_id'   => $adminRole->id,
-        'region_id' => $region->id
+        'user_id' => $user->id,
+        'role_id' => $adminRole->id,
+        'region_id' => $region->id,
     ]);
 
     // Створюємо ТП, яку будемо видаляти
@@ -150,6 +152,6 @@ test('адміністратор регіону може успішно вида
 
     // Перевіряємо, що запис фізично зник із таблиці СУБД
     $this->assertDatabaseMissing('tps', [
-        'id' => $tp->id
+        'id' => $tp->id,
     ]);
 });

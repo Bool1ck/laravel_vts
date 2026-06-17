@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\City;
-use App\Models\CityType;
 use App\Models\ConnectingPoint;
 use App\Models\Region;
-use App\Models\Role;
 use App\Models\Street;
 use App\Models\Tp;
-use App\Models\User;
 use App\Models\WorkType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

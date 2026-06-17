@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\City;
 use App\Models\Region;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CityPolicy
 {
@@ -47,7 +48,7 @@ class CityPolicy
     public function delete(User $user, City $city): bool
     {
         // 1. Проверяем, является ли пользователь админом в регионе этого города
-        if (!$user->isAdminInRegion($city->region)) {
+        if (! $user->isAdminInRegion($city->region)) {
             return false;
         }
 

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -16,7 +17,7 @@ class RoleSeeder extends Seeder
         $roles = config('roles.all_roles');
         foreach ($roles as $role) {
             Role::factory()->create([
-                'name' => $role
+                'name' => $role,
             ]);
         }
     }

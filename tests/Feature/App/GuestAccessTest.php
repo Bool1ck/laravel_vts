@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 // Очищаем базу перед тестом, чтобы всё работало в стерильных условиях

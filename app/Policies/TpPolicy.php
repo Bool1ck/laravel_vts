@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\City;
 use App\Models\Region;
 use App\Models\Tp;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TpPolicy
 {
@@ -40,6 +41,7 @@ class TpPolicy
     public function update(User $user, Tp $tp): bool
     {
         $region = $tp->city->region;
+
         return $region && $user->isAdminInRegion($region);
     }
 
@@ -49,6 +51,7 @@ class TpPolicy
     public function delete(User $user, Tp $tp): bool
     {
         $region = $tp->city->region;
+
         return $region && $user->isAdminInRegion($region);
     }
 

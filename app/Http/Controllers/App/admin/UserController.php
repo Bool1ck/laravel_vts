@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\App\admin;
 
 use App\Http\Controllers\Controller;
@@ -7,21 +9,17 @@ use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\Region;
 use App\Models\Role;
-use App\Models\RoleRegionUser;
 use App\Models\User;
 use App\Services\Admin\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
     // Внедряем сервис через конструктор
     public function __construct(
-        protected UserService $userService
-    )
-    {
-    }
+        protected UserService $userService,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -29,7 +27,7 @@ class UserController extends Controller
     public function index(Region $region): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('viewAny', [User::class, $region]);
+        //        $this->authorize('viewAny', [User::class, $region]);
 
         $users = $region->users;
 
@@ -43,7 +41,7 @@ class UserController extends Controller
     public function create(Region $region): View
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('create', [User::class, $region]);
+        //        $this->authorize('create', [User::class, $region]);
 
         // 2. Все роли, исключая роль "admin"
         $roles = Role::select('id', 'name')
@@ -61,7 +59,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request, Region $region): RedirectResponse
     {
         // 1. Проверка прав (HTTP-слой)
-//        $this->authorize('create', [User::class, $region]);
+        //        $this->authorize('create', [User::class, $region]);
 
         // 2. Делегирование бизнес-логики сервису
         $this->userService->create($region, $request->validated());

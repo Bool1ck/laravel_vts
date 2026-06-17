@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admin;
 
-use App\Models\Region;
 use App\Models\Tp;
 use Illuminate\Support\Facades\DB;
 
@@ -25,6 +26,7 @@ class TPService
     {
         return DB::transaction(function () use ($tp, $data) {
             $tp->update($data);
+
             return $tp;
         });
     }
@@ -38,5 +40,4 @@ class TPService
             return $tp->delete();
         });
     }
-
 }

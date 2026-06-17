@@ -1,22 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Middleware\IsAdminInRegionMiddleware;
+use App\Http\Middleware\IsCanEditRegionMiddleware;
+use App\Http\Middleware\IsCanViewRegionMiddleware;
+use App\Http\Middleware\NoCacheMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'UserIsAdminInRegion' => \App\Http\Middleware\IsAdminInRegionMiddleware::class,
-            'UserCanEditRegion' => \App\Http\Middleware\IsCanEditRegionMiddleware::class,
-            'UserCanViewRegion' => \App\Http\Middleware\IsCanViewRegionMiddleware::class,
-            'NoCache' => \App\Http\Middleware\NoCacheMiddleware::class,
+            'UserIsAdminInRegion' => IsAdminInRegionMiddleware::class,
+            'UserCanEditRegion' => IsCanEditRegionMiddleware::class,
+            'UserCanViewRegion' => IsCanViewRegionMiddleware::class,
+            'NoCache' => NoCacheMiddleware::class,
         ]);
         $middleware->statefulApi();
         //

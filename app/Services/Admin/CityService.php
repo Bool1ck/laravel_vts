@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Admin;
 
 use App\Models\City;
@@ -28,6 +30,7 @@ class CityService
     {
         return DB::transaction(function () use ($city, $data) {
             $city->update($data);
+
             return $city;
         });
     }
@@ -41,5 +44,4 @@ class CityService
             return $city->delete();
         });
     }
-
 }

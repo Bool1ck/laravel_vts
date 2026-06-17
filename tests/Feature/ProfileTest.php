@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 
-//test('profile page is displayed', function () {
+// test('profile page is displayed', function () {
 //    $user = User::factory()->create();
 //
 //    $response = $this
@@ -10,9 +12,9 @@ use App\Models\User;
 //        ->get('/profile');
 //
 //    $response->assertOk();
-//})->skip('Feature временно не работает');
+// })->skip('Feature временно не работает');
 //
-//test('profile information can be updated', function () {
+// test('profile information can be updated', function () {
 //    $user = User::factory()->create();
 //
 //    $response = $this
@@ -31,9 +33,9 @@ use App\Models\User;
 //    $this->assertSame('Test User', $user->name);
 //    $this->assertSame('app@example.com', $user->email);
 //    $this->assertNull($user->email_verified_at);
-//})->skip('Feature временно не работает');
+// })->skip('Feature временно не работает');
 //
-//test('email verification status is unchanged when the email address is unchanged', function () {
+// test('email verification status is unchanged when the email address is unchanged', function () {
 //    $user = User::factory()->create();
 //
 //    $response = $this
@@ -48,9 +50,9 @@ use App\Models\User;
 //        ->assertRedirect('/profile');
 //
 //    $this->assertNotNull($user->refresh()->email_verified_at);
-//})->skip('Feature временно не работает');
+// })->skip('Feature временно не работает');
 //
-//test('user can delete their account', function () {
+// test('user can delete their account', function () {
 //    $user = User::factory()->create();
 //
 //    $response = $this
@@ -65,9 +67,9 @@ use App\Models\User;
 //
 //    $this->assertGuest();
 //    $this->assertNull($user->fresh());
-//})->skip('Feature временно не работает');
+// })->skip('Feature временно не работает');
 //
-//test('correct password must be provided to delete account', function () {
+// test('correct password must be provided to delete account', function () {
 //    $user = User::factory()->create();
 //
 //    $response = $this
@@ -82,4 +84,4 @@ use App\Models\User;
 //        ->assertRedirect('/profile');
 //
 //    $this->assertNotNull($user->fresh());
-//})->skip('Feature временно не работает');
+// })->skip('Feature временно не работает');
