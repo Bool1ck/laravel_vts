@@ -141,13 +141,10 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
                 ->middleware('can:create,App\Models\User,region')
                 ->name('admin.users.store');
             Route::get('/edit/{user}', [UserController::class, 'edit'])
-//                ->middleware('can:update,region,user')
                 ->name('admin.users.edit');
             Route::patch('/update/{user}', [UserController::class, 'update'])
-//                ->middleware('can:update,region,user')
                 ->name('admin.users.update');
             Route::delete('/destroy/{user}', [UserController::class, 'destroy'])
-//                ->middleware('can:delete,region,user')
                 ->name('admin.users.destroy');
         });
     });
