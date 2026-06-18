@@ -1,0 +1,42 @@
+#!/bin/bash
+
+echo "=================================================="
+echo "🚀 Запуск автоматичних тестів перед коммітом..."
+echo "=================================================="
+
+# Перевіряємо, чи запущено Docker-контейнер Sail
+if ! ./vendor/bin/sail ps | grep -q "laravel.test"; then
+    echo "❌ Помилка: Контейнери Laravel Sail не запущені!"
+    echo "💡 Спочатку запустіть проект командою: ./vendor/bin/sail up -d"
+    exit 1
+fi
+
+# Отримуємо список PHP-файлів із змінами в цьому комміті
+STAGED_PHP_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
+
+# При наявності зміненних файлів запускаємо форматування
+if [ ! -z "$STAGED_PHP_FILES" ]; then
+    echo "⚙️  Запуск Laravel Pint для зміненних файлів..."
+
+    # Запуск Pint тілько для зміненних файлів
+    ./vendor/bin/pint $STAGED_PHP_FILES
+
+    # Пере-додаємо виправлені файли в індекс комміта
+    git add $STAGED_PHP_FILES
+    echo "✅ Код автоматично відформатованно!"
+fi
+
+# Запускаємо тести всередині Sail через вбудований Artisan
+./vendor/bin/sail artisan test --stop-on-failure
+RESULT=$?
+
+echo "=================================================="
+
+if [ $RESULT -ne 0 ]; then
+    echo "❌ Комміт заблоковано: Тести провалилися!"
+    echo "🛠️ Виправте помилки в коді та спробуйте знову."
+    exit 1
+else
+    echo "✅ Усі тести успішно пройдено! Створюю комміт..."
+    exit 0
+fi
