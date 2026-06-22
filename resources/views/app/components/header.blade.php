@@ -3,8 +3,13 @@
         <nav class="flex items-center  gap-4">
             @auth
                 <div>Користувач : {{Auth::user()->name}}
-                    @isset($region), роль: {{Auth::user()->roleInRegion($region)->name}}
-                    @endisset
+                    @if(Auth::user()->isSuperAdmin())
+                        : root
+                    @else
+                        @isset($region), роль: {{Auth::user()->roleInRegion($region)->name}}
+                        @endisset
+                    @endif
+
                 </div>
                 <a
                     href="{{ route('dashboard') }}"

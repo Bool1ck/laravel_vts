@@ -2,7 +2,11 @@
 
 <div class="flex flex-col">
     <div class="p-1">
-        @if(Auth::user()->regions()->count())
+        @if(Auth::user()->isSuperAdmin())
+            @foreach(\App\Models\Region::all() as $region)
+                <li><a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a></li>
+            @endforeach
+        @elseif(Auth::user()->regions()->count())
         <ul>
             @foreach(Auth::user()->regions as $region)
                <li><a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a></li>
@@ -16,13 +20,19 @@
         <hr>
     </div>
     @if(!request()->routeIs('dashboard'))
-        @if(Auth::user()->isAdminInRegion($region))
+        @if(Auth::user()->isAdminInRegion($region) || Auth::user()->isSuperAdmin())
             <div class="p-2">
                 <div class="w-full text-center">Admin panel</div>
                 <div><a href="{{route('admin.users.index', ['region' => $region])}}">Користувачі</a></div>
                 <div><a href="{{route('admin.cities.index',['region' => $region])}}">Довідник</a></div>
             </div>
-        @elseif(Auth::user()->isCanEditRegion($region) || Auth::user()->isMainEngineerInRegion($region))
+            @if(Auth::user()->isSuperAdmin())
+                <div class="p-2">
+                    <div class="w-full text-center">Root panel</div>
+                    <div><a href="#">Регіони</a></div>
+                </div>
+            @endif
+        @elseif(Auth::user()->isCanEditRegion($region) || Auth::user()->isMainEngineerInRegion($region) || Auth::user()->isSuperAdmin())
             <div class="p-2">
                 <div class="w-full text-center">Діючі</div>
                 <div><a href="{{route('connection_point.index', ['region' => $region, 'filter' => "all_active"])}}">Всі</a></div> {{-- *all_active --}}

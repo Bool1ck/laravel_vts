@@ -27,6 +27,24 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions) {
+        //        // Хитрый трюк для отладки: принудительно ловим ЛЮБУЮ ошибку 404
+        //        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
         //
+        //            // Если у ошибки есть предыдущее исключение (например, ModelNotFoundException из шаблона)
+        //            if ($e->getPrevious()) {
+        //                dd([
+        //                    '🚨 РЕАЛЬНАЯ ПРИЧИНА КРАША' => $e->getPrevious()->getMessage(),
+        //                    'Файл' => $e->getPrevious()->getFile(),
+        //                    'Строка' => $e->getPrevious()->getLine(),
+        //                ]);
+        //            }
+        //
+        //            // Если это чистый abort(404)
+        //            dd([
+        //                'Тип ошибки' => 'Чистый вызов abort(404) или отсутствие роута',
+        //                'Файл' => $e->getFile(),
+        //                'Строка' => $e->getLine(),
+        //            ]);
+        //        });
     })->create();

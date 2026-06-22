@@ -10,6 +10,19 @@ use App\Models\User;
 class UserPolicy
 {
     /**
+     * Глобальний перехоплювач прав Laravel Gates
+     */
+    public function before(User $user, string $ability): ?bool
+    {
+        // Якщо це користувач з ID=1 — він автоматично отримує доступ до будь-якої дії в системі
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return null; // Для всіх інших користувачів Laravel продовжує стандартну перевірку методів
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user, Region $region): bool

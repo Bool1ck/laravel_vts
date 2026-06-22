@@ -38,11 +38,21 @@ class User extends Authenticatable
         return $this->belongsToMany(Region::class, 'role_region_users', 'user_id', 'region_id');
     }
 
-    public function roleInRegion(Region $region)
+    public function roleInRegion(?Region $region = null)
     {
-        $data = RoleRegionUser::where('user_id', $this->id)->where('region_id', $region->id)->firstOrFail();
+        if ($this->isSuperAdmin()) {
+            $role = new Role;
+            $role->forceFill([
+                'id' => 1,
+                'name' => 'Root',
+            ]);
 
-        return Role::findorfail($data->role_id);
+            return $role;
+        } else {
+            $data = RoleRegionUser::where('user_id', $this->id)->where('region_id', $region->id)->firstOrFail();
+
+            return Role::findorfail($data->role_id);
+        }
     }
 
     public function isCanViewRegion(Region $region): bool
@@ -71,5 +81,10 @@ class User extends Authenticatable
         $MainEngineer = config('roles.main_engineer_roles');
 
         return in_array($this->roleInRegion($region)->name, $MainEngineer);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->id === 1;
     }
 }
