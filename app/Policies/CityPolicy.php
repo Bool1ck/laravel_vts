@@ -15,12 +15,17 @@ class CityPolicy
      */
     public function before(User $user, string $ability): ?bool
     {
-        // Якщо це користувач з ID=1 — він автоматично отримує доступ до будь-якої дії в системі
+        // Якщо перевіряється дія видалення міста — ігноруємо before() і спускаємось у метод delete()
+        if ($ability === 'delete') {
+            return null;
+        }
+
+        // Для всіх інших дій (view, create, update) Суперадмін автоматично отримує true
         if ($user->isSuperAdmin()) {
             return true;
         }
 
-        return null; // Для всіх інших користувачів Laravel продовжує стандартну перевірку методів
+        return null;
     }
 
     /**
@@ -60,17 +65,22 @@ class CityPolicy
      */
     public function delete(User $user, City $city): bool
     {
-        // 1. Проверяем, является ли пользователь админом в регионе этого города
-        if (! $user->isAdminInRegion($city->region)) {
-            return false;
-        }
-
-        // 2. Быстрая проверка на отсутствие связанных улиц и ТП
+        //  Быстрая проверка на отсутствие связанных улиц и ТП
         if ($city->streets()->exists() || $city->tps()->exists()) {
             return false;
         }
 
-        return true;
+        //  Проверяем, является ли пользователь админом в регионе этого города
+        if ($user->isAdminInRegion($city->region)) {
+            return true;
+        }
+
+        //  Якщо місто порожнє — дозволяємо видалення Головному Суперадміну...
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
