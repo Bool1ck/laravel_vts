@@ -66,7 +66,7 @@ class User extends Authenticatable
     {
         $canEditRoles = config('roles.edit_roles');
 
-        return in_array($this->roleInRegion($region)->name, $canEditRoles);
+        return in_array($this->roleInRegion($region)->name, $canEditRoles) || $this->isSuperAdmin();
     }
 
     public function isAdminInRegion(Region $region): bool

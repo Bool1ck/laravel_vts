@@ -16,6 +16,7 @@ use App\Models\WorkType;
 use App\Services\App\ConnectionPointService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ConnectionPointController extends Controller
@@ -102,12 +103,13 @@ class ConnectionPointController extends Controller
     {
 
         // 1. Проверяем бизнес-правило закрытия точки
-        if ($cp->performance_date) {
+        if ($cp->performance_date && ! Auth::user()->isSuperAdmin()) {
             abort(404);
         }
 
         // 2. Определяем контекст пользователя и получаем валидированные данные
         $data = match (true) {
+            auth()->user()->isSuperAdmin() => app(UpdateConnectionPointRequest::class)->validated(),
             auth()->user()->isMainEngineerInRegion($region) => app(UpdateConnectionPointMERequest::class)->validated(),
             auth()->user()->isCanEditRegion($region) => app(UpdateConnectionPointRequest::class)->validated(),
             default => abort(403)
@@ -115,7 +117,8 @@ class ConnectionPointController extends Controller
 
         // 3. Передаем в сервис чистый массив данных и флаг роли
         $isMainEngineer = auth()->user()->isMainEngineerInRegion($region);
-        $this->connectionPointService->update($cp, $data, $isMainEngineer);
+        $isSuperAdmin = auth()->user()->isSuperAdmin();
+        $this->connectionPointService->update($cp, $data, $isMainEngineer, $isSuperAdmin);
 
         return to_route('connection_point.show', ['region' => $region, 'cp' => $cp]);
     }

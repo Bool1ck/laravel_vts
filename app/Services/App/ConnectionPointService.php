@@ -80,14 +80,30 @@ class ConnectionPointService
     /**
      * Обновить данные точки подключения.
      */
-    public function update(ConnectingPoint $cp, array $data, bool $isMainEngineer): ConnectingPoint
+    public function update(ConnectingPoint $cp, array $data, bool $isMainEngineer, bool $isSuperAdmin = false): ConnectingPoint
     {
         // Если это Главный инженер — обновляем напрямую переданные поля
         if ($isMainEngineer) {
             return $this->updateForMainEngineer($data, $cp);
         }
 
+        if ($isSuperAdmin) {
+            return DB::transaction(function () use ($cp, $data) {
+                // Если в данных прилетели типы работ, синхронизируем их
+                if (isset($data['workTypes'])) {
+                    $cp->workTypes()->sync($data['workTypes']);
+                }
+
+                // Записываем абсолютно все пришедшие поля напрямую в базу данных
+                $cp->update(Arr::except($data, ['workTypes']));
+
+                return $cp;
+            });
+        }
+
         // Если это обычный инженер — выполняем полную логику с расчетом даты
+        unset($data['planning_date']);
+
         return $this->updateFull($data, $cp);
     }
 

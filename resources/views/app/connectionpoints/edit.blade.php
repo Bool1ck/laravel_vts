@@ -3,13 +3,17 @@
 @section('content')
     <div>
         @php
-        if(Auth::user()->isCanEditRegion($region)) {
-            $disabled = "";
-            $me_disabled = "disabled";
-        } else {
-            $disabled = "disabled";
-            $me_disabled = "";
-        }
+            if (Auth::user()->isSuperAdmin()) {
+                $disabled = "";
+                $mi_disabled = "";
+            }
+            elseif(Auth::user()->isCanEditRegion($region)) {
+                $disabled = "";
+                $mi_disabled = "disabled";
+            } else {
+                $disabled = "disabled";
+                $mi_disabled = "";
+            }
         @endphp
         <div class="">
             <form action="{{ route('connection_point.update', ['region' => $region, 'cp' => $cp]) }}" method="POST">
@@ -95,7 +99,10 @@
                                     <input type="date" name="planning_date" value="{{ $cp->planning_date }}"
                                            @if(empty($cp->planning_date))
                                                style="background-color: #FFBDC1"
-                                           @endif  {{$me_disabled}}>
+                                        @endif
+                                        @if($mi_disabled || empty($cp->payment_date))
+                                            disabled
+                                            @endif>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +151,7 @@
                             <div class="flex flex-row">
                                 <div>
                                     <input style="width: 520px" name="point_place" type="text"
-                                           value="{{ $cp->point_place }}"  {{$disabled}}>
+                                           value="{{ $cp->point_place }}" {{$disabled}}>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +162,7 @@
                             <div class="flex flex-row">
                                 <div>
                                     <input style="width: 520px" name="power_point" type="text"
-                                           value="{{ $cp->power_point }}"  {{$disabled}}>
+                                           value="{{ $cp->power_point }}" {{$disabled}}>
                                 </div>
                             </div>
                         </div>
