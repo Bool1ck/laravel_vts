@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\Admin\UserService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -43,11 +44,16 @@ class UserController extends Controller
         // 1. Проверка прав (HTTP-слой)
         //        $this->authorize('create', [User::class, $region]);
 
-        // 2. Все роли, исключая роль "admin"
-        $roles = Role::select('id', 'name')
-            ->whereNotIn('name', ['admin'])
-            ->orderBy('id')
-            ->get();
+        // 2. ИСПРАВЛЕНО: Динамически строим SQL-запрос в зависимости от того, КТО зашел в систему
+        $rolesQuery = Role::select('id', 'name')->orderBy('id');
+
+        // Если это НЕ Суперадмин (обычный региональный админ) — жестко скрываем роль 'admin'
+        if (! Auth::user()->isSuperAdmin()) {
+            $rolesQuery->whereNotIn('name', ['admin']);
+        }
+
+        // Выполняем SQL-запрос и получаем чистую, безопасную коллекцию моделей
+        $roles = $rolesQuery->get();
 
         // 3. HTTP-ответ
         return view('app.admin.users.create', compact('region', 'roles'));

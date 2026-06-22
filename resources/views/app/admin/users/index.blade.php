@@ -17,7 +17,7 @@
                     <tr>
                         <td style="padding: 5px">{{$user->name}}</td>
                         <td style="padding: 5px">
-                            @if(!$user->isAdminInRegion($region))
+                            @if(!$user->isAdminInRegion($region)||Auth::user()->isSuperAdmin())
                                 {{$user->email}}
                             @else
                                 **********
@@ -25,7 +25,7 @@
                         </td>
                         <td style="padding: 5px">{{$user->roleInRegion($region)->name}}</td>
                         <td style="padding: 5px; text-align: center;">
-                            @if(!$user->isAdminInRegion($region))
+                            @if(!$user->isAdminInRegion($region)||Auth::user()->isSuperAdmin())
                                 <a href="{{route('admin.users.edit',['region' =>$region, 'user' => $user])}}">edit</a>
                             @endif
                         </td>
