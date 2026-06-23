@@ -44,7 +44,7 @@ class User extends Authenticatable
             $role = new Role;
             $role->forceFill([
                 'id' => 1,
-                'name' => 'Root',
+                'name' => 'root',
             ]);
 
             return $role;

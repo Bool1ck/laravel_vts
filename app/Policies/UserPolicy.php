@@ -14,6 +14,10 @@ class UserPolicy
      */
     public function before(User $user, string $ability): ?bool
     {
+        if ($ability === 'delete') {
+            return null;
+        }
+
         // Якщо це користувач з ID=1 — він автоматично отримує доступ до будь-якої дії в системі
         if ($user->isSuperAdmin()) {
             return true;
@@ -59,7 +63,21 @@ class UserPolicy
      */
     public function delete(User $user, Region $region, User $model): bool
     {
-        return $user->isAdminInRegion($region) && $model->roleInRegion($region) && ! $model->isAdminInRegion($region);
+
+        $targetRole = $model->roleInRegion($region);
+        if (! $targetRole) {
+            return false;
+        }
+
+        if ($targetRole->name === 'root') {
+            return false;
+        }
+
+        if ($targetRole->name === 'admin') {
+            return $user->isSuperAdmin();
+        } else {
+            return $user->isAdminInRegion($region) || $user->isSuperAdmin();
+        }
     }
 
     /**
