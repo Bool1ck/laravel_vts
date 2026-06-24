@@ -28,8 +28,22 @@ class StoreRegionRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'max:255',
                 'unique:regions,name',
             ],
+        ];
+    }
+
+    /**
+     * Кастомні повідомлення про помилки валідації українською мовою.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Назва регіону (РЕМ) є обов\'язковою для заповнення.',
+            'name.string' => 'Назва регіону повинна бути текстовим рядком.',
+            'name.max' => 'Назва регіону не повинна перевищувати 255 символів.',
+            'name.unique' => 'Регіон (РЕМ) з такою назвою вже існує в системі.',
         ];
     }
 }

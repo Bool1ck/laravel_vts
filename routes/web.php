@@ -64,14 +64,19 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
     // --- РЕГІОНИ (Regions) ---
     Route::prefix('root/regions')->group(function () {
         Route::get('/', [RegionController::class, 'index'])
+            ->middleware('can:viewAny,App\Models\Region')
             ->name('root.regions.index');
         Route::get('/create', [RegionController::class, 'create'])
+            ->middleware('can:create,App\Models\Region')
             ->name('root.regions.create');
         Route::put('/store', [RegionController::class, 'store'])
+            ->middleware('can:create,App\Models\Region')
             ->name('root.regions.store');
         Route::get('/edit/{region}', [RegionController::class, 'edit'])
+            ->middleware('can:update,region')
             ->name('root.regions.edit');
         Route::patch('/edit/{region}', [RegionController::class, 'update'])
+            ->middleware('can:update,region')
             ->name('root.regions.update');
     });
 

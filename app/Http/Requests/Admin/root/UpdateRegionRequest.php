@@ -6,6 +6,7 @@ namespace App\Http\Requests\Admin\root;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRegionRequest extends FormRequest
 {
@@ -24,12 +25,34 @@ class UpdateRegionRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Отримуємо об'єкт моделі регіону безпосередньо з маршруту URL {region}
+        $region = $this->route('region');
+
+        // Дістаємо чистий ID для виключення у базі даних СУБД
+        $regionId = is_object($region) ? $region->id : $region;
+
         return [
             'name' => [
                 'required',
                 'string',
-                'unique:regions,name',
+                'max:255',
+                // ІСПРАВЛЕНО: додаємо обов'язкове виключення ID поточного регіону,
+                // щоб СУБД дозволяла зберегти назву незмінною
+                Rule::unique('regions', 'name')->ignore($regionId),
             ],
+        ];
+    }
+
+    /**
+     * Кастомні повідомлення про помилки валідації українською мовою.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Назва регіону (РЕМ) є обов\'язковою для заповнення.',
+            'name.string' => 'Назва регіону повинна бути текстовим рядком.',
+            'name.max' => 'Назва регіону не повинна перевищувати 255 символів.',
+            'name.unique' => 'Регіон (РЕМ) з такою назвою вже існує в системі.',
         ];
     }
 }
