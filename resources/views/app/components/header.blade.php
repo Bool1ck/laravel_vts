@@ -47,7 +47,7 @@
     @endif
 
 </header>
-@if(isset($region))
+@if(isset($region) && !request()->routeIs('root.regions.*'))
     <div class="bg-gray-200 flex w-full py-2 px-2">
         <a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a>&nbsp;>>
         @if (Route::is('connection_point.show'))

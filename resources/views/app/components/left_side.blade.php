@@ -3,13 +3,13 @@
 <div class="flex flex-col">
     <div class="p-1">
         @if(Auth::user()->isSuperAdmin())
-            @foreach(\App\Models\Region::all() as $region)
-                <li><a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a></li>
+            @foreach(\App\Models\Region::all() as $regionList)
+                <li><a href="{{ route('connection_point.index',['region' => $regionList->id]) }}">{{$regionList->name}}</a></li>
             @endforeach
         @elseif(Auth::user()->regions()->count())
         <ul>
-            @foreach(Auth::user()->regions as $region)
-               <li><a href="{{ route('connection_point.index',['region' => $region->id]) }}">{{$region->name}}</a></li>
+            @foreach(Auth::user()->regions as $regionList)
+               <li><a href="{{ route('connection_point.index',['region' => $regionList->id]) }}">{{$regionList->name}}</a></li>
             @endforeach
         </ul>
         @else
@@ -19,7 +19,7 @@
     <div>
         <hr>
     </div>
-    @if(!request()->routeIs('dashboard'))
+    @if(!request()->routeIs('dashboard') && !request()->routeIs('root.regions.*'))
         @if(Auth::user()->isCanEditRegion($region) || Auth::user()->isMainEngineerInRegion($region) || Auth::user()->isSuperAdmin())
             <div class="p-2">
                 <div class="w-full text-center">Діючі</div>
@@ -40,13 +40,12 @@
                 <div><a href="{{route('admin.cities.index',['region' => $region])}}">Довідник</a></div>
                 <div><hr></div>
             </div>
-            @if(Auth::user()->isSuperAdmin())
-                <div class="p-2">
-                    <div class="w-full text-center">Root panel</div>
-                    <div><a href="#">Регіони</a></div>
-                </div>
-            @endif
         @endif
-
+    @endif
+    @if(Auth::user()->isSuperAdmin() && (request()->routeIs('root.regions.*') || request()->routeIs('dashboard')))
+            <div class="p-2">
+                <div class="w-full text-center">Root panel</div>
+                <div><a href="{{route('root.regions.index')}}">Регіони</a></div>
+            </div>
     @endif
 </div>

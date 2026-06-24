@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\App\admin\CityController;
+use App\Http\Controllers\App\admin\root\RegionController;
 use App\Http\Controllers\App\admin\StreetController;
 use App\Http\Controllers\App\admin\TPController;
 use App\Http\Controllers\App\admin\UserController;
@@ -15,49 +16,68 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
+    // Виводить данні по користувачу в розрізі регіонів
     Route::get('/', function () {
         return view('app.dashboard');
     })->name('dashboard');
 
     // ==========================================
-    // ТРЕКИ ПДК (Connecting Points)
+    // (Connecting Points)
     // ==========================================
     Route::prefix('/region/{region}')->group(function () {
 
-        // Список точек (вызывает viewAny в ConnectingPointPolicy)
+        // Список точок (с viewAny в ConnectingPointPolicy)
         Route::get('/connections-points/{filter?}', [ConnectionPointController::class, 'index'])
             ->middleware('can:viewAny,App\Models\ConnectingPoint,region')
             ->name('connection_point.index');
 
-        // Просмотр точки (вызывает view в ConnectingPointPolicy)
+        // Перегляд точки (викликає view в ConnectingPointPolicy)
         Route::get('/connections-points/show/{cp}', [ConnectionPointController::class, 'show'])
             ->middleware('can:view,cp')
             ->name('connection_point.show');
 
-        // Создание и обновление (вызывают create/update в ConnectingPointPolicy)
+        // Форма створення нової точки (викликає create в ConnectingPointPolicy)
         Route::get('/create', [ConnectionPointController::class, 'create'])
             ->middleware('can:create,App\Models\ConnectingPoint,region')
             ->name('connection_point.create');
 
+        // Збереження нової точки (викликає create в ConnectingPointPolicy)
         Route::put('/store', [ConnectionPointController::class, 'store'])
             ->middleware('can:create,App\Models\ConnectingPoint,region')
             ->name('connection_point.store');
 
+        // Форма зміни точки (викликає update в ConnectingPointPolicy)
         Route::get('/edit/{cp}', [ConnectionPointController::class, 'edit'])
             ->middleware('can:update,cp')
             ->name('connection_point.edit');
 
+        // Збереження зміненної точки (викликає update в ConnectingPointPolicy)
         Route::patch('/update/{cp}', [ConnectionPointController::class, 'update'])
             ->middleware('can:update,cp')
             ->name('connection_point.update');
     });
 
     // ==========================================
-    // АДМИН-ПАНЕЛЬ СТРАНИЦЫ (Связные справочники)
+    // СТОРІНКИ АДМІН-ПАНЕЛІ (Довідники)
     // ==========================================
+
+    // --- РЕГІОНИ (Regions) ---
+    Route::prefix('root/regions')->group(function () {
+        Route::get('/', [RegionController::class, 'index'])
+            ->name('root.regions.index');
+        Route::get('/create', [RegionController::class, 'create'])
+            ->name('root.regions.create');
+        Route::put('/store', [RegionController::class, 'store'])
+            ->name('root.regions.store');
+        Route::get('/edit/{region}', [RegionController::class, 'edit'])
+            ->name('root.regions.edit');
+        Route::patch('/edit/{region}', [RegionController::class, 'update'])
+            ->name('root.regions.update');
+    });
+
     Route::prefix('/admin/region/{region}')->group(function () {
 
-        // --- ГОРОДА (City) ---
+        // --- МІСТА (City) ---
         Route::prefix('/cities')->group(function () {
             Route::get('/', [CityController::class, 'index'])
                 ->middleware('can:view,App\Models\City,region')
@@ -79,7 +99,7 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
                 ->name('admin.cities.destroy');
         });
 
-        // --- УЛИЦЫ (Street) ---
+        // --- ВУЛИЦІ (Street) ---
         Route::prefix('/streets')->group(function () {
             Route::get('/', [StreetController::class, 'index'])
                 ->middleware('can:viewAny,App\Models\Street,region')
@@ -104,7 +124,7 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
                 ->name('admin.streets.destroy');
         });
 
-        // --- ТРАНСФОРМАТОРЫ (TP) ---
+        // --- ТРАНСФОРМАТОРИ (TP) ---
         Route::prefix('/tps')->group(function () {
             Route::get('/', [TPController::class, 'index'])
                 ->middleware('can:viewAny,App\Models\Tp,region')
@@ -129,7 +149,7 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
                 ->name('admin.tps.destroy');
         });
 
-        // --- ПОЛЬЗОВАТЕЛИ (User) ---
+        // --- КОРИСТУВАЧІ (User) ---
         Route::prefix('/users')->group(function () {
             Route::get('/', [UserController::class, 'index'])
                 ->middleware('can:viewAny,App\Models\User,region')

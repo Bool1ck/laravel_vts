@@ -11,6 +11,8 @@ class Region extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function allConnectionPoints()
     {
         return $this->hasMany(ConnectingPoint::class, 'region_id', 'id');
