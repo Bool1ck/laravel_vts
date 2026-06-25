@@ -68,3 +68,36 @@ test('звичайний адміністратор регіону або інж
 
     $response->assertStatus(403);
 });
+
+test('система жорстко блокує видалення регіону, якщо в ньому є хоча б один користувач', function () {
+    $this->seed(SystemDictionariesSeeder::class);
+
+    // Скидаємо лічильник автоінкременту та створюємо рута (ID=1)
+    DB::statement('ALTER TABLE users AUTO_INCREMENT = 1;');
+    $superAdmin = User::factory()->create(['id' => 1]);
+
+    // 1. ПІДГОТОВКА: Створюємо регіон, який буде НЕ пустим
+    $activeRegion = Region::factory()->create(['name' => 'Активний РЕМ']);
+    $localUser = User::factory()->create();
+    $vtgRole = Role::where('name', 'ВТГ')->first();
+
+    // Прив'язуємо користувача до цього регіону — робимо регіон активним
+    RoleRegionUser::create([
+        'user_id' => $localUser->id,
+        'role_id' => $vtgRole->id,
+        'region_id' => $activeRegion->id,
+    ]);
+
+    // 2. ДІЯ: Рут намагається видалити цей активний (не пустий) регіон
+    $response = $this->actingAs($superAdmin)
+        ->delete(route('root.regions.destroy', $activeRegion));
+
+    // 3. ПЕРЕВІРКА: Політика зобов'язана викинути 403 Forbidden через наявність активних зв'язків
+    $response->assertStatus(403);
+
+    // Перевіряємо, що регіон залишився в базі активним і НЕ отримав мітку soft-delete
+    $this->assertDatabaseHas('regions', [
+        'id' => $activeRegion->id,
+        'deleted_at' => null,
+    ]);
+});

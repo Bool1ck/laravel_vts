@@ -16,7 +16,18 @@
                 @foreach($regions as $regionItem)
                     <tr>
                         <td>{{$regionItem->name}}</td>
-                        <td><a href="{{route('root.regions.edit', $regionItem->id)}}">edit</a>
+                        <td>
+                            <div><a href="{{route('root.regions.edit', $regionItem->id)}}">edit</a></div>
+                            <div>@can('delete', $regionItem)
+                                    <form action="{{ route('root.regions.destroy', $regionItem) }}" method="POST" onsubmit="return confirm('Ви впевнені, що хочете перенести цей регіон в архів?');">
+                                        @csrf
+                                        @method('DELETE') <!-- Примусово підміняємо метод на DELETE для ядра Laravel -->
+
+                                        <button type="submit" class="text-red-600 hover:text-red-900 bg-transparent border-none p-0 cursor-pointer font-medium">
+                                            Видалити
+                                        </button>
+                                    </form>
+                                @endcan</div>
                         </td>
                     </tr>
                 @endforeach

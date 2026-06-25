@@ -9,7 +9,6 @@ use App\Http\Requests\Admin\root\StoreRegionRequest;
 use App\Http\Requests\Admin\root\UpdateRegionRequest;
 use App\Models\City;
 use App\Models\Region;
-use App\Services\Admin\CityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -74,14 +73,12 @@ class RegionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    //    public function destroy(Region $region, City $city): RedirectResponse
-    //    {
-    //        // 1. Проверка прав (HTTP-слой)
-    //        //        $this->authorize('delete', $city);
-    //        // 2. Делегирование бизнес-логики сервису
-    //        $this->cityService->delete($city);
-    //
-    //        // 3. HTTP-ответ
-    //        return to_route('admin.cities.index', compact('region'));
-    //    }
+    public function destroy(Region $region): RedirectResponse
+    {
+        $region->delete();
+
+        // 3. HTTP-ответ
+        return to_route('root.regions.index')
+            ->with('success', 'Регіон (РЕМ) успішно перенесено до архіву (м\'яке видалення).');
+    }
 }

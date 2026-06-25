@@ -78,6 +78,9 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
         Route::patch('/edit/{region}', [RegionController::class, 'update'])
             ->middleware('can:update,region')
             ->name('root.regions.update');
+        Route::delete('/destroy/{region}', [RegionController::class, 'destroy'])
+            ->middleware('can:delete,region')
+            ->name('root.regions.destroy');
     });
 
     Route::prefix('/admin/region/{region}')->group(function () {

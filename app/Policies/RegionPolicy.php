@@ -14,6 +14,9 @@ class RegionPolicy
      */
     public function before(User $user, string $ability): ?bool
     {
+        if ($ability === 'delete') {
+            return null;
+        }
         // Якщо це Головний Суперадміністратор (ID=1) — він автоматично отримує доступ
         if ($user->isSuperAdmin()) {
             return true;
@@ -59,6 +62,15 @@ class RegionPolicy
      */
     public function delete(User $user, Region $region): bool
     {
+        if (! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        $users = $region->users()->count();
+        if ($users === 0) {
+            return true;
+        }
+
         return false;
     }
 
