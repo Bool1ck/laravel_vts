@@ -2,9 +2,15 @@
 
 declare(strict_types=1);
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// =========================================================================
+// ПЛАНУВАЛЬНИК ЗАДАЧ (AUTOMATED SCHEDULE)
+// =========================================================================
+
+// Автоматичне щоденне обнулення та повний перезапис демо-пісочниці.
+// Запуск налаштовано на 03:00 ночі (час найменшого навантаження на сервер).
+Schedule::command('db:seed --class=DemoSandboxSeeder')
+    ->dailyAt('03:00')
+    ->runInBackground() // Запускає задачу у фоновому режимі, щоб не блокувати інші процеси
+    ->appendOutputTo(storage_path('logs/sandbox_reset.log')); // Логує результат виконання в окремий файл
