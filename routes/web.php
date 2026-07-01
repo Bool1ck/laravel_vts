@@ -81,6 +81,10 @@ Route::middleware(['auth', 'verified', 'NoCache'])->group(function () {
         Route::delete('/destroy/{region}', [RegionController::class, 'destroy'])
             ->middleware('can:delete,region')
             ->name('root.regions.destroy');
+
+        Route::post('/reset-sandbox', [RegionController::class, 'resetSandbox'])
+            ->middleware('can:create,App\Models\Region')
+            ->name('root.regions.reset_sandbox');
     });
 
     Route::prefix('/admin/region/{region}')->group(function () {

@@ -46,6 +46,17 @@
             <div class="p-2">
                 <div class="w-full text-center">Root panel</div>
                 <div><a href="{{route('root.regions.index')}}">Регіони</a></div>
+                <div>
+                    @if(config('app.env') === 'sandbox')
+                        <form action="{{ route('root.regions.reset_sandbox') }}" method="POST" onsubmit="return confirm('Ви впевнені, що хочете повністю скинути та перезаписати стан тестової пісочниці?');">
+                            @csrf
+                            <button type="submit" class="a">
+                                Скинути тестову пісочницю
+                            </button>
+                        </form>
+                    @endif
+                </div>
             </div>
     @endif
+
 </div>

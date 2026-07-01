@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Schedule;
 // ПЛАНУВАЛЬНИК ЗАДАЧ (AUTOMATED SCHEDULE)
 // =========================================================================
 
-// Автоматичне щоденне обнулення та повний перезапис демо-пісочниці.
-// Запуск налаштовано на 03:00 ночі (час найменшого навантаження на сервер).
+// Автоматичне щоденне обнулення та повний перезапис демо-пісочниці о 03:00 ночі
 Schedule::command('db:seed --class=DemoSandboxSeeder')
     ->dailyAt('03:00')
-    ->runInBackground() // Запускає задачу у фоновому режимі, щоб не блокувати інші процеси
-    ->appendOutputTo(storage_path('logs/sandbox_reset.log')); // Логує результат виконання в окремий файл
+    ->runInBackground()
+    ->appendOutputTo(storage_path('logs/sandbox_reset.log'))
+    // ІСПРАВЛЕНО: Задача виконається ТІЛЬКИ якщо поточне середовище додатка — staging
+    ->when(function () {
+        return config('app.env') === 'sandbox';
+    });

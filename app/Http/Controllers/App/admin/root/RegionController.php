@@ -10,10 +10,35 @@ use App\Http\Requests\Admin\root\UpdateRegionRequest;
 use App\Models\City;
 use App\Models\Region;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class RegionController extends Controller
 {
+    /**
+     * Ручне скидання та відновлення стану тестової пісочниці суперадміном
+     */
+    public function resetSandbox(): RedirectResponse
+    {
+        // 1. Перша лінія захисту: перевірка на Головного Суперадміністратора
+        if (! auth()->user()->isSuperAdmin()) {
+            abort(403, 'Ця дія доступна лише Головному Суперадміністратору.');
+        }
+
+        // 2. ІСПРАВЛЕНО: Друга лінія захисту. Якщо додаток запущено НЕ в режимі staging (наприклад, на Production) —
+        // жорстко блокуємо виконання команди, захищаючи живі дані клієнтів!
+        if (config('app.env') !== 'sandbox') {
+            abort(403, 'Помилка безпеки: скидання пісочниці дозволено лише в середовищі staging.');
+        }
+
+        Artisan::call('db:seed', [
+            '--class' => 'DemoSandboxSeeder',
+        ]);
+
+        return to_route('root.regions.index')
+            ->with('success', 'Стан тестової пісочниці "Тестовий РЕМ" успішно відновлено до початкового рівня!');
+    }
+
     /**
      * Display a listing of the resource.
      */
