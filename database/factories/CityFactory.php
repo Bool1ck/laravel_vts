@@ -22,9 +22,9 @@ class CityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->city(),
-            'city_type_id' => fake()->randomElement(CityType::all()->pluck('id')->toArray()),
-            'region_id' => fake()->randomElement(Region::all()->pluck('id')->toArray()),
+            'name' => $this->faker->unique()->city(),
+            'city_type_id' => $this->faker->randomElement(CityType::all()->pluck('id')->toArray()),
+            'region_id' => $this->faker->randomElement(Region::all()->pluck('id')->toArray()),
         ];
     }
 }

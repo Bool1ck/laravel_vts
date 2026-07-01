@@ -22,7 +22,7 @@ class TpFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->numberBetween(1, 800),
+            'name' => $this->faker->unique()->numberBetween(1, 800),
             'tp_type_id' => $this->faker->randomElement(TpType::all()->pluck('id')->toArray()),
             'city_id' => $this->faker->randomElement(City::all()->pluck('id')->toArray()),
             //

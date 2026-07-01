@@ -18,6 +18,7 @@ use App\Models\StreetType;
 use App\Models\Tp;
 use App\Models\TpType;
 use App\Models\User;
+use App\Models\WorkType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +45,10 @@ class DemoSandboxSeeder extends Seeder
         }
         if (! PowerLineType::exists()) {
             (new PowerLineTypeSeeder)->run();
+        }
+
+        if (! WorkType::exists()) {
+            (new WorkTypeSeeder)->run();
         }
 
         DB::transaction(function () {

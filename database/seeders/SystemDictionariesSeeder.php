@@ -17,6 +17,7 @@ class SystemDictionariesSeeder extends Seeder
             PowerLineTypeSeeder::class,
             TpTypeSeeder::class,
             CustomerTypeSeeder::class,
+            WorkTypeSeeder::class,
         ]);
     }
 }
