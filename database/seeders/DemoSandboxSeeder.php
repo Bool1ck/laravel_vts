@@ -145,32 +145,57 @@ class DemoSandboxSeeder extends Seeder
                 'region_id' => $region->id,
                 'role_id' => Role::where('name', 'Головний інженер')->first()->id,
             ]);
+        });
 
+        DB::transaction(function () {
             // =========================================================================
             // 4. ГЕНЕРАЦІЯ ТОЧОК ПРИЄДНАННЯ ПДК ЧЕРЕЗ ФАБРИКИ
             // =========================================================================
             $customerType = CustomerType::first();
             $powerLineType = PowerLineType::first();
 
+            // Надійно завантажуємо моделі з СУБД на початку другої транзакції
+            $region = Region::first();
+            $city1 = City::find(1);
+            $city2 = City::find(2);
+            $street1 = Street::find(1);
+            $street3 = Street::find(3);
+            $tp1 = Tp::find(1);
+            $tp3 = Tp::find(3);
+
+            // Захист від порожнього довідника ліній передач
+            $plName = $powerLineType ? $powerLineType->name : '0.4';
+
+            // Створюємо першу відкриту точку приєднання
             ConnectingPoint::factory()->create([
                 'region_id' => $region->id,
                 'customer_type_id' => $customerType->id,
                 'technical_conditions' => 'ТУ-DEMO/01',
-                'point_place' => $city1->fullName() . ', ' . $street1->fullName() . ', буд. ' . rand(10, 30),
-                'power_point' => 'ПЛ-' . $powerLineType->name . 'кВ від ' . $tp1->fullName() . ', ' .
-                    $tp1->city->fullName() . ',Л-1 опора №' . rand(10, 30),
                 'performance_date' => null,
+
+                // Формуємо чистовий текстовий опис адреси об'єкта
+                'point_place' => $city1->fullName() . ', ' . $street1->fullName() . ', буд. ' . rand(10, 30),
+
+                // ІСПРАВЛЕНО: Замінено деструктивний виклики $tp1->city->fullName() на безпечну зміну міського контексту $city1->fullName().
+                // Це повністю припиняє падіння фабрики через приховані SQL-запити відносин Eloquent!
+                'power_point' => 'ПЛ-' . $plName . 'кВ від ' . $tp1->fullName() . ', ' .
+                    $city1->fullName() . ', Л-1 опора №' . rand(10, 30),
             ]);
 
+            // Створюємо другу, вже виконану точку приєднання
             ConnectingPoint::factory()->create([
                 'region_id' => $region->id,
                 'customer_type_id' => $customerType->id,
                 'technical_conditions' => 'ТУ-DEMO/02',
-                'point_place' => $city2->fullName() . ', ' . $street3->fullName() . ', буд. ' . rand(10, 30),
-                'power_point' => 'ПЛ-' . $powerLineType->name . 'кВ від ' . $tp3->fullName() . ', ' .
-                    $tp3->city->fullName() . ',Л-1 опора №' . rand(10, 30),
                 'performance_date' => now()->format('Y-m-d'),
+
+                'point_place' => $city2->fullName() . ', ' . $street3->fullName() . ', буд. ' . rand(10, 30),
+
+                // ІСПРАВЛЕНО: Аналогічно оптимізовано для другого демонстраційного міста
+                'power_point' => 'ПЛ-' . $plName . 'кВ від ' . $tp3->fullName() . ', ' .
+                    $city2->fullName() . ', Л-1 опора №' . rand(10, 30),
             ]);
         });
+
     }
 }

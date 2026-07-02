@@ -23,21 +23,14 @@ class ConnectingPointFactory extends Factory
     {
         return [
             'region_id' => $this->faker->randomElement(Region::all()->pluck('id')->toArray()),
-            'technical_conditions' => 'MP-' . fake()->numberBetween(100, 999),
+            'technical_conditions' => 'MP-' . $this->faker->numberBetween(100, 999),
             'technical_conditions_date' => $this->faker->date(),
             'customer' => $this->faker->name() . ' ' . $this->faker->lastName(),
             'customer_type_id' => $this->faker->randomElement(CustomerType::all()->pluck('id')->toArray()),
             'point_place' => $this->faker->words(5, true),
             'power_point' => $this->faker->words(5, true),
             'power' => $this->faker->numberBetween(5, 20),
-            //            'payment_date' => $this->faker->date(),
-            //            'perform_by_date' => $this->faker->date(),
-            //            'planning_date' => $this->faker->date(),
-            //            'performance_date' => $this->faker->date(),
-            //            'materials_order_date' => $this->faker->date(),
-            //            'materials_receipt_date' => $this->faker->date(),
             'contract_date' => $this->faker->date(),
-            //            'note' => $this->faker->text(30),
         ];
     }
 }
