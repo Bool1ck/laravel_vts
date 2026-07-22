@@ -36,7 +36,6 @@ class ConnectionPointController extends Controller
         $end_date = $request->query('end_date', '');
         $connectionPoints = $this->connectionPointService->index($region, $filter, $start_date, $end_date);
 
-        // 2. HTTP-ответ
         return view('app.index', compact('connectionPoints', 'region'));
     }
 
@@ -46,13 +45,13 @@ class ConnectionPointController extends Controller
     public function create(Region $region): View
     {
 
-        // 2. выборка данных для страницы
+        // 1. отримання даних для сторінки
         $customerTypes = CustomerType::select('id', 'name')->orderBy('id')->get();
         $powerLineTypes = PowerLineType::select('id', 'name')->orderBy('id')->get();
         $cities = $region->cities()->with('cityType')->get();
         $workTypes = WorkType::select('id', 'name')->orderBy('id')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.connectionpoints.create', compact('region', 'customerTypes', 'powerLineTypes', 'cities', 'workTypes'));
     }
 
@@ -62,10 +61,10 @@ class ConnectionPointController extends Controller
     public function store(StoreConnectionPointRequest $request, Region $region): RedirectResponse
     {
 
-        // 2. Делегирование бизнес-логики сервису
+        // 1. обробка бізнес-логіки сервісом
         $connectionPoint = $this->connectionPointService->create($region, $request->validated());
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return to_route('connection_point.show', ['region' => $region, 'cp' => $connectionPoint]);
     }
 
@@ -74,10 +73,10 @@ class ConnectionPointController extends Controller
      */
     public function show(Region $region, ConnectingPoint $cp): View
     {
-        // 1. Жадная подгрузка данных
+        // 1. Жадібне підвантаження даних
         $cp->load('workTypes');
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.connectionpoints.show', compact('region', 'cp'));
     }
 
@@ -87,12 +86,12 @@ class ConnectionPointController extends Controller
     public function edit(Region $region, ConnectingPoint $cp): View
     {
 
-        // 2. выборка данных для страницы
+        // 1. отримання даних для сторінки
         $cp->load('workTypes');
         $workTypes = WorkType::select('id', 'name')->orderBy('id')->get();
         $customerTypes = CustomerType::select('id', 'name')->orderBy('id')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.connectionpoints.edit', compact('region', 'cp', 'workTypes', 'customerTypes'));
     }
 
@@ -102,12 +101,12 @@ class ConnectionPointController extends Controller
     public function update(Request $request, Region $region, ConnectingPoint $cp): RedirectResponse
     {
 
-        // 1. Проверяем бизнес-правило закрытия точки
+        // 1. Перевірки бізнес-логіки закриття точки
         if ($cp->performance_date && ! Auth::user()->isSuperAdmin()) {
             abort(404);
         }
 
-        // 2. Определяем контекст пользователя и получаем валидированные данные
+        // 2. Валідація даних в залежності від типу користувача
         $data = match (true) {
             auth()->user()->isSuperAdmin() => app(UpdateConnectionPointRequest::class)->validated(),
             auth()->user()->isMainEngineerInRegion($region) => app(UpdateConnectionPointMERequest::class)->validated(),
@@ -115,11 +114,13 @@ class ConnectionPointController extends Controller
             default => abort(403)
         };
 
-        // 3. Передаем в сервис чистый массив данных и флаг роли
+        // 3. Передача в сервіс даних та перевірку прав користувача
+        //      переробити!!!!
         $isMainEngineer = auth()->user()->isMainEngineerInRegion($region);
         $isSuperAdmin = auth()->user()->isSuperAdmin();
         $this->connectionPointService->update($cp, $data, $isMainEngineer, $isSuperAdmin);
 
+        // 4. HTTP-редірект
         return to_route('connection_point.show', ['region' => $region, 'cp' => $cp]);
     }
 

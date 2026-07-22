@@ -31,10 +31,7 @@ class StreetController extends Controller
      */
     public function create(Region $region, ?City $city = null): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [Street::class, $region]);
-
-        // 2. список типов улиц
+        // 1. список типов вулиць
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
 
         if (! is_null($city)) {
@@ -43,7 +40,7 @@ class StreetController extends Controller
 
         $cities = $region->cities()->with('cityType')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.streets.create', compact('region', 'streetTypes', 'cities', 'city'));
     }
 
@@ -52,15 +49,12 @@ class StreetController extends Controller
      */
     public function store(StoreStreetRequest $request, Region $region): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [Street::class, $region]);
-
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $street = $this->streetService->create($request->validated());
 
         $city = $street->city;
 
-        // 3. HTTP-ответ
+        // 2. HTTP-редірект
         return to_route('admin.streets.show', compact('region', 'city'));
     }
 
@@ -69,12 +63,10 @@ class StreetController extends Controller
      */
     public function show(Region $region, City $city): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('view', [Street::class, $region, $city]);
-        // 2. Streets list with streetType
+        // 1. Список вулиць з типом вулиць
         $streets = $city->streets()->with('streetType')->paginate(20);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-відповідь
         return view('app.admin.streets.show', compact('region', 'city', 'streets'));
     }
 
@@ -83,16 +75,14 @@ class StreetController extends Controller
      */
     public function edit(Region $region, Street $street): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('update', [Street::class, $street]);
 
-        // 2. cities and streetTypes lists
+        // 1. міста з типом міст
         $cities = $region->cities()->with('cityType')->orderBy('id')->get();
+        // 1.1 типи вулиць
         $streetTypes = StreetType::select('id', 'name')->orderBy('id')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.streets.edit', compact('region', 'cities', 'streetTypes', 'street'));
-        //
     }
 
     /**
@@ -100,16 +90,13 @@ class StreetController extends Controller
      */
     public function update(UpdateStreetRequest $request, Region $region, Street $street): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('update', [Street::class, $street]);
-
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $street = $this->streetService->update($street, $request->validated());
 
-        // 2.1. City of Street
+        // 2. City of Street
         $city = $street->city;
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('admin.streets.show', compact('region', 'city'));
     }
 
@@ -118,16 +105,13 @@ class StreetController extends Controller
      */
     public function destroy(Region $region, Street $street): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('delete', [Street::class, $street]);
-
-        // 2. City of Street
+        // 1. City of Street
         $city = $street->city;
 
-        // 2.1 Делегирование бизнес-логики сервису
+        // 2 Обробка даних сервісом
         $this->streetService->delete($street);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('admin.streets.show', compact('region', 'city'));
     }
 }

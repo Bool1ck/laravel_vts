@@ -17,7 +17,7 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    // Внедряем сервис через конструктор
+    // Додаємо сервіс через конструктор
     public function __construct(
         protected UserService $userService,
     ) {}
@@ -27,12 +27,10 @@ class UserController extends Controller
      */
     public function index(Region $region): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('viewAny', [User::class, $region]);
-
+        // 1. користувачі регіона
         $users = $region->users;
 
-        // 2. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.users.index', compact('region', 'users'));
     }
 
@@ -41,21 +39,18 @@ class UserController extends Controller
      */
     public function create(Region $region): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [User::class, $region]);
-
-        // 2. ИСПРАВЛЕНО: Динамически строим SQL-запрос в зависимости от того, КТО зашел в систему
+        // 1. Динамічний запит ролей
         $rolesQuery = Role::select('id', 'name')->orderBy('id');
 
-        // Если это НЕ Суперадмин (обычный региональный админ) — жестко скрываем роль 'admin'
+        // 2. Для не супер адміна скриваємо роль адміна
         if (! Auth::user()->isSuperAdmin()) {
             $rolesQuery->whereNotIn('name', ['admin']);
         }
 
-        // Выполняем SQL-запрос и получаем чистую, безопасную коллекцию моделей
+        // 3. Отримуємо ролі
         $roles = $rolesQuery->get();
 
-        // 3. HTTP-ответ
+        // 4. HTTP-відповідь
         return view('app.admin.users.create', compact('region', 'roles'));
     }
 
@@ -64,13 +59,10 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request, Region $region): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [User::class, $region]);
-
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $this->userService->create($region, $request->validated());
 
-        // 3. HTTP-ответ
+        // 2. HTTP-редірект
         return to_route('admin.users.index', ['region' => $region]);
     }
 
@@ -87,16 +79,16 @@ class UserController extends Controller
      */
     public function edit(Region $region, User $user): View
     {
-        // 1. Проверка прав (HTTP-слой)
+        // 1. Перевірка прав прав (HTTP-шар)
         $this->authorize('update', [User::class, $region, $user]);
 
-        // 2. Все роли, исключая роль "admin"
+        // 2. Всі ролі, виключаючи роль "admin"
         $roles = Role::select('id', 'name')
             ->whereNotIn('name', ['admin'])
             ->orderBy('id')
             ->get();
 
-        // 3. HTTP-ответ
+        // 3. HTTP-відповідь
         return view('app.admin.users.edit', compact('region', 'user', 'roles'));
     }
 
@@ -105,13 +97,13 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, Region $region, User $user): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
+        // 1. Перевірка прав прав (HTTP-шар)
         $this->authorize('update', [User::class, $region, $user]);
 
-        // 2. Делегирование бизнес-логики сервису
+        // 2. Обробка даних сервісом
         $this->userService->update($user, $region, $request->validated());
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('admin.users.index', ['region' => $region]);
     }
 
@@ -120,13 +112,13 @@ class UserController extends Controller
      */
     public function destroy(Region $region, User $user): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
+        // 1. Перевірка прав прав (HTTP-шар)
         $this->authorize('delete', [User::class, $region, $user]);
 
-        // 2. Делегирование бизнес-логики сервису
+        // 2. Обробка даних сервісом
         $this->userService->delete($region, $user);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('admin.users.index', ['region' => $region]);
     }
 }

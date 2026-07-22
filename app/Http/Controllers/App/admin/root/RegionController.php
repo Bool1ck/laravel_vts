@@ -20,12 +20,12 @@ class RegionController extends Controller
      */
     public function resetSandbox(): RedirectResponse
     {
-        // 1. Перша лінія захисту: перевірка на Головного Суперадміністратора
+        // 1. перевірка на Головного Суперадміністратора
         if (! auth()->user()->isSuperAdmin()) {
             abort(403, 'Ця дія доступна лише Головному Суперадміністратору.');
         }
 
-        // 2. ІСПРАВЛЕНО: Друга лінія захисту. Якщо додаток запущено НЕ в режимі staging (наприклад, на Production) —
+        // 2. Якщо додаток запущено НЕ в режимі staging (наприклад, на Production) —
         // жорстко блокуємо виконання команди, захищаючи живі дані клієнтів!
         if (config('app.env') !== 'sandbox') {
             abort(403, 'Помилка безпеки: скидання пісочниці дозволено лише в середовищі staging.');
@@ -65,7 +65,7 @@ class RegionController extends Controller
         $data = $request->validated();
         Region::create($data);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('root.regions.index');
     }
 
@@ -79,7 +79,7 @@ class RegionController extends Controller
      */
     public function edit(Region $region): View
     {
-        // 3. HTTP-ответ
+        // 3. HTTP-відповідь
         return view('app.admin.root.regions.edit', compact('region'));
     }
 
@@ -91,7 +91,7 @@ class RegionController extends Controller
         $data = $request->validated();
         $region->update($data);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('root.regions.index');
     }
 
@@ -102,7 +102,7 @@ class RegionController extends Controller
     {
         $region->delete();
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('root.regions.index')
             ->with('success', 'Регіон (РЕМ) успішно перенесено до архіву (м\'яке видалення).');
     }

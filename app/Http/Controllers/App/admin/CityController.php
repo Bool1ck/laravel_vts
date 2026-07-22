@@ -25,12 +25,10 @@ class CityController extends Controller
      */
     public function index(Region $region): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('view', [City::class, $region]);
-        // 2. список городов
+        // 1. список міст
         $cities = $region->cities()->with('cityType')->paginate(20);
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.cities.index', compact('region', 'cities'));
     }
 
@@ -39,12 +37,10 @@ class CityController extends Controller
      */
     public function create(Region $region): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [City::class, $region]);
-        // 2. список типов городов
+        // 1. список типов міст
         $cityTypes = CityType::select('id', 'name')->orderBy('id')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.cities.create', compact('region', 'cityTypes'));
     }
 
@@ -53,13 +49,10 @@ class CityController extends Controller
      */
     public function store(StoreCityRequest $request, Region $region): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('create', [City::class, $region]);
-
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $this->cityService->create($region, $request->validated());
 
-        // 3. HTTP-ответ
+        // 2. HTTP-редірект
         return to_route('admin.cities.index', compact('region'));
     }
 
@@ -73,12 +66,10 @@ class CityController extends Controller
      */
     public function edit(Region $region, City $city): View
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('update', $city);
-        // 2. список типов городов
+        // 1. список типов міст
         $cityTypes = CityType::select('id', 'name')->orderBy('id')->get();
 
-        // 3. HTTP-ответ
+        // 2. HTTP-відповідь
         return view('app.admin.cities.edit', compact('region', 'city', 'cityTypes'));
     }
 
@@ -87,12 +78,10 @@ class CityController extends Controller
      */
     public function update(UpdateCityRequest $request, Region $region, City $city): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('update', $city);
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $this->cityService->update($city, $request->validated());
 
-        // 3. HTTP-ответ
+        // 2. HTTP-редірект
         return to_route('admin.cities.index', compact('region'));
     }
 
@@ -101,12 +90,10 @@ class CityController extends Controller
      */
     public function destroy(Region $region, City $city): RedirectResponse
     {
-        // 1. Проверка прав (HTTP-слой)
-        //        $this->authorize('delete', $city);
-        // 2. Делегирование бизнес-логики сервису
+        // 1. Обробка даних сервісом
         $this->cityService->delete($city);
 
-        // 3. HTTP-ответ
+        // 3. HTTP-редірект
         return to_route('admin.cities.index', compact('region'));
     }
 }
