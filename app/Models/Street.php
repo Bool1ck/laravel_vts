@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable(['name', 'city_id', 'street_type_id'])]
 class Street extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
 
     public function city()
     {

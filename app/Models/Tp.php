@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable(['name', 'tp_type_id', 'city_id'])]
 class Tp extends Model
 {
     use HasFactory;
-
-    //
-    protected $guarded = [];
 
     public function type()
     {
