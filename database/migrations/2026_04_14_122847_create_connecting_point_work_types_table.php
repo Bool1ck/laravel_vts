@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // проміжна таблиця видів робіт по точці приєднання
         Schema::create('connecting_point_work_types', function (Blueprint $table) {
             $table->id();
+            // id виду робіт
             $table->unsignedBigInteger('worktype_id');
             $table->foreign('worktype_id')->references('id')->on('work_types');
+            // id точки приєднання
             $table->unsignedBigInteger('pointid');
             $table->foreign('pointid')->references('id')->on('connecting_points');
             $table->unique(['worktype_id', 'pointid']);

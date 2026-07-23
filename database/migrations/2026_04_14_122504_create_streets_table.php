@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('streets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // id міста, до якого прив'язана вулиця
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
+            // id типу вулиці
             $table->unsignedBigInteger('street_type_id');
             $table->foreign('street_type_id')->references('id')->on('street_types');
             $table->unique(['name', 'city_id', 'street_type_id']);

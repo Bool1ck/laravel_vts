@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // id типу міста
             $table->unsignedBigInteger('city_type_id');
             $table->foreign('city_type_id')->references('id')->on('city_types');
+            // id регіону, до якого прив'язане місто
             $table->unsignedBigInteger('region_id');
             $table->foreign('region_id')->references('id')->on('regions');
             $table->unique(['name', 'city_type_id', 'region_id']);

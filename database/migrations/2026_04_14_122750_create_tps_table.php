@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('tps', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // id типу ТП
             $table->unsignedBigInteger('tp_type_id');
             $table->foreign('tp_type_id')->references('id')->on('tp_types');
+            // id міста, до якого прив'язано ТП
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->unique(['name', 'tp_type_id', 'city_id']);

@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('role_region_users', function (Blueprint $table) {
             $table->id();
+            // роль користувача в регіоні
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('id')->on('roles');
+            // до якого регіону прив'язаний користувач
             $table->unsignedBigInteger('region_id');
             $table->foreign('region_id')->references('id')->on('regions');
+            // id користувача, прив'язаного до регіону
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unique(['region_id', 'user_id']);
