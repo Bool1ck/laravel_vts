@@ -10,6 +10,7 @@ class SystemDictionariesSeeder extends Seeder
 {
     public function run(): void
     {
+        // заповнення базових довідників для прода, дані беруться з файлів config, або стандартні прописані значення
         $this->call([
             RoleSeeder::class,
             CityTypeSeeder::class,

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Тестовий сідер для бази
         $this->call(SystemDictionariesSeeder::class);
         $this->call([
             UserSeeder::class,
